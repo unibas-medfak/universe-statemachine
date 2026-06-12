@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project root="true" xmlns="http://maven.apache.org/POM/4.1.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.1.0 https://maven.apache.org/xsd/maven-4.1.0.xsd">
+
+	<modelVersion>4.1.0</modelVersion>
+
+	<groupId>ch.unibas.medizin.universe.statemachine</groupId>
+	<artifactId>universe-statemachine-parent</artifactId>
+	<version>${revision}</version>
+	<packaging>pom</packaging>
+
+	<name>Universe Statemachine</name>
+	<description>Common infrastructure to work with state machine concepts in Spring applications</description>
+	<url>https://github.com/unibas-medfak/universe-statemachine</url>
+
+	<organization>
+		<name>Medical Faculty of Uni Basel</name>
+		<url>https://medizin.unibas.ch</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Martin Imobersteg</name>
+			<email>m.imobersteg@unibas.ch</email>
+			<organization>Uni Basel</organization>
+			<organizationUrl>https://medizin.unibas.ch</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/unibas-medfak/universe-statemachine.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/unibas-medfak/universe-statemachine.git</developerConnection>
+		<url>https://github.com/unibas-medfak/universe-statemachine</url>
+	</scm>
+
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/unibas-medfak/universe-statemachine/issues</url>
+	</issueManagement>
+
+	<subprojects>
+		<subproject>universe-statemachine-platform</subproject>
+		<subproject>universe-statemachine-core</subproject>
+		<subproject>universe-statemachine-autoconfigure</subproject>
+		<subproject>universe-statemachine-starter</subproject>
+	</subprojects>
+
+	<properties>
+		<!-- Single source of truth for the project version (CI-friendly). -->
+		<revision>0.0.1</revision>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.release>21</maven.compiler.release>
+
+		<!-- Dependency versions. -->
+		<spring-boot.version>4.1.0</spring-boot.version>
+		<awaitility.version>4.3.0</awaitility.version>
+		<blockhound.version>1.0.17.RELEASE</blockhound.version>
+		<jsr305.version>3.0.2</jsr305.version>
+
+		<!-- JUnit tags excluded by default. -->
+		<excluded.test.groups>smoke</excluded.test.groups>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Spring Boot platform manages the bulk of the third-party versions. -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- Internal modules. -->
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>universe-statemachine-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>universe-statemachine-autoconfigure</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<!-- Constraints not covered (or pinned tighter than) Spring Boot. -->
+			<dependency>
+				<groupId>com.google.code.findbugs</groupId>
+				<artifactId>jsr305</artifactId>
+				<version>${jsr305.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.awaitility</groupId>
+				<artifactId>awaitility</artifactId>
+				<version>${awaitility.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.projectreactor.tools</groupId>
+				<artifactId>blockhound</artifactId>
+				<version>${blockhound.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.projectreactor.tools</groupId>
+				<artifactId>blockhound-junit-platform</artifactId>
+				<version>${blockhound.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.5.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.5.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.15.0</version>
+					<configuration>
+						<parameters>true</parameters>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.5.6</version>
+					<configuration>
+						<excludedGroups>${excluded.test.groups}</excludedGroups>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.5.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.4.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>3.12.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<version>3.2.8</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>3.6.1</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots><enabled>false</enabled></snapshots>
+		</repository>
+		<repository>
+			<id>spring-snapshots</id>
+			<url>https://repo.spring.io/snapshot</url>
+			<releases><enabled>false</enabled></releases>
+			<snapshots><enabled>true</enabled></snapshots>
+		</repository>
+	</repositories>
+
+	<profiles>
+		<!-- Publishing concerns kept out of the default build so `mvn verify` stays
+		     fast. Activate with `-Prelease`. -->
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals><goal>jar-no-fork</goal></goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<doclint>none</doclint>
+							<quiet>true</quiet>
+							<source>21</source>
+						</configuration>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals><goal>jar</goal></goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals><goal>sign</goal></goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
