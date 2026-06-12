@@ -16,11 +16,10 @@
 package org.springframework.statemachine.boot.autoconfigure;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.statemachine.data.mongodb.MongoDbRepositoryState;
 import org.springframework.statemachine.data.mongodb.MongoDbStateRepository;
@@ -28,10 +27,10 @@ import org.springframework.statemachine.data.mongodb.MongoDbStateRepository;
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for MongoDb repositories and Entity classes.
  */
-@AutoConfiguration(after = MongoRepositoriesAutoConfiguration.class)
+@AutoConfiguration
 @ConditionalOnClass(MongoDbStateRepository.class)
 @ConditionalOnProperty(prefix = "spring.statemachine.data.mongo.repositories", name = "enabled", havingValue = "true", matchIfMissing = true)
-@EntityScan(basePackageClasses = {MongoDbRepositoryState.class})
+@AutoConfigurationPackage(basePackageClasses = {MongoDbRepositoryState.class})
 @EnableMongoRepositories(basePackageClasses = {MongoDbStateRepository.class})
 public class StateMachineMongoDbRepositoriesAutoConfiguration {
 

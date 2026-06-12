@@ -16,11 +16,10 @@
 package org.springframework.statemachine.boot.autoconfigure;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.statemachine.data.jpa.JpaRepositoryState;
 import org.springframework.statemachine.data.jpa.JpaStateRepository;
@@ -28,10 +27,10 @@ import org.springframework.statemachine.data.jpa.JpaStateRepository;
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for JPA repositories and Entity classes.
  */
-@AutoConfiguration(after = JpaRepositoriesAutoConfiguration.class)
+@AutoConfiguration
 @ConditionalOnClass(JpaStateRepository.class)
 @ConditionalOnProperty(prefix = "spring.statemachine.data.jpa.repositories", name = "enabled", havingValue = "true", matchIfMissing = true)
-@EntityScan(basePackageClasses = {JpaRepositoryState.class})
+@AutoConfigurationPackage(basePackageClasses = {JpaRepositoryState.class})
 @EnableJpaRepositories(basePackageClasses = {JpaStateRepository.class})
 public class StateMachineJpaRepositoriesAutoConfiguration {
 
