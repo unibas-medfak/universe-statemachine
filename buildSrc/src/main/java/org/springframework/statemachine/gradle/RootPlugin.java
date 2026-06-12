@@ -85,7 +85,7 @@ class RootPlugin implements Plugin<Project> {
 			a.setDescription("Generates aggregated Javadoc API documentation.");
 			a.setDestinationDir(new File(project.getBuildDir(), "api"));
 			CoreJavadocOptions options = (CoreJavadocOptions) a.getOptions();
-			options.source("17");
+			options.source("21");
 			options.encoding("UTF-8");
 			options.addStringOption("Xdoclint:none", "-quiet");
 		});

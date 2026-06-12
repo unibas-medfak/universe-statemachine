@@ -38,7 +38,7 @@ import org.gradle.external.javadoc.CoreJavadocOptions;
  */
 class JavaConventions {
 
-	private static final String SOURCE_AND_TARGET_COMPATIBILITY = "17";
+	private static final String SOURCE_AND_TARGET_COMPATIBILITY = "21";
 	private static final String INCLUDE_TAGS = "statemachineIncludeTags";
 	private static final String EXCLUDE_TAGS = "statemachineExcludeTags";
 
@@ -54,7 +54,7 @@ class JavaConventions {
 	private void configureJavadocConventions(Project project) {
 		project.getTasks().withType(Javadoc.class, (javadoc) -> {
 			CoreJavadocOptions options = (CoreJavadocOptions) javadoc.getOptions();
-			options.source("17");
+			options.source("21");
 			options.encoding("UTF-8");
 			options.addStringOption("Xdoclint:none", "-quiet");
 		});
@@ -71,7 +71,7 @@ class JavaConventions {
 				compile.setSourceCompatibility(SOURCE_AND_TARGET_COMPATIBILITY);
 				compile.setTargetCompatibility(SOURCE_AND_TARGET_COMPATIBILITY);
 			}
-			else if (buildingWithJava17(project)) {
+			else if (buildingWithJava21(project)) {
 				args.addAll(Arrays.asList("-Xdoclint:none"));
 				// TODO: When we're without javadoc errors
 				// args.addAll(Arrays.asList("-Werror", "-Xlint:unchecked", "-Xlint:deprecation", "-Xlint:rawtypes",
@@ -80,8 +80,8 @@ class JavaConventions {
 		});
 	}
 
-	private boolean buildingWithJava17(Project project) {
-		return JavaVersion.current() == JavaVersion.VERSION_17;
+	private boolean buildingWithJava21(Project project) {
+		return JavaVersion.current() == JavaVersion.VERSION_21;
 	}
 
 	private void configureTestConventions(Project project) {
