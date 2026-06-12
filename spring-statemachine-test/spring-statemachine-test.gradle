@@ -15,5 +15,7 @@ dependencies {
 	optional 'org.junit.jupiter:junit-jupiter-api'
 	optional 'org.junit.vintage:junit-vintage-engine'
 	testImplementation(testFixtures(project(':spring-statemachine-core')))
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+	testImplementation 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'org.mockito:mockito-core'
 }

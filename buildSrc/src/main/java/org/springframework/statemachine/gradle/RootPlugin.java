@@ -20,7 +20,7 @@ import java.io.File;
 import org.asciidoctor.gradle.jvm.AsciidoctorJPlugin;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.plugins.PluginManager;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.maven.MavenPublication;
@@ -92,7 +92,7 @@ class RootPlugin implements Plugin<Project> {
 
 		project.getRootProject().getSubprojects().forEach(p -> {
 			p.getPlugins().withType(ModulePlugin.class, m -> {
-				JavaPluginConvention java = p.getConvention().getPlugin(JavaPluginConvention.class);
+				JavaPluginExtension java = p.getExtensions().getByType(JavaPluginExtension.class);
 				SourceSet mainSourceSet = java.getSourceSets().getByName("main");
 
 				api.setSource(api.getSource().plus(mainSourceSet.getAllJava()));

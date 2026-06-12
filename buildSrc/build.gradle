@@ -10,9 +10,9 @@ java {
 repositories {
 	gradlePluginPortal()
 	mavenCentral()
-	maven { url "https://repo.spring.io/milestone" }
-	maven { url "https://repo.spring.io/snapshot" }
-	maven { url 'https://repo.spring.io/plugins-release/' }
+	maven { url = "https://repo.spring.io/milestone" }
+	maven { url = "https://repo.spring.io/snapshot" }
+	maven { url = 'https://repo.spring.io/plugins-release/' }
 }
 
 ext {
@@ -32,8 +32,8 @@ ext {
 dependencies {
 	implementation(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
 	implementation("org.springframework:spring-core")
-	implementation 'org.asciidoctor:asciidoctor-gradle-jvm:3.3.2'
-	implementation 'org.jfrog.buildinfo:build-info-extractor-gradle:4.29.0'
+	implementation 'org.asciidoctor.jvm.convert:org.asciidoctor.jvm.convert.gradle.plugin:4.0.5'
+	implementation 'com.jfrog.artifactory:com.jfrog.artifactory.gradle.plugin:6.0.4'
 	implementation "org.springframework.boot:org.springframework.boot.gradle.plugin:${springBootVersion}"
 }
 

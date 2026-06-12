@@ -1,37 +1,16 @@
 pluginManagement {
 	repositories {
-        maven { url 'https://repo.spring.io/snapshot' }
-		maven { url 'https://repo.spring.io/release' }
+        maven { url = 'https://repo.spring.io/snapshot' }
+		maven { url = 'https://repo.spring.io/release' }
 		mavenCentral()
 		gradlePluginPortal()
 	}
 	plugins {
 		id 'org.springframework.boot' version "$springBootVersion"
-		id 'com.gradle.enterprise' version "$gradleEnterpriseVersion"
-		id 'io.spring.ge.conventions' version "$springGeConventionsVersion"
 	}
-}
-
-plugins {
-	id "com.gradle.enterprise"
-	id "io.spring.ge.conventions"
 }
 
 rootProject.name = 'spring-statemachine'
-
-settings.gradle.projectsLoaded {
-	gradleEnterprise {
-		buildScan {
-			def buildDir = settings.gradle.rootProject.getBuildDir()
-			buildDir.mkdirs()
-			new File(buildDir, "build-scan-uri.txt").text = "build scan not generated"
-			buildScanPublished { scan ->
-				buildDir.mkdirs()
-				new File(buildDir, "build-scan-uri.txt").text = "<${scan.buildScanUri}|build scan>\n"
-			}
-		}
-	}
-}
 
 include 'spring-statemachine-platform'
 include 'spring-statemachine-core'
