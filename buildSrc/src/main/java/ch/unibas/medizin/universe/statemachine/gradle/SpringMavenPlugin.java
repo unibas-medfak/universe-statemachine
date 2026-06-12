@@ -73,7 +73,7 @@ public class SpringMavenPlugin implements Plugin<Project> {
 	}
 
 	private void customizePom(MavenPom pom, Project project) {
-		pom.getUrl().set("https://spring.io/projects/universe-statemachine");
+		pom.getUrl().set("https://github.com/unibas-medfak/universe-statemachine");
 		pom.getName().set(project.provider(project::getName));
 		pom.getDescription().set(project.provider(project::getDescription));
 		pom.organization(this::customizeOrganization);
@@ -103,8 +103,8 @@ public class SpringMavenPlugin implements Plugin<Project> {
 	}
 
 	private void customizeOrganization(MavenPomOrganization organization) {
-		organization.getName().set("Pivotal Software, Inc.");
-		organization.getUrl().set("https://spring.io");
+		organization.getName().set("Medical Faculty of Uni Basel");
+		organization.getUrl().set("https://medizin.unibas.ch");
 	}
 
 	private void customizeLicences(MavenPomLicenseSpec licences) {
@@ -116,21 +116,21 @@ public class SpringMavenPlugin implements Plugin<Project> {
 
 	private void customizeDevelopers(MavenPomDeveloperSpec developers) {
 		developers.developer((developer) -> {
-			developer.getName().set("Pivotal");
-			developer.getEmail().set("info@pivotal.io");
-			developer.getOrganization().set("Pivotal Software, Inc.");
-			developer.getOrganizationUrl().set("https://www.spring.io");
+			developer.getName().set("Martin Imobersteg");
+			developer.getEmail().set("m.imobersteg@unibas.ch");
+			developer.getOrganization().set("Uni Basel");
+			developer.getOrganizationUrl().set("https://medizin.unibas.ch");
 		});
 	}
 
 	private void customizeScm(MavenPomScm scm, Project project) {
-		scm.getConnection().set("scm:git:git://github.com/spring-projects/universe-statemachine.git");
-		scm.getDeveloperConnection().set("scm:git:ssh://git@github.com/spring-projects/universe-statemachine.git");
-		scm.getUrl().set("https://github.com/spring-projects/universe-statemachine");
+		scm.getConnection().set("scm:git:git://github.com/unibas-medfak/universe-statemachine.git");
+		scm.getDeveloperConnection().set("scm:git:ssh://git@github.com/unibas-medfak/universe-statemachine.git");
+		scm.getUrl().set("https://github.com/unibas-medfak/universe-statemachine");
 	}
 
 	private void customizeIssueManagement(MavenPomIssueManagement issueManagement) {
 		issueManagement.getSystem().set("GitHub");
-		issueManagement.getUrl().set("https://github.com/spring-projects/universe-statemachine/issues");
+		issueManagement.getUrl().set("https://github.com/unibas-medfak/universe-statemachine/issues");
 	}
 }
