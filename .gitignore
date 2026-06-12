@@ -19,3 +19,5 @@ classes
 .attach_pid*
 nexus
 .jfrog
+build/
+.gradle/
