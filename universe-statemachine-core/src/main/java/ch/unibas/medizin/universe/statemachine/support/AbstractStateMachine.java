@@ -295,7 +295,7 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 			}
 			if (state.getPseudoState() != null
 					&& (state.getPseudoState().getKind() == PseudoStateKind.HISTORY_DEEP || state.getPseudoState()
-							.getKind() == PseudoStateKind.HISTORY_DEEP)) {
+							.getKind() == PseudoStateKind.HISTORY_SHALLOW)) {
 				history = state.getPseudoState();
 			}
 		}
