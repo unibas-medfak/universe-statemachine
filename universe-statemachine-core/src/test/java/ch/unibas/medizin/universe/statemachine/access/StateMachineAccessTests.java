@@ -66,29 +66,29 @@ public class StateMachineAccessTests {
 
 		@Override
 		public StateMachineAccessor<String, String> getStateMachineAccessor() {
-			return new StateMachineAccessor<String, String>() {
+			return new StateMachineAccessor<>() {
 
-				@Override
-				public void doWithAllRegions(Consumer<StateMachineAccess<String, String>> stateMachineAccess) {
-					stateMachineAccess.accept(MockStateMachine.this);
-				}
+                @Override
+                public void doWithAllRegions(Consumer<StateMachineAccess<String, String>> stateMachineAccess) {
+                    stateMachineAccess.accept(MockStateMachine.this);
+                }
 
-				@Override
-				public List<StateMachineAccess<String, String>> withAllRegions() {
-					List<StateMachineAccess<String, String>> list = new ArrayList<StateMachineAccess<String,String>>();
-					list.add(MockStateMachine.this);
-					return list;
-				}
+                @Override
+                public List<StateMachineAccess<String, String>> withAllRegions() {
+                    List<StateMachineAccess<String, String>> list = new ArrayList<>();
+                    list.add(MockStateMachine.this);
+                    return list;
+                }
 
-				@Override
-				public void doWithRegion(Consumer<StateMachineAccess<String, String>> stateMachineAccess) {
-				}
+                @Override
+                public void doWithRegion(Consumer<StateMachineAccess<String, String>> stateMachineAccess) {
+                }
 
-				@Override
-				public StateMachineAccess<String, String> withRegion() {
-					return null;
-				}
-			};
+                @Override
+                public StateMachineAccess<String, String> withRegion() {
+                    return null;
+                }
+            };
 		}
 
 		@Override

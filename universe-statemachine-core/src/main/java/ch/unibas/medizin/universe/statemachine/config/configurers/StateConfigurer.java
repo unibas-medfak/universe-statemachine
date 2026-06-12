@@ -330,7 +330,7 @@ public interface StateConfigurer<S, E> extends
 	/**
 	 * Enumeration of a possible history pseudostate type.
 	 */
-	public enum History {
+    enum History {
 
 		/**
 		 * Shallow history is a pseudo state representing the most

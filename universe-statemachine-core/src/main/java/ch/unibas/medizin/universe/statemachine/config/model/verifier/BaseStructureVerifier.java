@@ -67,7 +67,7 @@ public class BaseStructureVerifier<S, E> implements StateMachineModelVerifier<S,
 	}
 
 	private Iterator<Node<StateData<S, E>>> buildStateDataIterator(StatesData<S, E> stateMachineStates) {
-		Tree<StateData<S, E>> tree = new Tree<StateData<S, E>>();
+		Tree<StateData<S, E>> tree = new Tree<>();
 
 		for (StateData<S, E> stateData : stateMachineStates.getStateData()) {
 			Object id = stateData.getState();
@@ -75,12 +75,12 @@ public class BaseStructureVerifier<S, E> implements StateMachineModelVerifier<S,
 			tree.add(stateData, id, parent);
 		}
 
-		TreeTraverser<Node<StateData<S, E>>> traverser = new TreeTraverser<Node<StateData<S, E>>>() {
-			@Override
-			public Iterable<Node<StateData<S, E>>> children(Node<StateData<S, E>> root) {
-				return root.getChildren();
-			}
-		};
+		TreeTraverser<Node<StateData<S, E>>> traverser = new TreeTraverser<>() {
+            @Override
+            public Iterable<Node<StateData<S, E>>> children(Node<StateData<S, E>> root) {
+                return root.getChildren();
+            }
+        };
 
 		Iterable<Node<StateData<S, E>>> postOrderTraversal = traverser.postOrderTraversal(tree.getRoot());
 		Iterator<Node<StateData<S, E>>> iterator = postOrderTraversal.iterator();

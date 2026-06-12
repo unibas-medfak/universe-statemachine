@@ -72,24 +72,24 @@ public abstract class AbstractStateMachineTests {
 		E1,E2,E3,E4,E5,EF,EH
 	}
 
-	public static enum TestStates2 {
+	public enum TestStates2 {
 		BUSY, PLAYING, PAUSED,
 		IDLE, CLOSED, OPEN,
 		PAUSED1, PAUSED2
 	}
 
-	public static enum TestStates3 {
+	public enum TestStates3 {
 		READY,
 		FORK, JOIN,
 		TASKS, T1, T1E, T2, T2E, T3, T3E
 	}
 
-	public static enum TestStates4 {
+	public enum TestStates4 {
 		READY, DONE,
 		TASKS, T1, T1E, T2, T2E
 	}
 
-	public static enum TestEvents2 {
+	public enum TestEvents2 {
 		PLAY, STOP, PAUSE, EJECT, LOAD
 	}
 
@@ -149,11 +149,11 @@ public abstract class AbstractStateMachineTests {
 
 	public static class TestSleepAction extends AbstractTestAction {
 
-		long sleep;
+		final long sleep;
 		long now;
-		public CountDownLatch onExecuteStartLatch = new CountDownLatch(1);
-		public AtomicBoolean interrupted = new AtomicBoolean(false);
-		public CountDownLatch interruptedLatch = new CountDownLatch(1);
+		public final CountDownLatch onExecuteStartLatch = new CountDownLatch(1);
+		public final AtomicBoolean interrupted = new AtomicBoolean(false);
+		public final CountDownLatch interruptedLatch = new CountDownLatch(1);
 
 		public TestSleepAction(long sleep) {
 			super();
@@ -179,7 +179,7 @@ public abstract class AbstractStateMachineTests {
 
 	public static class TestGuard implements Guard<TestStates, TestEvents> {
 
-		public CountDownLatch onEvaluateLatch = new CountDownLatch(1);
+		public final CountDownLatch onEvaluateLatch = new CountDownLatch(1);
 		boolean evaluationResult = true;
 
 		public TestGuard() {
@@ -199,8 +199,8 @@ public abstract class AbstractStateMachineTests {
 	protected static class AbstractTestAction implements Action<TestStates, TestEvents> {
 
 		protected String message = null;
-		public CountDownLatch onExecuteLatch = new CountDownLatch(1);
-		public List<StateContext<TestStates, TestEvents>> stateContexts = new ArrayList<StateContext<TestStates, TestEvents>>();
+		public final CountDownLatch onExecuteLatch = new CountDownLatch(1);
+		public final List<StateContext<TestStates, TestEvents>> stateContexts = new ArrayList<>();
 
 		public AbstractTestAction() {
 		}

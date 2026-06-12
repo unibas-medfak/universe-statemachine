@@ -27,7 +27,7 @@ import org.springframework.util.ObjectUtils;
  * {@link Action} which is used to wrap execution of an {@link Action}
  * so that only a {@link StateMachine} considered to be a leader in an
  * {@link StateMachineEnsemble} will do the execution.
- *
+ * <p>
  * Executing action via {@code DistributedLeaderAction} is bound to if
  * current machine is a leader or not. Effectively this means that if
  * leader doesn't exist, execution is discarded.

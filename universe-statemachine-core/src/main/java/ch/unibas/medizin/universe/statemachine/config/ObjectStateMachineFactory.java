@@ -75,8 +75,8 @@ public class ObjectStateMachineFactory<S, E> extends AbstractStateMachineFactory
 			Message<E> initialEvent, ExtendedState extendedState, PseudoState<S, E> historyState,
 			Boolean contextEventsEnabled, BeanFactory beanFactory, String beanName, String machineId, UUID uuid,
 			StateMachineModel<S, E> stateMachineModel) {
-		ObjectStateMachine<S, E> machine = new ObjectStateMachine<S, E>(states, transitions, initialState, initialTransition, initialEvent,
-				extendedState, uuid);
+		ObjectStateMachine<S, E> machine = new ObjectStateMachine<>(states, transitions, initialState, initialTransition, initialEvent,
+                extendedState, uuid);
 		machine.setId(machineId);
 		machine.setHistoryState(historyState);
 		machine.setTransitionConflightPolicy(stateMachineModel.getConfigurationData().getTransitionConflictPolicy());
@@ -93,7 +93,7 @@ public class ObjectStateMachineFactory<S, E> extends AbstractStateMachineFactory
 			if ((machineId == null || machineId.isEmpty()) && (beanName == null || beanName.isEmpty())) {
 				beanName = StateMachineSystemConstants.DEFAULT_ID_STATEMACHINE;
 			}
-			((BeanNameAware)machine).setBeanName(beanName);
+			machine.setBeanName(beanName);
 		}
 		return machine;
 	}
@@ -104,7 +104,7 @@ public class ObjectStateMachineFactory<S, E> extends AbstractStateMachineFactory
 			Collection<Function<StateContext<S, E>, Mono<Void>>> exitActions,
 			Collection<Function<StateContext<S, E>, Mono<Void>>> stateActions, PseudoState<S, E> pseudoState,
 			StateMachineModel<S, E> stateMachineModel) {
-		ObjectState<S,E> objectState = new ObjectState<S, E>(id, deferred, entryActions, exitActions, stateActions, pseudoState, null, null);
+		ObjectState<S,E> objectState = new ObjectState<>(id, deferred, entryActions, exitActions, stateActions, pseudoState, null, null);
 		BeanFactory beanFactory = resolveBeanFactory(stateMachineModel);
 		if (beanFactory != null) {
 			objectState.setBeanFactory(beanFactory);
@@ -119,7 +119,7 @@ public class ObjectStateMachineFactory<S, E> extends AbstractStateMachineFactory
 			Collection<Function<StateContext<S, E>, Mono<Void>>> entryActions,
 			Collection<Function<StateContext<S, E>, Mono<Void>>> exitActions, PseudoState<S, E> pseudoState,
 			StateMachineModel<S, E> stateMachineModel) {
-		RegionState<S,E> regionState = new RegionState<S, E>(id, regions, deferred, entryActions, exitActions, pseudoState);
+		RegionState<S,E> regionState = new RegionState<>(id, regions, deferred, entryActions, exitActions, pseudoState);
 		regionState.setStateDoActionPolicy(stateMachineModel.getConfigurationData().getStateDoActionPolicy());
 		regionState.setStateDoActionPolicyTimeout(stateMachineModel.getConfigurationData().getStateDoActionPolicyTimeout());
 		return regionState;

@@ -100,13 +100,13 @@ public class StateMachineErrorTests extends AbstractStateMachineTests {
 		assertThat(machine.hasStateMachineError()).isFalse();
 
 		machine.getStateMachineAccessor().doWithRegion(
-				function -> function.addStateMachineInterceptor(new StateMachineInterceptorAdapter<TestStates,TestEvents>() {
-					@Override
-					public Exception stateMachineError(StateMachine<TestStates, TestEvents> stateMachine,
-					                                   Exception exception) {
-						return null;
-					}
-				}));
+				function -> function.addStateMachineInterceptor(new StateMachineInterceptorAdapter<>() {
+                    @Override
+                    public Exception stateMachineError(StateMachine<TestStates, TestEvents> stateMachine,
+                                                       Exception exception) {
+                        return null;
+                    }
+                }));
 
 		TestStateMachineListener listener2 = new TestStateMachineListener();
 		machine.addStateListener(listener2);
@@ -277,7 +277,7 @@ public class StateMachineErrorTests extends AbstractStateMachineTests {
 
 	static class TestStateMachineListener extends StateMachineListenerAdapter<TestStates, TestEvents> {
 
-		CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 		int count = 0;
 
 		@Override
@@ -289,7 +289,7 @@ public class StateMachineErrorTests extends AbstractStateMachineTests {
 
 	static class TestApplicationEventListener1 implements ApplicationListener<StateMachineEvent> {
 
-		CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 		int count = 0;
 
 		@Override
@@ -303,7 +303,7 @@ public class StateMachineErrorTests extends AbstractStateMachineTests {
 
 	static class TestApplicationEventListener2 implements ApplicationListener<OnStateMachineError> {
 
-		CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 		int count = 0;
 
 		@Override
@@ -339,7 +339,7 @@ public class StateMachineErrorTests extends AbstractStateMachineTests {
 
 	static class StartedStateMachineListener extends StateMachineListenerAdapter<TestStates, TestEvents> {
 
-		CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 
 		@Override
 		public void stateMachineStarted(StateMachine<TestStates, TestEvents> stateMachine) {

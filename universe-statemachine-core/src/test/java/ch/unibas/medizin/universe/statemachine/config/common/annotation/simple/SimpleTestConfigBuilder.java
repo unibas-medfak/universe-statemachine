@@ -52,7 +52,7 @@ public class SimpleTestConfigBuilder extends AbstractConfiguredAnnotationBuilder
 	}
 
 	public DefaultPropertiesConfigurer<SimpleTestConfig, SimpleTestConfigBuilder,SimpleTestConfigBuilder> withProperties() throws Exception {
-		return getOrApply(new DefaultPropertiesConfigurer<SimpleTestConfig, SimpleTestConfigBuilder,SimpleTestConfigBuilder>());
+		return getOrApply(new DefaultPropertiesConfigurer<>());
 	}
 
 }

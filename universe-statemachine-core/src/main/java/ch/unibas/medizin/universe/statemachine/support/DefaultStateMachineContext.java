@@ -51,7 +51,7 @@ public class DefaultStateMachineContext<S, E> implements StateMachineContext<S, 
 	 * @param extendedState the extended state
 	 */
 	public DefaultStateMachineContext(S state, E event, Map<String, Object> eventHeaders, ExtendedState extendedState) {
-		this(new ArrayList<StateMachineContext<S, E>>(), state, event, eventHeaders, extendedState);
+		this(new ArrayList<>(), state, event, eventHeaders, extendedState);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class DefaultStateMachineContext<S, E> implements StateMachineContext<S, 
 	 */
 	public DefaultStateMachineContext(S state, E event, Map<String, Object> eventHeaders, ExtendedState extendedState,
 			Map<S, S> historyStates) {
-		this(new ArrayList<StateMachineContext<S, E>>(), state, event, eventHeaders, extendedState, historyStates);
+		this(new ArrayList<>(), state, event, eventHeaders, extendedState, historyStates);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class DefaultStateMachineContext<S, E> implements StateMachineContext<S, 
 	 */
 	public DefaultStateMachineContext(S state, E event, Map<String, Object> eventHeaders, ExtendedState extendedState,
 			Map<S, S> historyStates, String id) {
-		this(new ArrayList<StateMachineContext<S, E>>(), state, event, eventHeaders, extendedState, historyStates, id);
+		this(new ArrayList<>(), state, event, eventHeaders, extendedState, historyStates, id);
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class DefaultStateMachineContext<S, E> implements StateMachineContext<S, 
 		this.event = event;
 		this.eventHeaders = eventHeaders;
 		this.extendedState = extendedState;
-		this.historyStates = historyStates != null ? historyStates : new HashMap<S, S>();
+		this.historyStates = historyStates != null ? historyStates : new HashMap<>();
 		this.id = id;
 	}
 
@@ -155,7 +155,7 @@ public class DefaultStateMachineContext<S, E> implements StateMachineContext<S, 
 		this.event = event;
 		this.eventHeaders = eventHeaders;
 		this.extendedState = extendedState;
-		this.historyStates = historyStates != null ? historyStates : new HashMap<S, S>();
+		this.historyStates = historyStates != null ? historyStates : new HashMap<>();
 		this.id = id;
 	}
 

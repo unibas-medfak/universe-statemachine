@@ -73,9 +73,6 @@ public class CompletionEventTests extends AbstractStateMachineTests {
 		assertThat(machine.getState().getId()).isEqualTo("S3");
 	}
 
-	public void testSubmachineWithStateActionCompletes() throws Exception {
-	}
-
 	@Test
 	public void testSubmachineWithoutStateActionCompletes() throws Exception {
 		context.register(Config3.class);
@@ -440,9 +437,9 @@ public class CompletionEventTests extends AbstractStateMachineTests {
 
 	private static class TestCountAction implements Action<String, String> {
 
-		int count = 0;
+		int count;
 		StateContext<String, String> context;
-		CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 
 		public TestCountAction() {
 			count = 0;

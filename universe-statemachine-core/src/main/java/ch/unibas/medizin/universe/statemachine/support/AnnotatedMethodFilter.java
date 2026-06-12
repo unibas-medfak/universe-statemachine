@@ -51,8 +51,8 @@ public class AnnotatedMethodFilter implements MethodFilter {
 	}
 
 	public List<Method> filter(List<Method> methods) {
-		List<Method> annotatedCandidates = new ArrayList<Method>();
-		List<Method> fallbackCandidates = new ArrayList<Method>();
+		List<Method> annotatedCandidates = new ArrayList<>();
+		List<Method> fallbackCandidates = new ArrayList<>();
 		for (Method method : methods) {
 			if (method.isBridge()) {
 				continue;

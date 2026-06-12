@@ -55,7 +55,7 @@ public class SimpleTestConfigBeanBBuilder
 
 	@Override
 	public ResourceConfigurer<SimpleTestConfigBeanBConfigurer> withResources() throws Exception {
-		return getOrApply(new DefaultResourceConfigurer<SimpleTestConfigBeanB,SimpleTestConfigBeanBConfigurer,SimpleTestConfigBeanBBuilder>());
+		return getOrApply(new DefaultResourceConfigurer<>());
 	}
 
 }

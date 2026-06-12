@@ -49,7 +49,7 @@ public class StateMachineBuilder {
 	 * @return the builder
 	 */
 	public static <S, E> Builder<S, E> builder() {
-		return new Builder<S, E>();
+		return new Builder<>();
 	}
 
 	/**
@@ -61,15 +61,15 @@ public class StateMachineBuilder {
 	 */
 	public static class Builder<S, E> {
 
-		private StateMachineConfigBuilder<S, E> builder;
-		private BuilderStateMachineConfigurerAdapter<S, E> adapter;
+		private final StateMachineConfigBuilder<S, E> builder;
+		private final BuilderStateMachineConfigurerAdapter<S, E> adapter;
 
 		/**
 		 * Instantiates a new builder.
 		 */
 		public Builder() {
-			adapter = new BuilderStateMachineConfigurerAdapter<S, E>();
-			builder = new StateMachineConfigBuilder<S, E>();
+			adapter = new BuilderStateMachineConfigurerAdapter<>();
+			builder = new StateMachineConfigBuilder<>();
 		}
 
 		/**
@@ -145,7 +145,7 @@ public class StateMachineBuilder {
 		}
 	}
 
-	private static class BuilderStateMachineConfigurerAdapter<S extends Object, E extends Object>
+	private static class BuilderStateMachineConfigurerAdapter<S, E>
 			implements StateMachineConfigurer<S, E> {
 
 		private StateMachineModelBuilder<S, E> modelBuilder;
@@ -201,7 +201,7 @@ public class StateMachineBuilder {
 			if (modelBuilder != null) {
 				return modelBuilder;
 			}
-			modelBuilder = new StateMachineModelBuilder<S, E>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
+			modelBuilder = new StateMachineModelBuilder<>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
 			configure(modelBuilder);
 			return modelBuilder;
 		}
@@ -210,7 +210,7 @@ public class StateMachineBuilder {
 			if (transitionBuilder != null) {
 				return transitionBuilder;
 			}
-			transitionBuilder = new StateMachineTransitionBuilder<S, E>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
+			transitionBuilder = new StateMachineTransitionBuilder<>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
 			return transitionBuilder;
 		}
 
@@ -218,7 +218,7 @@ public class StateMachineBuilder {
 			if (stateBuilder != null) {
 				return stateBuilder;
 			}
-			stateBuilder = new StateMachineStateBuilder<S, E>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
+			stateBuilder = new StateMachineStateBuilder<>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
 			return stateBuilder;
 		}
 
@@ -226,7 +226,7 @@ public class StateMachineBuilder {
 			if (configurationBuilder != null) {
 				return configurationBuilder;
 			}
-			configurationBuilder = new StateMachineConfigurationBuilder<S, E>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
+			configurationBuilder = new StateMachineConfigurationBuilder<>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
 			return configurationBuilder;
 		}
 	}

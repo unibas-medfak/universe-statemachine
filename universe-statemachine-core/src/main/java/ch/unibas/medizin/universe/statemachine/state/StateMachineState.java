@@ -51,7 +51,7 @@ public class StateMachineState<S, E> extends AbstractState<S, E> {
 	 */
 	public StateMachineState(S id, StateMachine<S, E> submachine) {
 		super(id, null, null, null, null, submachine);
-		this.ids = new ArrayList<S>();
+		this.ids = new ArrayList<>();
 		this.ids.add(id);
 	}
 
@@ -64,7 +64,7 @@ public class StateMachineState<S, E> extends AbstractState<S, E> {
 	 */
 	public StateMachineState(S id, StateMachine<S, E> submachine, Collection<E> deferred) {
 		super(id, deferred, null, null, null, submachine);
-		this.ids = new ArrayList<S>();
+		this.ids = new ArrayList<>();
 		this.ids.add(id);
 	}
 
@@ -77,7 +77,7 @@ public class StateMachineState<S, E> extends AbstractState<S, E> {
 	 */
 	public StateMachineState(S id, StateMachine<S, E> submachine, PseudoState<S, E> pseudoState) {
 		super(id, null, null, null, pseudoState, submachine);
-		this.ids = new ArrayList<S>();
+		this.ids = new ArrayList<>();
 		this.ids.add(id);
 	}
 
@@ -95,7 +95,7 @@ public class StateMachineState<S, E> extends AbstractState<S, E> {
 			Collection<Function<StateContext<S, E>, Mono<Void>>> entryActions,
 			Collection<Function<StateContext<S, E>, Mono<Void>>> exitActions, PseudoState<S, E> pseudoState) {
 		super(id, deferred, entryActions, exitActions, pseudoState, submachine);
-		this.ids = new ArrayList<S>();
+		this.ids = new ArrayList<>();
 		this.ids.add(id);
 	}
 
@@ -112,14 +112,14 @@ public class StateMachineState<S, E> extends AbstractState<S, E> {
 			Collection<Function<StateContext<S, E>, Mono<Void>>> entryActions,
 			Collection<Function<StateContext<S, E>, Mono<Void>>> exitActions) {
 		super(id, deferred, entryActions, exitActions, null, submachine);
-		this.ids = new ArrayList<S>();
+		this.ids = new ArrayList<>();
 		this.ids.add(id);
 	}
 
 	@Override
 	public Collection<S> getIds() {
 
-		Collection<S> ret = new ArrayList<S>(ids);
+		Collection<S> ret = new ArrayList<>(ids);
 		State<S, E> state = getSubmachine().getState();
 		if (state != null) {
 			ret.addAll(state.getIds());
@@ -129,7 +129,7 @@ public class StateMachineState<S, E> extends AbstractState<S, E> {
 
 	@Override
 	public Collection<State<S, E>> getStates() {
-		ArrayList<State<S, E>> states = new ArrayList<State<S, E>>();
+		ArrayList<State<S, E>> states = new ArrayList<>();
 		states.add(this);
 		for (State<S, E> s : getSubmachine().getStates()) {
 			states.addAll(s.getStates());
@@ -143,7 +143,7 @@ public class StateMachineState<S, E> extends AbstractState<S, E> {
 			// don't stop if it looks like we're coming back
 			// stop would cause start with entry which would
 			// enable default transition and state
-			Mono<Void> mono = null;
+			Mono<Void> mono;
 			if (getSubmachine().getState() != null && context.getTransition() != null
 					&& context.getTransition().getSource().getId() != getSubmachine().getState().getId()) {
 				mono = getSubmachine().stopReactively();

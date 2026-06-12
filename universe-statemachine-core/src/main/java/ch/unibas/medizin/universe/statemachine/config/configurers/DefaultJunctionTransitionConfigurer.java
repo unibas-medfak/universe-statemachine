@@ -42,12 +42,12 @@ public class DefaultJunctionTransitionConfigurer<S, E>
 
 	private S source;
 	private JunctionData<S, E> first;
-	private final List<JunctionData<S, E>> thens = new ArrayList<JunctionData<S, E>>();
+	private final List<JunctionData<S, E>> thens = new ArrayList<>();
 	private JunctionData<S, E> last;
 
 	@Override
 	public void configure(StateMachineTransitionBuilder<S, E> builder) throws Exception {
-		List<JunctionData<S, E>> junctions = new ArrayList<JunctionData<S, E>>();
+		List<JunctionData<S, E>> junctions = new ArrayList<>();
 		if (first != null) {
 			junctions.add(first);
 		}
@@ -80,7 +80,7 @@ public class DefaultJunctionTransitionConfigurer<S, E>
 		if (action != null) {
 			actions.add(error != null ? Actions.errorCallingAction(action, error) : action);
 		}
-		this.first = new JunctionData<S, E>(source, target, guard, actions);
+		this.first = new JunctionData<>(source, target, guard, actions);
 		return this;
 	}
 
@@ -100,7 +100,7 @@ public class DefaultJunctionTransitionConfigurer<S, E>
 		if (action != null) {
 			actions.add(error != null ? Actions.errorCallingAction(action, error) : action);
 		}
-		thens.add(new JunctionData<S, E>(source, target, guard, actions));
+		thens.add(new JunctionData<>(source, target, guard, actions));
 		return this;
 	}
 
@@ -120,7 +120,7 @@ public class DefaultJunctionTransitionConfigurer<S, E>
 		if (action != null) {
 			actions.add(error != null ? Actions.errorCallingAction(action, error) : action);
 		}
-		this.last = new JunctionData<S, E>(source, target, null, actions);
+		this.last = new JunctionData<>(source, target, null, actions);
 		return this;
 	}
 }

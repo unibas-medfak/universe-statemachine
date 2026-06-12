@@ -70,8 +70,8 @@ public class ForkStateTests extends AbstractStateMachineTests {
 		assertThat(s21EntryAction.stateContexts).hasSize(1);
 		assertThat(s30EntryAction.stateContexts).isEmpty();
 		assertThat(s31EntryAction.stateContexts).hasSize(1);
-		assertThat((String)s21EntryAction.stateContexts.get(0).getMessageHeader("foo")).isEqualTo("bar");
-		assertThat((String)s31EntryAction.stateContexts.get(0).getMessageHeader("foo")).isEqualTo("bar");
+		assertThat((String)s21EntryAction.stateContexts.getFirst().getMessageHeader("foo")).isEqualTo("bar");
+		assertThat((String)s31EntryAction.stateContexts.getFirst().getMessageHeader("foo")).isEqualTo("bar");
 	}
 
 	@Test
@@ -102,8 +102,8 @@ public class ForkStateTests extends AbstractStateMachineTests {
 		assertThat(s21EntryAction.stateContexts).isEmpty();
 		assertThat(s30EntryAction.stateContexts).hasSize(1);
 		assertThat(s31EntryAction.stateContexts).isEmpty();
-		assertThat((String)s20EntryAction.stateContexts.get(0).getMessageHeader("foo")).isNull();
-		assertThat((String)s30EntryAction.stateContexts.get(0).getMessageHeader("foo")).isNull();
+		assertThat((String)s20EntryAction.stateContexts.getFirst().getMessageHeader("foo")).isNull();
+		assertThat((String)s30EntryAction.stateContexts.getFirst().getMessageHeader("foo")).isNull();
 	}
 
 	@Test
@@ -134,8 +134,8 @@ public class ForkStateTests extends AbstractStateMachineTests {
 		assertThat(s21EntryAction.stateContexts).isEmpty();
 		assertThat(s30EntryAction.stateContexts).isEmpty();
 		assertThat(s31EntryAction.stateContexts).hasSize(1);
-		assertThat((String)s20EntryAction.stateContexts.get(0).getMessageHeader("foo")).isNull();
-		assertThat((String)s31EntryAction.stateContexts.get(0).getMessageHeader("foo")).isEqualTo("bar");
+		assertThat((String)s20EntryAction.stateContexts.getFirst().getMessageHeader("foo")).isNull();
+		assertThat((String)s31EntryAction.stateContexts.getFirst().getMessageHeader("foo")).isEqualTo("bar");
 	}
 
 	@Configuration

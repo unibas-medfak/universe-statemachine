@@ -25,6 +25,6 @@ import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineConfi
  * @param <S> the type of state
  * @param <E> the type of event
  */
-public class StateMachineConfigurerAdapter<S extends Object, E extends Object> extends AbstractStateMachineConfigurerAdapter<S, E> {
+public class StateMachineConfigurerAdapter<S, E> extends AbstractStateMachineConfigurerAdapter<S, E> {
 
 }

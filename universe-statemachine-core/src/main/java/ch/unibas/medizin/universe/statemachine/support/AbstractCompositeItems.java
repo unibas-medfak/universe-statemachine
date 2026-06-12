@@ -27,13 +27,13 @@ import java.util.List;
 public class AbstractCompositeItems<T> {
 
 	/** List of ordered composite items */
-	private OrderedCompositeItem<T> items;
+	private final OrderedCompositeItem<T> items;
 
 	/**
 	 * Constructs instance with an empty item list.
 	 */
 	public AbstractCompositeItems() {
-		items = new OrderedCompositeItem<T>();
+		items = new OrderedCompositeItem<>();
 	}
 
 	/**

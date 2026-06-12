@@ -70,8 +70,8 @@ public class SecurityConfigTests extends AbstractStateMachineTests {
 		List<StateMachineInterceptor<?, ?>> interceptors = TestUtils.readField("interceptors", ilist);
 		assertThat(interceptors).isNotNull();
 		assertThat(interceptors).hasSize(1);
-		assertThat(interceptors.get(0)).isInstanceOf(StateMachineSecurityInterceptor.class);
-		Object adm = TestUtils.readField("transitionAccessDecisionManager", interceptors.get(0));
+		assertThat(interceptors.getFirst()).isInstanceOf(StateMachineSecurityInterceptor.class);
+		Object adm = TestUtils.readField("transitionAccessDecisionManager", interceptors.getFirst());
 		assertThat(adm).isNull();
 	}
 
@@ -104,8 +104,8 @@ public class SecurityConfigTests extends AbstractStateMachineTests {
 		StateMachineInterceptorList<?, ?> ilist = TestUtils.readField("interceptors", machine);
 		List<StateMachineInterceptor<?, ?>> interceptors = TestUtils.readField("interceptors", ilist);
 		assertThat(interceptors).hasSize(1);
-		assertThat(interceptors.get(0)).isInstanceOf(StateMachineSecurityInterceptor.class);
-		Object adm = TestUtils.readField("transitionAccessDecisionManager", interceptors.get(0));
+		assertThat(interceptors.getFirst()).isInstanceOf(StateMachineSecurityInterceptor.class);
+		Object adm = TestUtils.readField("transitionAccessDecisionManager", interceptors.getFirst());
 		assertThat(adm).isNull();
 	}
 
@@ -139,8 +139,8 @@ public class SecurityConfigTests extends AbstractStateMachineTests {
 		List<StateMachineInterceptor<?, ?>> interceptors = TestUtils.readField("interceptors", ilist);
 		assertThat(interceptors).isNotNull();
 		assertThat(interceptors).hasSize(1);
-		assertThat(interceptors.get(0)).isInstanceOf(StateMachineSecurityInterceptor.class);
-		Object adm = TestUtils.readField("transitionAccessDecisionManager", interceptors.get(0));
+		assertThat(interceptors.getFirst()).isInstanceOf(StateMachineSecurityInterceptor.class);
+		Object adm = TestUtils.readField("transitionAccessDecisionManager", interceptors.getFirst());
 		assertThat(adm).isNotNull();
 		assertThat(adm).isInstanceOf(MockAccessDecisionManager.class);
 	}
@@ -187,8 +187,8 @@ public class SecurityConfigTests extends AbstractStateMachineTests {
 		List<StateMachineInterceptor<?, ?>> interceptors = TestUtils.readField("interceptors", ilist);
 		assertThat(interceptors).isNotNull();
 		assertThat(interceptors).hasSize(1);
-		assertThat(interceptors.get(0)).isInstanceOf(StateMachineSecurityInterceptor.class);
-		Object adm = TestUtils.readField("eventSecurityRule", interceptors.get(0));
+		assertThat(interceptors.getFirst()).isInstanceOf(StateMachineSecurityInterceptor.class);
+		Object adm = TestUtils.readField("eventSecurityRule", interceptors.getFirst());
 		assertThat(adm).isNotNull();
 	}
 

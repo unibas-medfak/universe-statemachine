@@ -36,8 +36,8 @@ public class DefaultExtendedState implements ExtendedState {
 	 * Instantiates a new default extended state.
 	 */
 	public DefaultExtendedState() {
-		this.variables = new ObservableMap<Object, Object>(new ConcurrentHashMap<Object, Object>(),
-				new LocalMapChangeListener());
+		this.variables = new ObservableMap<>(new ConcurrentHashMap<>(),
+                new LocalMapChangeListener());
 	}
 
 	/**

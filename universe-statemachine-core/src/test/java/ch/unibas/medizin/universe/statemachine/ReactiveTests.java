@@ -247,9 +247,7 @@ public class ReactiveTests extends AbstractStateMachineTests {
 		List<StateMachineEventResult<TestStates, TestEvents>> ers = new ArrayList<>();
 
 		StepVerifier.create(machine.sendEvent(asMono(TestEvents.E1)))
-			.thenConsumeWhile(er -> true, er -> {
-				ers.add(er);
-			})
+			.thenConsumeWhile(er -> true, ers::add)
 			.expectComplete()
 			.verify();
 

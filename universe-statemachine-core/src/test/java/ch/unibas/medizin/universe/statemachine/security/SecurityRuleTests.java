@@ -28,7 +28,7 @@ public class SecurityRuleTests {
 
 	@Test
 	public void testConvertAttributesToCommaSeparatedString() {
-		Collection<String> attributes = new ArrayList<String>();
+		Collection<String> attributes = new ArrayList<>();
 		attributes.add("ROLE_1");
 		attributes.add("ROLE_2");
 		assertThat("ROLE_1, ROLE_2").isEqualTo(SecurityRule.securityAttributesToCommaDelimitedList(attributes));

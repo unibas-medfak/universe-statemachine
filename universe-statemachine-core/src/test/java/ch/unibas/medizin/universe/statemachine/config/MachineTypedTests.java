@@ -387,18 +387,18 @@ public class MachineTypedTests extends AbstractStateMachineTests {
 	}
 
 	public enum MyTestStates1 {
-		S1, S2;
-	}
+		S1, S2
+    }
 
 	public enum MyTestEvents1 {
-		E1;
-	}
+		E1
+    }
 
 	public enum MyTestStates2 {
-		S1, S2;
-	}
+		S1, S2
+    }
 
 	public enum MyTestEvents2 {
-		E1;
-	}
+		E1
+    }
 }

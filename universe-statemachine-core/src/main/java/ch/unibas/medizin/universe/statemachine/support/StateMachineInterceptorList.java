@@ -35,7 +35,7 @@ import ch.unibas.medizin.universe.statemachine.transition.Transition;
  */
 public class StateMachineInterceptorList<S, E> {
 
-	private final List<StateMachineInterceptor<S, E>> interceptors = new CopyOnWriteArrayList<StateMachineInterceptor<S, E>>();
+	private final List<StateMachineInterceptor<S, E>> interceptors = new CopyOnWriteArrayList<>();
 
 	/**
 	 * Sets the interceptors, clears any existing interceptors.

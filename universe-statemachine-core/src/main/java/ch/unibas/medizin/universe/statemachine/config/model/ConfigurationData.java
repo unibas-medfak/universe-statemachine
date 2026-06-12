@@ -65,8 +65,8 @@ public class ConfigurationData<S, E> {
 	 * Instantiates a new state machine configuration config data.
 	 */
 	public ConfigurationData() {
-		this(null, false, null, new ArrayList<StateMachineListener<S, E>>(), false, null, null, null, null, true,
-				new DefaultStateMachineModelVerifier<S, E>(), null, null, null);
+		this(null, false, null, new ArrayList<>(), false, null, null, null, null, true,
+                new DefaultStateMachineModelVerifier<>(), null, null, null);
 	}
 
 	/**

@@ -110,7 +110,7 @@ public class DistributedLeaderActionTests extends AbstractStateMachineTests {
 
 		@Bean
 		public StateMachineEnsemble<String, String> ensemble() {
-			return new InMemoryStateMachineEnsemble<String, String>();
+			return new InMemoryStateMachineEnsemble<>();
 		}
 
 		@Bean

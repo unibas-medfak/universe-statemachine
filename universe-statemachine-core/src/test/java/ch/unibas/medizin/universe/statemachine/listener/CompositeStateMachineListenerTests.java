@@ -30,8 +30,8 @@ public class CompositeStateMachineListenerTests {
 
 	@Test
 	public void testRegister() throws Exception {
-		CompositeStateMachineListener<String, String> listener = new CompositeStateMachineListener<String, String>();
-		StateMachineListenerAdapter<String, String> adapter1 = new StateMachineListenerAdapter<String, String>();
+		CompositeStateMachineListener<String, String> listener = new CompositeStateMachineListener<>();
+		StateMachineListenerAdapter<String, String> adapter1 = new StateMachineListenerAdapter<>();
 		listener.register(adapter1);
 		OrderedComposite<StateMachineListener<String, String>> listeners = listener.getListeners();
 		List<Object> list = TestUtils.readField("list", listeners);
@@ -40,8 +40,8 @@ public class CompositeStateMachineListenerTests {
 
 	@Test
 	public void testUnregister() throws Exception {
-		CompositeStateMachineListener<String, String> listener = new CompositeStateMachineListener<String, String>();
-		StateMachineListenerAdapter<String, String> adapter1 = new StateMachineListenerAdapter<String, String>();
+		CompositeStateMachineListener<String, String> listener = new CompositeStateMachineListener<>();
+		StateMachineListenerAdapter<String, String> adapter1 = new StateMachineListenerAdapter<>();
 		listener.register(adapter1);
 		listener.unregister(adapter1);
 		OrderedComposite<StateMachineListener<String, String>> listeners = listener.getListeners();

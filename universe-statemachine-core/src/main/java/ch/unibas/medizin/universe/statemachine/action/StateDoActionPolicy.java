@@ -32,5 +32,5 @@ public enum StateDoActionPolicy {
 	/**
 	 * Policy interrupting action after a timeout before state is exited.
 	 */
-	TIMEOUT_CANCEL;
+	TIMEOUT_CANCEL
 }

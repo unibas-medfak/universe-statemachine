@@ -60,7 +60,7 @@ public class MethodAnnotationWithFactoryTests extends AbstractStateMachineTests 
 	@WithStateMachine(name = "xxx")
 	static class Bean1 {
 
-		CountDownLatch onStateChangedLatch = new CountDownLatch(1);
+		final CountDownLatch onStateChangedLatch = new CountDownLatch(1);
 
 		@OnStateChanged
 		public void onStateChanged() {

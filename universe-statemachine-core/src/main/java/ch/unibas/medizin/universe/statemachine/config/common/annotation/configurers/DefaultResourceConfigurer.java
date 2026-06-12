@@ -38,7 +38,7 @@ import ch.unibas.medizin.universe.statemachine.config.common.annotation.Annotati
 public class DefaultResourceConfigurer<O,I,B extends AnnotationBuilder<O>>
 		extends AnnotationConfigurerAdapter<O,I,B> implements ResourceConfigurer<I> {
 
-	private Set<Resource> resources = new HashSet<Resource>();
+	private final Set<Resource> resources = new HashSet<>();
 	private final DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
 
 	@Override
@@ -121,6 +121,6 @@ public class DefaultResourceConfigurer<O,I,B extends AnnotationBuilder<O>>
 	 */
 	protected boolean configureResources(B builder, Set<Resource> resources){
 		return false;
-	};
+	}
 
 }

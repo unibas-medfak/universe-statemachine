@@ -28,7 +28,7 @@ import ch.unibas.medizin.universe.statemachine.config.model.StateMachineModelFac
  */
 public class ModelData<S, E> {
 
-	private StateMachineModelFactory<S, E> factory;
+	private final StateMachineModelFactory<S, E> factory;
 
 	/**
 	 * Instantiates a new model data.

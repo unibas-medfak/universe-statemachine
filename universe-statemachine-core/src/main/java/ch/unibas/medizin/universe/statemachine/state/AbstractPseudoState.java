@@ -33,7 +33,7 @@ public abstract class AbstractPseudoState<S, E> implements PseudoState<S, E> {
 
 	private final PseudoStateKind kind;
 
-	private final CompositePseudoStateListener<S, E> pseudoStateListener = new CompositePseudoStateListener<S, E>();
+	private final CompositePseudoStateListener<S, E> pseudoStateListener = new CompositePseudoStateListener<>();
 
 	/**
 	 * Instantiates a new abstract pseudo state.

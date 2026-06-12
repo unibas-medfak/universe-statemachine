@@ -204,19 +204,19 @@ public class AnnotatedMethodTests extends AbstractStateMachineTests {
 	@WithStateMachine
 	static class Bean1 {
 
-		CountDownLatch onMethod0Latch = new CountDownLatch(1);
-		CountDownLatch onMethod1Latch = new CountDownLatch(1);
-		CountDownLatch onMethod2Latch = new CountDownLatch(1);
-		CountDownLatch onMethod3Latch = new CountDownLatch(1);
-		CountDownLatch onMethod4Latch = new CountDownLatch(1);
-		CountDownLatch onMethod5Latch = new CountDownLatch(1);
-		CountDownLatch onMethod6Latch = new CountDownLatch(1);
-		CountDownLatch onMethod7Latch = new CountDownLatch(1);
-		CountDownLatch onMethod8Latch = new CountDownLatch(1);
-		CountDownLatch onMethod9Latch = new CountDownLatch(1);
-		CountDownLatch onMethod10Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod0Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod1Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod2Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod3Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod4Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod5Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod6Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod7Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod8Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod9Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod10Latch = new CountDownLatch(1);
 		volatile int onMethod10Count;
-		CountDownLatch onOnTransitionFromS2ToS3Latch = new CountDownLatch(1);
+		final CountDownLatch onOnTransitionFromS2ToS3Latch = new CountDownLatch(1);
 
 		@OnTransition(target = "S1")
 		public void method0() {
@@ -296,7 +296,7 @@ public class AnnotatedMethodTests extends AbstractStateMachineTests {
 	@WithStateMachineMeta1
 	static class Bean2 {
 
-		CountDownLatch onMethod0Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod0Latch = new CountDownLatch(1);
 
 		@OnTransition(target = "S1")
 		public void method0() {
@@ -307,10 +307,10 @@ public class AnnotatedMethodTests extends AbstractStateMachineTests {
 	@WithStateMachine
 	static class Bean3 {
 
-		CountDownLatch onMethod0Latch = new CountDownLatch(1);
-		CountDownLatch onMethod1Latch = new CountDownLatch(1);
-		CountDownLatch onMethod11Latch = new CountDownLatch(1);
-		CountDownLatch onMethod2Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod0Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod1Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod11Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod2Latch = new CountDownLatch(1);
 
 		@OnTransition(target = "S1")
 		public void method0() {
@@ -370,7 +370,7 @@ public class AnnotatedMethodTests extends AbstractStateMachineTests {
 	@Target(ElementType.METHOD)
 	@Retention(RetentionPolicy.RUNTIME)
 	@OnTransition
-	public static @interface StatesOnTransition {
+	public @interface StatesOnTransition {
 
 		TestStates[] source() default {};
 

@@ -16,6 +16,7 @@
 package ch.unibas.medizin.universe.statemachine;
 
 import java.io.IOException;
+import java.io.Serial;
 
 import org.springframework.dao.NonTransientDataAccessException;
 
@@ -27,7 +28,8 @@ import org.springframework.dao.NonTransientDataAccessException;
  */
 public class StateMachineException extends NonTransientDataAccessException {
 
-	private static final long serialVersionUID = 4485522802268496000L;
+	@Serial
+    private static final long serialVersionUID = 4485522802268496000L;
 
 	/**
 	 * Constructs a generic StateMachineException.

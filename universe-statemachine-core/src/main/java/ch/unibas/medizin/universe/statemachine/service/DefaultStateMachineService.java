@@ -44,7 +44,7 @@ public class DefaultStateMachineService<S, E> implements StateMachineService<S, 
 
 	private final static Log log = LogFactory.getLog(DefaultStateMachineService.class);
 	private final StateMachineFactory<S, E> stateMachineFactory;
-	private final Map<String, StateMachine<S, E>> machines = new HashMap<String, StateMachine<S, E>>();
+	private final Map<String, StateMachine<S, E>> machines = new HashMap<>();
 	private StateMachinePersist<S, E, String> stateMachinePersist;
 
 	/**

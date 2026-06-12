@@ -114,41 +114,32 @@ public class StateMachineMonitorTests extends AbstractStateMachineTests {
 
 		@Bean
 		public Action<String, String> taction() {
-			return new Action<String, String>() {
-				@Override
-				public void execute(StateContext<String, String> context) {
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-					}
-				}
-			};
+			return context -> {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                }
+            };
 		}
 
 		@Bean
 		public Action<String, String> enaction() {
-			return new Action<String, String>() {
-				@Override
-				public void execute(StateContext<String, String> context) {
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-					}
-				}
-			};
+			return context -> {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                }
+            };
 		}
 
 		@Bean
 		public Action<String, String> exaction() {
-			return new Action<String, String>() {
-				@Override
-				public void execute(StateContext<String, String> context) {
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-					}
-				}
-			};
+			return context -> {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                }
+            };
 		}
 
 		@Bean
@@ -183,8 +174,8 @@ public class StateMachineMonitorTests extends AbstractStateMachineTests {
 
 	private static class TestStateMachineMonitor extends AbstractStateMachineMonitor<String, String> {
 
-		Map<Transition<String, String>, Transitions> transitions = new HashMap<>();
-		Map<Function<StateContext<String, String>, Mono<Void>>, Actions> actions = new HashMap<>();
+		final Map<Transition<String, String>, Transitions> transitions = new HashMap<>();
+		final Map<Function<StateContext<String, String>, Mono<Void>>, Actions> actions = new HashMap<>();
 		CountDownLatch latch = new CountDownLatch(4);
 
 		@Override
@@ -207,8 +198,8 @@ public class StateMachineMonitorTests extends AbstractStateMachineTests {
 
 		@SuppressWarnings("unused")
 		static class Transitions {
-			Transition<String, String> transition;
-			Long duration;
+			final Transition<String, String> transition;
+			final Long duration;
 			public Transitions(Transition<String, String> transition, Long duration) {
 				super();
 				this.transition = transition;
@@ -217,8 +208,8 @@ public class StateMachineMonitorTests extends AbstractStateMachineTests {
 		}
 		@SuppressWarnings("unused")
 		static class Actions {
-			Function<StateContext<String, String>, Mono<Void>> action;
-			Long duration;
+			final Function<StateContext<String, String>, Mono<Void>> action;
+			final Long duration;
 			public Actions(Function<StateContext<String, String>, Mono<Void>> action, Long duration) {
 				this.action = action;
 				this.duration = duration;

@@ -66,8 +66,8 @@ public class ListenerTests extends AbstractStateMachineTests {
 		assertThat(machine).isNotNull();
 		machine.sendEvent(MessageBuilder.withPayload(TestEvents.E1).setHeader("foo", "jee1").build());
 		assertThat(listener.states).hasSize(1);
-		assertThat(listener.states.get(0).from.getIds()).containsExactly(TestStates.S1);
-		assertThat(listener.states.get(0).to.getIds()).containsExactly(TestStates.S2);
+		assertThat(listener.states.getFirst().from.getIds()).containsExactly(TestStates.S1);
+		assertThat(listener.states.getFirst().to.getIds()).containsExactly(TestStates.S2);
 		machine.sendEvent(MessageBuilder.withPayload(TestEvents.E2).setHeader("foo", "jee2").build());
 		assertThat(listener.states).hasSize(2);
 		assertThat(listener.states.get(1).from.getIds()).containsExactly(TestStates.S2);
@@ -113,8 +113,8 @@ public class ListenerTests extends AbstractStateMachineTests {
 		machine.getExtendedState().getVariables().put("foo", "jee");
 		assertThat(listener.extendedLatch.await(2, TimeUnit.SECONDS)).isTrue();
 		assertThat(listener.extended).hasSize(1);
-		assertThat(listener.extended.get(0).key).isEqualTo("foo");
-		assertThat(listener.extended.get(0).value).isEqualTo("jee");
+		assertThat(listener.extended.getFirst().key).isEqualTo("foo");
+		assertThat(listener.extended.getFirst().value).isEqualTo("jee");
 		ctx.close();
 	}
 
@@ -122,7 +122,7 @@ public class ListenerTests extends AbstractStateMachineTests {
 
 		private static final Log log = LogFactory.getLog(LoggingAction.class);
 
-		private String message;
+		private final String message;
 
 		public LoggingAction(String message) {
 			this.message = message;
@@ -137,12 +137,12 @@ public class ListenerTests extends AbstractStateMachineTests {
 
 	private static class TestStateMachineListener implements StateMachineListener<TestStates, TestEvents> {
 
-		ArrayList<Holder> states = new ArrayList<Holder>();
+		final ArrayList<Holder> states = new ArrayList<>();
 		volatile int started = 0;
 		volatile int stopped = 0;
-		CountDownLatch stopLatch = new CountDownLatch(1);
-		ArrayList<Holder2> extended = new ArrayList<Holder2>();
-		CountDownLatch extendedLatch = new CountDownLatch(1);
+		final CountDownLatch stopLatch = new CountDownLatch(1);
+		final ArrayList<Holder2> extended = new ArrayList<>();
+		final CountDownLatch extendedLatch = new CountDownLatch(1);
 
 
 		@Override
@@ -159,8 +159,8 @@ public class ListenerTests extends AbstractStateMachineTests {
 		}
 
 		static class Holder {
-			State<TestStates, TestEvents> from;
-			State<TestStates, TestEvents> to;
+			final State<TestStates, TestEvents> from;
+			final State<TestStates, TestEvents> to;
 			public Holder(State<TestStates, TestEvents> from, State<TestStates, TestEvents> to) {
 				this.from = from;
 				this.to = to;
@@ -168,8 +168,8 @@ public class ListenerTests extends AbstractStateMachineTests {
 		}
 
 		static class Holder2 {
-			Object key;
-			Object value;
+			final Object key;
+			final Object value;
 			public Holder2(Object key, Object value) {
 				this.key = key;
 				this.value = value;

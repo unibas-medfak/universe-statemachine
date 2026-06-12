@@ -36,7 +36,7 @@ public class ComplexTestConfigBeanABuilder
 		implements ResourceConfigurerAware {
 
 	private String data;
-	private Set<Resource> resources = new HashSet<Resource>();
+	private final Set<Resource> resources = new HashSet<>();
 
 	@Override
 	protected ComplexTestConfigBeanA performBuild() throws Exception {
@@ -61,7 +61,7 @@ public class ComplexTestConfigBeanABuilder
 	}
 
 	public ResourceConfigurer<ComplexTestConfigBeanABuilder> withResources() throws Exception {
-		return getOrApply(new DefaultResourceConfigurer<ComplexTestConfigBeanA, ComplexTestConfigBeanABuilder,ComplexTestConfigBeanABuilder>());
+		return getOrApply(new DefaultResourceConfigurer<>());
 	}
 
 }

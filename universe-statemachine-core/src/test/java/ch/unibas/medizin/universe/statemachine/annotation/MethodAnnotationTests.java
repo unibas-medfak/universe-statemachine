@@ -32,7 +32,6 @@ import org.springframework.messaging.support.MessageBuilder;
 import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests;
 import ch.unibas.medizin.universe.statemachine.ExtendedState;
 import ch.unibas.medizin.universe.statemachine.ObjectStateMachine;
-import ch.unibas.medizin.universe.statemachine.StateContext;
 import ch.unibas.medizin.universe.statemachine.StateMachine;
 import ch.unibas.medizin.universe.statemachine.StateMachineSystemConstants;
 import ch.unibas.medizin.universe.statemachine.action.Action;
@@ -463,8 +462,8 @@ public class MethodAnnotationTests extends AbstractStateMachineTests {
 	@WithStateMachine
 	static class Bean2 {
 
-		CountDownLatch onMethod1Latch = new CountDownLatch(1);
-		CountDownLatch onMethod2Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod1Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod2Latch = new CountDownLatch(1);
 		Map<String, Object> headers;
 		ExtendedState extendedState;
 		Object variable;
@@ -504,7 +503,7 @@ public class MethodAnnotationTests extends AbstractStateMachineTests {
 	@WithStateMachine
 	static class Bean3 {
 
-		CountDownLatch onStateChangedLatch = new CountDownLatch(1);
+		final CountDownLatch onStateChangedLatch = new CountDownLatch(1);
 
 		@OnStateChanged
 		public void onStateChanged() {
@@ -547,7 +546,7 @@ public class MethodAnnotationTests extends AbstractStateMachineTests {
 
 		CountDownLatch onExtendedStateChanged1Latch = new CountDownLatch(1);
 		CountDownLatch onExtendedStateChanged2Latch = new CountDownLatch(1);
-		CountDownLatch onExtendedStateChangedKeyV1Latch = new CountDownLatch(1);
+		final CountDownLatch onExtendedStateChangedKeyV1Latch = new CountDownLatch(1);
 		CountDownLatch onExtendedStateChangedKeyV2Latch = new CountDownLatch(1);
 		int onExtendedStateChanged1Count = 0;
 		int onExtendedStateChanged2Count = 0;
@@ -598,7 +597,7 @@ public class MethodAnnotationTests extends AbstractStateMachineTests {
 		CountDownLatch onEventNotAccepted2Latch = new CountDownLatch(1);
 		CountDownLatch onEventNotAccepted3Latch = new CountDownLatch(1);
 		CountDownLatch onEventNotAccepted4Latch = new CountDownLatch(1);
-		CountDownLatch onEventNotAccepted5Latch = new CountDownLatch(1);
+		final CountDownLatch onEventNotAccepted5Latch = new CountDownLatch(1);
 		Message<TestEvents> onEventNotAccepted4Message;
 
 		@OnEventNotAccepted
@@ -638,8 +637,8 @@ public class MethodAnnotationTests extends AbstractStateMachineTests {
 
 	@WithStateMachine
 	static class Bean7 {
-		CountDownLatch OnStateMachineError1Latch = new CountDownLatch(1);
-		CountDownLatch OnStateMachineError2Latch = new CountDownLatch(1);
+		final CountDownLatch OnStateMachineError1Latch = new CountDownLatch(1);
+		final CountDownLatch OnStateMachineError2Latch = new CountDownLatch(1);
 		Exception OnStateMachineError2Exception;
 
 		@OnStateMachineError
@@ -657,8 +656,8 @@ public class MethodAnnotationTests extends AbstractStateMachineTests {
 
 	@WithStateMachine
 	static class Bean8 {
-		CountDownLatch OnTransition1Latch = new CountDownLatch(2);
-		CountDownLatch OnTransition2Latch = new CountDownLatch(1);
+		final CountDownLatch OnTransition1Latch = new CountDownLatch(2);
+		final CountDownLatch OnTransition2Latch = new CountDownLatch(1);
 
 		@OnTransition
 		public void OnTransition1() {
@@ -673,8 +672,8 @@ public class MethodAnnotationTests extends AbstractStateMachineTests {
 
 	@WithStateMachine
 	static class Bean9 {
-		CountDownLatch OnTransition1Latch = new CountDownLatch(1);
-		CountDownLatch OnStateEntry1Latch = new CountDownLatch(2);
+		final CountDownLatch OnTransition1Latch = new CountDownLatch(1);
+		final CountDownLatch OnStateEntry1Latch = new CountDownLatch(2);
 
 		@OnTransition(target = "S21")
 		public void OnTransition1() {
@@ -689,8 +688,8 @@ public class MethodAnnotationTests extends AbstractStateMachineTests {
 
 	@WithStateMachine
 	static class Bean10 {
-		CountDownLatch OnTransition1Latch = new CountDownLatch(1);
-		CountDownLatch OnStateEntry1Latch = new CountDownLatch(2);
+		final CountDownLatch OnTransition1Latch = new CountDownLatch(1);
+		final CountDownLatch OnStateEntry1Latch = new CountDownLatch(2);
 
 		@OnTransition(target = "S21")
 		public void OnTransition1() {
@@ -705,8 +704,8 @@ public class MethodAnnotationTests extends AbstractStateMachineTests {
 
 	@WithStateMachine(id="myMachine")
 	static class Bean11 {
-		CountDownLatch OnTransition1Latch = new CountDownLatch(1);
-		CountDownLatch OnTransition2Latch = new CountDownLatch(1);
+		final CountDownLatch OnTransition1Latch = new CountDownLatch(1);
+		final CountDownLatch OnTransition2Latch = new CountDownLatch(1);
 		volatile int count1 = 0;
 		volatile int count2 = 0;
 
@@ -885,16 +884,12 @@ public class MethodAnnotationTests extends AbstractStateMachineTests {
 
 		@Bean
 		public Action<TestStates, TestEvents> extendedStateAction() {
-			return new Action<TestStates, TestEvents>() {
-
-				@Override
-				public void execute(StateContext<TestStates, TestEvents> context) {
-					String e1 = context.getMessageHeaders().get("V1", String.class);
-					if (e1 != null) {
-						context.getExtendedState().getVariables().put("V1", e1);
-					}
-				}
-			};
+			return context -> {
+                String e1 = context.getMessageHeaders().get("V1", String.class);
+                if (e1 != null) {
+                    context.getExtendedState().getVariables().put("V1", e1);
+                }
+            };
 		}
 
 	}

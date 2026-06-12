@@ -65,12 +65,12 @@ public class StateMachineModelBuilder<S, E>
 
 	@Override
 	protected ModelData<S, E> performBuild() throws Exception {
-		return new ModelData<S, E>(factory);
+		return new ModelData<>(factory);
 	}
 
 	@Override
 	public ModelConfigurer<S, E> withModel() throws Exception {
-		return apply(new DefaultModelConfigurer<S, E>());
+		return apply(new DefaultModelConfigurer<>());
 	}
 
 	public void setStateMachineModelFactory(StateMachineModelFactory<S, E> factory) {

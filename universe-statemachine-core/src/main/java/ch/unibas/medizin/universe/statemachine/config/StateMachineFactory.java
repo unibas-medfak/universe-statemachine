@@ -66,14 +66,14 @@ public interface StateMachineFactory<S, E> {
 		StatesData<S, E> stateMachineStates = stateMachineConfig.getStates();
 		ConfigurationData<S, E> stateMachineConfigurationConfig = stateMachineConfig.getStateMachineConfigurationConfig();
 
-		ObjectStateMachineFactory<S, E> stateMachineFactory = null;
+		ObjectStateMachineFactory<S, E> stateMachineFactory;
 		if (stateMachineConfig.getModel() != null && stateMachineConfig.getModel().getFactory() != null) {
-			stateMachineFactory = new ObjectStateMachineFactory<S, E>(
-					new DefaultStateMachineModel<S, E>(stateMachineConfigurationConfig, null, null),
-					stateMachineConfig.getModel().getFactory());
+			stateMachineFactory = new ObjectStateMachineFactory<>(
+                    new DefaultStateMachineModel<>(stateMachineConfigurationConfig, null, null),
+                    stateMachineConfig.getModel().getFactory());
 		} else {
-			stateMachineFactory = new ObjectStateMachineFactory<S, E>(new DefaultStateMachineModel<S, E>(
-					stateMachineConfigurationConfig, stateMachineStates, stateMachineTransitions), null);
+			stateMachineFactory = new ObjectStateMachineFactory<>(new DefaultStateMachineModel<>(
+                    stateMachineConfigurationConfig, stateMachineStates, stateMachineTransitions), null);
 		}
 		return stateMachineFactory;
 	}

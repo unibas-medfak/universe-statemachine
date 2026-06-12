@@ -134,7 +134,7 @@ public class ManualBuilderContextTests extends AbstractStateMachineTests {
 
 	private static class TestListener extends StateMachineListenerAdapter<String, String> {
 
-		volatile CountDownLatch stateMachineStartedLatch = new CountDownLatch(1);
+		final CountDownLatch stateMachineStartedLatch = new CountDownLatch(1);
 		volatile CountDownLatch stateChangedLatch = new CountDownLatch(1);
 		volatile int stateChangedCount = 0;
 

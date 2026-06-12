@@ -59,8 +59,8 @@ public class StateMachineAnnotationPostProcessorTests extends AbstractStateMachi
 	@WithStateMachine
 	static class Bean1 {
 
-		CountDownLatch onMethod1Latch = new CountDownLatch(1);
-		CountDownLatch onOnTransitionFromS2ToS3Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod1Latch = new CountDownLatch(1);
+		final CountDownLatch onOnTransitionFromS2ToS3Latch = new CountDownLatch(1);
 
 		@OnTransition(source = "S1", target = "S2")
 		public void method1() {
@@ -82,7 +82,7 @@ public class StateMachineAnnotationPostProcessorTests extends AbstractStateMachi
 	@WithStateMachine
 	static class Bean2 {
 
-		CountDownLatch onMethod1Latch = new CountDownLatch(1);
+		final CountDownLatch onMethod1Latch = new CountDownLatch(1);
 		CountDownLatch onOnTransitionFromS2ToS3Latch = new CountDownLatch(1);
 
 		@OnTransition(source = "S1", target = "S2")

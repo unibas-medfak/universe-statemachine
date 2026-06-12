@@ -29,7 +29,6 @@ import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests.TestEve
 import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests.TestGuard;
 import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests.TestStates;
 import ch.unibas.medizin.universe.statemachine.ObjectStateMachine;
-import ch.unibas.medizin.universe.statemachine.StateContext;
 import ch.unibas.medizin.universe.statemachine.StateMachineSystemConstants;
 import ch.unibas.medizin.universe.statemachine.config.EnableStateMachine;
 import ch.unibas.medizin.universe.statemachine.config.EnumStateMachineConfigurerAdapter;
@@ -208,24 +207,16 @@ public class GuardTests {
 
 		@Bean
 		public Guard<TestStates, TestEvents> testGuard1() {
-			return new Guard<TestStates, TestEvents>() {
-
-				@Override
-				public boolean evaluate(StateContext<TestStates, TestEvents> context) {
-					throw new RuntimeException();
-				}
-			};
+			return context -> {
+                throw new RuntimeException();
+            };
 		}
 
 		@Bean
 		public Guard<TestStates, TestEvents> testGuard2() {
-			return new Guard<TestStates, TestEvents>() {
-
-				@Override
-				public boolean evaluate(StateContext<TestStates, TestEvents> context) {
-					throw new Error();
-				}
-			};
+			return context -> {
+                throw new Error();
+            };
 		}
 	}
 }

@@ -37,7 +37,7 @@ import java.util.Collection;
  * @author Janne Valkealahti
  */
 public class EventExpressionVoter<T> implements AccessDecisionVoter<Message<T>> {
-	private SecurityExpressionHandler<Message<T>> expressionHandler = new DefaultEventSecurityExpressionHandler<T>();
+	private SecurityExpressionHandler<Message<T>> expressionHandler = new DefaultEventSecurityExpressionHandler<>();
 
 	public int vote(Authentication authentication, Message<T> message,
 			Collection<ConfigAttribute> attributes) {

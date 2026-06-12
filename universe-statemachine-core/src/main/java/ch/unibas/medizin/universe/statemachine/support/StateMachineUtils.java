@@ -141,7 +141,7 @@ public abstract class StateMachineUtils {
 	}
 
 	public static <S> Collection<String> toStringCollection(Collection<S> collection) {
-		Collection<String> c = new ArrayList<String>();
+		Collection<String> c = new ArrayList<>();
 		for (S item : collection) {
 			c.add(item.toString());
 		}
@@ -149,7 +149,7 @@ public abstract class StateMachineUtils {
 	}
 
 	public static Collection<String> toStringCollection(Object object) {
-		Collection<String> c = new ArrayList<String>();
+		Collection<String> c = new ArrayList<>();
 		if (ObjectUtils.isArray(object)) {
 			for (Object o : ObjectUtils.toObjectArray(object)) {
 				c.add(o.toString());
@@ -161,7 +161,7 @@ public abstract class StateMachineUtils {
 	}
 
 	public static boolean containsAtleastOneEqualString(Collection<String> left, String right) {
-		Collection<String> r = new ArrayList<String>(1);
+		Collection<String> r = new ArrayList<>(1);
 		r.add(right);
 		return containsAtleastOneEqualString(left, r);
 	}

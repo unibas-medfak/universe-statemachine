@@ -171,7 +171,7 @@ public class ConfigurationErrorTests extends AbstractStateMachineTests {
 
 	static class TestStateMachineModelVerifier implements StateMachineModelVerifier<String, String> {
 
-		CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 
 		@Override
 		public void verify(StateMachineModel<String, String> model) {

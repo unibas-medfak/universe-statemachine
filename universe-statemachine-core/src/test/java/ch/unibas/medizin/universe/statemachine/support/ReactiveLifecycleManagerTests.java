@@ -31,8 +31,8 @@ public class ReactiveLifecycleManagerTests {
 
 	@Test
 	public void testStartStop() {
-		ReactiveLifecycleManager manager = new ReactiveLifecycleManager(() -> Mono.empty(), () -> Mono.empty(),
-				() -> Mono.empty(), () -> Mono.empty());
+		ReactiveLifecycleManager manager = new ReactiveLifecycleManager(Mono::empty, Mono::empty,
+                Mono::empty, Mono::empty);
 
 		assertThat(manager.isRunning()).isFalse();
 		assertThat(manager.getLifecycleState()).isEqualTo(LifecycleState.STOPPED);
@@ -57,8 +57,8 @@ public class ReactiveLifecycleManagerTests {
 	@Test
 	public void testStartRecursive() {
 		RecursiveStartRequestSupplier startSupplier = new RecursiveStartRequestSupplier();
-		ReactiveLifecycleManager manager = new ReactiveLifecycleManager(startSupplier, () -> Mono.empty(),
-				() -> Mono.empty(), () -> Mono.empty());
+		ReactiveLifecycleManager manager = new ReactiveLifecycleManager(startSupplier, Mono::empty,
+                Mono::empty, Mono::empty);
 		startSupplier.setManager(manager);
 		StepVerifier.create(manager.startReactively()).expectComplete().verify();
 		assertThat(manager.isRunning()).isTrue();
@@ -68,8 +68,8 @@ public class ReactiveLifecycleManagerTests {
 	@Test
 	public void testStartStops() {
 		StartStopsRequestSupplier startSupplier = new StartStopsRequestSupplier();
-		ReactiveLifecycleManager manager = new ReactiveLifecycleManager(() -> Mono.empty(), () -> Mono.empty(),
-				startSupplier, () -> Mono.empty());
+		ReactiveLifecycleManager manager = new ReactiveLifecycleManager(Mono::empty, Mono::empty,
+				startSupplier, Mono::empty);
 		startSupplier.setManager(manager);
 		StepVerifier.create(manager.startReactively()).expectComplete().verify();
 		assertThat(manager.isRunning()).isFalse();
@@ -79,8 +79,8 @@ public class ReactiveLifecycleManagerTests {
 	@Test
 	public void testStartStops2() {
 		StartStopsRequestSupplier startSupplier = new StartStopsRequestSupplier();
-		ReactiveLifecycleManager manager = new ReactiveLifecycleManager(startSupplier, () -> Mono.empty(),
-				() -> Mono.empty(), () -> Mono.empty());
+		ReactiveLifecycleManager manager = new ReactiveLifecycleManager(startSupplier, Mono::empty,
+                Mono::empty, Mono::empty);
 		startSupplier.setManager(manager);
 		StepVerifier.create(manager.startReactively()).expectComplete().verify();
 //		assertThat(manager.isRunning()).isFalse();

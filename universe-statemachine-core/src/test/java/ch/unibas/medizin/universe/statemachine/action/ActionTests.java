@@ -136,9 +136,9 @@ public class ActionTests extends AbstractStateMachineTests {
 
 	private static class TestCountAction implements Action<TestStates, TestEvents> {
 
-		int count = 0;
+		int count;
 		StateContext<TestStates, TestEvents> context;
-		CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 
 		public TestCountAction() {
 			count = 0;

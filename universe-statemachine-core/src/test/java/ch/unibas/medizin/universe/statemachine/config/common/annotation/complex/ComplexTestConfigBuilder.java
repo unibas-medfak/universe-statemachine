@@ -52,7 +52,7 @@ public class ComplexTestConfigBuilder extends AbstractConfiguredAnnotationBuilde
 	}
 
 	public DefaultPropertiesConfigurer<ComplexTestConfig, ComplexTestConfigBuilder,ComplexTestConfigBuilder> withProperties() throws Exception {
-		return getOrApply(new DefaultPropertiesConfigurer<ComplexTestConfig, ComplexTestConfigBuilder,ComplexTestConfigBuilder>());
+		return getOrApply(new DefaultPropertiesConfigurer<>());
 	}
 
 }

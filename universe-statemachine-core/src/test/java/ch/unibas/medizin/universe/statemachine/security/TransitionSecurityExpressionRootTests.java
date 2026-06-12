@@ -36,7 +36,7 @@ import ch.unibas.medizin.universe.statemachine.transition.Transition;
 
 public class TransitionSecurityExpressionRootTests {
 
-	SpelExpressionParser parser = new SpelExpressionParser();
+	final SpelExpressionParser parser = new SpelExpressionParser();
 	TransitionSecurityExpressionRoot root;
 	StandardEvaluationContext ctx;
 	private AuthenticationTrustResolver trustResolver;

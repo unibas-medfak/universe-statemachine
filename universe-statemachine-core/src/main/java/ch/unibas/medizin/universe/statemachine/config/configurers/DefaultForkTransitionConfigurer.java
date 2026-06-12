@@ -37,7 +37,7 @@ public class DefaultForkTransitionConfigurer<S, E>
 
 	private S source;
 
-	private final List<S> targets = new ArrayList<S>();
+	private final List<S> targets = new ArrayList<>();
 
 	@Override
 	public void configure(StateMachineTransitionBuilder<S, E> builder) throws Exception {

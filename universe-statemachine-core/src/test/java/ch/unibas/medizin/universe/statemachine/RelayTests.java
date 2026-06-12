@@ -22,7 +22,6 @@ import static ch.unibas.medizin.universe.statemachine.TestUtils.resolveMachine;
 
 import java.util.concurrent.TimeUnit;
 
-import ch.unibas.medizin.universe.statemachine.StateContext;
 import ch.unibas.medizin.universe.statemachine.StateMachine;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -93,16 +92,10 @@ public class RelayTests extends AbstractStateMachineTests {
 
 		@Bean
 		public Action<TestStates, TestEvents> action1() {
-			return new Action<TestStates, TestEvents>() {
-
-				@Override
-				public void execute(StateContext<TestStates, TestEvents> context) {
-					context.getStateMachine()
-						.sendEvent(Mono.just(MessageBuilder
-							.withPayload(TestEvents.E2).build()))
-						.subscribe();
-				}
-			};
+			return context -> context.getStateMachine()
+                    .sendEvent(Mono.just(MessageBuilder
+                            .withPayload(TestEvents.E2).build()))
+                    .subscribe();
 		}
 	}
 

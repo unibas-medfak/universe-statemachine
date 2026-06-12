@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class AbstractAnnotationBuilder<O> implements AnnotationBuilder<O> {
 
 	/** Flag tracking build */
-	private AtomicBoolean building = new AtomicBoolean();
+	private final AtomicBoolean building = new AtomicBoolean();
 
 	/** Built object is stored here */
 	private O object;

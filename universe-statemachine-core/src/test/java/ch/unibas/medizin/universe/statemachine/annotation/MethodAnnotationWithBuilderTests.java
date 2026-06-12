@@ -108,7 +108,7 @@ public class MethodAnnotationWithBuilderTests extends AbstractStateMachineTests 
 	@WithStateMachine(id = "xxx")
 	static class Bean1 {
 
-		CountDownLatch onStateChangedLatch = new CountDownLatch(1);
+		final CountDownLatch onStateChangedLatch = new CountDownLatch(1);
 
 		@OnStateChanged
 		public void onStateChanged() {
@@ -119,7 +119,7 @@ public class MethodAnnotationWithBuilderTests extends AbstractStateMachineTests 
 	@WithStateMachine(name = "", id = "xxx")
 	static class Bean2 {
 
-		CountDownLatch onStateChangedLatch = new CountDownLatch(1);
+		final CountDownLatch onStateChangedLatch = new CountDownLatch(1);
 
 		@OnStateChanged
 		public void onStateChanged() {

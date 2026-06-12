@@ -165,7 +165,7 @@ public class SessionScopedManualTests {
 		public HttpEntity<Void> dummyPing() {
 			// dummy ping to instantiate session and then create machine
 			stateMachine.getState();
-			return new ResponseEntity<Void>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 
 		@RequestMapping(path="/state", method=RequestMethod.POST)
@@ -174,7 +174,7 @@ public class SessionScopedManualTests {
 				.sendEvent(Mono.just(MessageBuilder
 					.withPayload(event).build()))
 				.subscribe();
-			return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(HttpStatus.ACCEPTED);
 		}
 
 		@RequestMapping(path="/state", method=RequestMethod.GET)

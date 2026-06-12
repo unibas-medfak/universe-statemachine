@@ -114,7 +114,7 @@ public abstract class AbstractImportingAnnotationConfiguration<B extends Annotat
 		// wrap in scoped proxy if needed
 		if (proxyMode != null && proxyMode != ScopedProxyMode.DEFAULT && proxyMode != ScopedProxyMode.NO) {
 			BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(beanDefinition, names[0]);
-			BeanDefinitionHolder scopedProxy = null;
+			BeanDefinitionHolder scopedProxy;
 			if (proxyMode == ScopedProxyMode.TARGET_CLASS) {
 				scopedProxy = ScopedProxyUtils.createScopedProxy(definitionHolder, registry, true);
 			} else if (proxyMode == ScopedProxyMode.INTERFACES) {
@@ -184,7 +184,7 @@ public abstract class AbstractImportingAnnotationConfiguration<B extends Annotat
 
 		private BeanFactory beanFactory;
 
-		private Class<T> clazz;
+		private final Class<T> clazz;
 
 		public BeanDelegatingFactoryBean(B builder, Class<T> clazz) {
 			this.builder = builder;

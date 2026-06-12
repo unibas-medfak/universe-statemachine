@@ -32,7 +32,7 @@ public class InMemoryStateMachineTraceRepository implements StateMachineTraceRep
 
 	private int capacity = 100;
 	private boolean reverse = true;
-	private final List<StateMachineTrace> traces = new LinkedList<StateMachineTrace>();
+	private final List<StateMachineTrace> traces = new LinkedList<>();
 
 	/**
 	 * Flag to say that the repository lists traces in reverse order.
@@ -57,7 +57,7 @@ public class InMemoryStateMachineTraceRepository implements StateMachineTraceRep
 	@Override
 	public List<StateMachineTrace> findAll() {
 		synchronized (this.traces) {
-			return Collections.unmodifiableList(new ArrayList<StateMachineTrace>(this.traces));
+			return Collections.unmodifiableList(new ArrayList<>(this.traces));
 		}
 	}
 
@@ -69,7 +69,7 @@ public class InMemoryStateMachineTraceRepository implements StateMachineTraceRep
 				this.traces.remove(this.reverse ? this.capacity - 1 : 0);
 			}
 			if (this.reverse) {
-				this.traces.add(0, trace);
+				this.traces.addFirst(trace);
 			}
 			else {
 				this.traces.add(trace);

@@ -94,7 +94,7 @@ public interface StateMachineExecutor<S, E> extends StateMachineReactiveLifecycl
 	/**
 	 * Callback interface when executor wants to handle transit.
 	 */
-	public interface StateMachineExecutorTransit<S, E> {
+    interface StateMachineExecutorTransit<S, E> {
 
 		/**
 		 * Called when executor wants to do a transit.
@@ -110,12 +110,12 @@ public interface StateMachineExecutor<S, E> extends StateMachineReactiveLifecycl
 	/**
 	 * Completion callback to notify back complete or error.
 	 */
-	public interface StateMachineExecutorCallback {
+    interface StateMachineExecutorCallback {
 		void complete();
 		void error(Throwable e);
 	}
 
-	static class MonoSinkStateMachineExecutorCallback implements Consumer<MonoSink<Void>>, StateMachineExecutorCallback {
+	class MonoSinkStateMachineExecutorCallback implements Consumer<MonoSink<Void>>, StateMachineExecutorCallback {
 
 		private boolean complete;
 		private Throwable error;
@@ -142,7 +142,7 @@ public interface StateMachineExecutor<S, E> extends StateMachineReactiveLifecycl
 		}
 	}
 
-	public static class ExecutorExceptionHolder {
+	class ExecutorExceptionHolder {
 
 		private Throwable error;
 

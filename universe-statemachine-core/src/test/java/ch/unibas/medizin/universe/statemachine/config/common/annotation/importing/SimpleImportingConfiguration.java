@@ -62,7 +62,7 @@ public class SimpleImportingConfiguration extends
 
 	@Override
 	protected List<Class<? extends Annotation>> getAnnotations() {
-		List<Class<? extends Annotation>> types = new ArrayList<Class<? extends Annotation>>();
+		List<Class<? extends Annotation>> types = new ArrayList<>();
 		types.add(EnableImportingTest.class);
 		return types;
 	}

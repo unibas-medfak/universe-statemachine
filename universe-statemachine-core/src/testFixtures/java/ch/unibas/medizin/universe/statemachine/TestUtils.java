@@ -47,7 +47,7 @@ import reactor.test.StepVerifier;
  */
 public class TestUtils {
 
-	private static Log log = LogFactory.getLog(TestUtils.class);
+	private static final Log log = LogFactory.getLog(TestUtils.class);
 
 	@SuppressWarnings("unchecked")
 	public static <S, E> StateMachine<S, E> resolveMachine(BeanFactory beanFactory) {
@@ -151,7 +151,7 @@ public class TestUtils {
 			.doOnNext(result -> {
 				log.debug("Consume eventResult " + result);
 			})
-			.flatMap(result -> result.complete());
+			.flatMap(StateMachineEventResult::complete);
 		StepVerifier.create(completions)
 			.thenConsumeWhile(complete -> true)
 			.expectComplete()

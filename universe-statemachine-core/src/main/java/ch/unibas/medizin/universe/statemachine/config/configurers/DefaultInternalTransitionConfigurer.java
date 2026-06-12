@@ -105,7 +105,7 @@ public class DefaultInternalTransitionConfigurer<S, E> extends AbstractTransitio
 	public InternalTransitionConfigurer<S, E> guardExpression(String expression) {
 		SpelExpressionParser parser = new SpelExpressionParser(
 				new SpelParserConfiguration(SpelCompilerMode.MIXED, null));
-		setGuard(new SpelExpressionGuard<S, E>(parser.parseExpression(expression)));
+		setGuard(new SpelExpressionGuard<>(parser.parseExpression(expression)));
 		return this;
 	}
 

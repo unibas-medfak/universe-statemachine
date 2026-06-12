@@ -127,7 +127,7 @@ public class ReactiveActionTests extends AbstractStateMachineTests {
 	private static class TestCountAction implements ReactiveAction<TestStates, TestEvents> {
 
 		int count = 0;
-		CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 
 		@Override
 		public Mono<Void> apply(StateContext<TestStates, TestEvents> context) {

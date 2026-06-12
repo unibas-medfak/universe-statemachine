@@ -46,35 +46,35 @@ public class TransitionComparatorTests {
 
 	@Test
 	public void testCompareWithParentAndChild() {
-		PseudoState<TestStates, TestEvents> pseudoState = new DefaultPseudoState<TestStates, TestEvents>(PseudoStateKind.INITIAL);
+		PseudoState<TestStates, TestEvents> pseudoState = new DefaultPseudoState<>(PseudoStateKind.INITIAL);
 
-		State<TestStates, TestEvents> stateS111 = new EnumState<TestStates, TestEvents>(TestStates.S111, null, null, null, pseudoState);
+		State<TestStates, TestEvents> stateS111 = new EnumState<>(TestStates.S111, null, null, null, pseudoState);
 
 		// submachine 11
-		Collection<State<TestStates, TestEvents>> substates111 = new ArrayList<State<TestStates, TestEvents>>();
+		Collection<State<TestStates, TestEvents>> substates111 = new ArrayList<>();
 		substates111.add(stateS111);
-		Collection<Transition<TestStates, TestEvents>> subtransitions111 = new ArrayList<Transition<TestStates, TestEvents>>();
-		ObjectStateMachine<TestStates, TestEvents> submachine11 = new ObjectStateMachine<TestStates, TestEvents>(substates111,
-				subtransitions111, stateS111);
+		Collection<Transition<TestStates, TestEvents>> subtransitions111 = new ArrayList<>();
+		ObjectStateMachine<TestStates, TestEvents> submachine11 = new ObjectStateMachine<>(substates111,
+                subtransitions111, stateS111);
 
 		// submachine 1
-		StateMachineState<TestStates, TestEvents> stateS11 = new StateMachineState<TestStates, TestEvents>(TestStates.S11, submachine11,
-				null, null, null, pseudoState);
+		StateMachineState<TestStates, TestEvents> stateS11 = new StateMachineState<>(TestStates.S11, submachine11,
+                null, null, null, pseudoState);
 
-		Collection<State<TestStates, TestEvents>> substates11 = new ArrayList<State<TestStates, TestEvents>>();
+		Collection<State<TestStates, TestEvents>> substates11 = new ArrayList<>();
 		substates11.add(stateS11);
-		Collection<Transition<TestStates, TestEvents>> subtransitions11 = new ArrayList<Transition<TestStates, TestEvents>>();
-		ObjectStateMachine<TestStates, TestEvents> submachine1 = new ObjectStateMachine<TestStates, TestEvents>(substates11,
-				subtransitions11, stateS11);
+		Collection<Transition<TestStates, TestEvents>> subtransitions11 = new ArrayList<>();
+		ObjectStateMachine<TestStates, TestEvents> submachine1 = new ObjectStateMachine<>(substates11,
+                subtransitions11, stateS11);
 
 		// machine
-		StateMachineState<TestStates, TestEvents> stateS1 = new StateMachineState<TestStates, TestEvents>(TestStates.S1, submachine1, null,
-				null, null, pseudoState);
+		StateMachineState<TestStates, TestEvents> stateS1 = new StateMachineState<>(TestStates.S1, submachine1, null,
+                null, null, pseudoState);
 
-		DefaultExternalTransition<TestStates, TestEvents> transitionFromS111ToS1 = new DefaultExternalTransition<TestStates, TestEvents>(
-				stateS111, stateS1, null, TestEvents.E1, null, new EventTrigger<TestStates, TestEvents>(TestEvents.E1));
-		DefaultExternalTransition<TestStates, TestEvents> transitionFromS11ToS1 = new DefaultExternalTransition<TestStates, TestEvents>(
-				stateS11, stateS1, null, TestEvents.E1, null, new EventTrigger<TestStates, TestEvents>(TestEvents.E1));
+		DefaultExternalTransition<TestStates, TestEvents> transitionFromS111ToS1 = new DefaultExternalTransition<>(
+                stateS111, stateS1, null, TestEvents.E1, null, new EventTrigger<>(TestEvents.E1));
+		DefaultExternalTransition<TestStates, TestEvents> transitionFromS11ToS1 = new DefaultExternalTransition<>(
+                stateS11, stateS1, null, TestEvents.E1, null, new EventTrigger<>(TestEvents.E1));
 
 		TransitionComparator<TestStates, TestEvents> comparator = new TransitionComparator<>(null);
 		assertThat(comparator.compare(transitionFromS111ToS1, transitionFromS11ToS1)).isEqualTo(-1);

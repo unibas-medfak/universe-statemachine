@@ -229,8 +229,8 @@ public class ExitEntryStateTests extends AbstractStateMachineTests {
 
 	private static class TestStateEntryExitListener extends StateMachineListenerAdapter<String, String> {
 
-		List<String> entered = new ArrayList<>();
-		List<String> exited = new ArrayList<>();
+		final List<String> entered = new ArrayList<>();
+		final List<String> exited = new ArrayList<>();
 
 		@Override
 		public void stateEntered(State<String, String> state) {

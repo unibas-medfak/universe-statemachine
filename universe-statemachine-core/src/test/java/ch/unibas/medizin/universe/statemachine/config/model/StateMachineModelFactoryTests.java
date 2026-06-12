@@ -137,11 +137,8 @@ public class StateMachineModelFactoryTests extends AbstractStateMachineTests {
 	static class Config1 {
 		@Bean
 		public Action<String, String> action1() {
-			return new Action<String, String>() {
-				@Override
-				public void execute(StateContext<String, String> context) {
-				}
-			};
+			return context -> {
+            };
 		}
 	}
 
@@ -163,11 +160,8 @@ public class StateMachineModelFactoryTests extends AbstractStateMachineTests {
 
 		@Bean
 		public Action<String, String> action1() {
-			return new Action<String, String>() {
-				@Override
-				public void execute(StateContext<String, String> context) {
-				}
-			};
+			return context -> {
+            };
 		}
 	}
 
@@ -189,11 +183,8 @@ public class StateMachineModelFactoryTests extends AbstractStateMachineTests {
 
 		@Bean
 		public Action<String, String> action1() {
-			return new Action<String, String>() {
-				@Override
-				public void execute(StateContext<String, String> context) {
-				}
-			};
+			return context -> {
+            };
 		}
 	}
 
@@ -222,16 +213,14 @@ public class StateMachineModelFactoryTests extends AbstractStateMachineTests {
 
 		@Bean
 		public Action<String, String> action1() {
-			return new Action<String, String>() {
-				@Override
-				public void execute(StateContext<String, String> context) {
-				}
-			};
+			return context -> {
+            };
 		}
 
 		@Bean
 		public StateMachineListener<String, String> stateMachineListener() {
-			return new StateMachineListenerAdapter<String, String>(){};
+			return new StateMachineListenerAdapter<>() {
+            };
 		}
 	}
 
@@ -260,16 +249,14 @@ public class StateMachineModelFactoryTests extends AbstractStateMachineTests {
 
 		@Bean
 		public Action<String, String> action1() {
-			return new Action<String, String>() {
-				@Override
-				public void execute(StateContext<String, String> context) {
-				}
-			};
+			return context -> {
+            };
 		}
 
 		@Bean
 		public StateMachineListener<String, String> stateMachineListener() {
-			return new StateMachineListenerAdapter<String, String>(){};
+			return new StateMachineListenerAdapter<>() {
+            };
 		}
 	}
 
@@ -290,12 +277,12 @@ public class StateMachineModelFactoryTests extends AbstractStateMachineTests {
 			ConfigurationData<String, String> configurationData = new ConfigurationData<>();
 
 			Collection<StateData<String, String>> stateData = new ArrayList<>();
-			stateData.add(new StateData<String, String>(state1, true));
-			stateData.add(new StateData<String, String>(null, null, state2, null, s2Actions, null));
+			stateData.add(new StateData<>(state1, true));
+			stateData.add(new StateData<>(null, null, state2, null, s2Actions, null));
 			StatesData<String, String> statesData = new StatesData<>(stateData);
 
 			Collection<TransitionData<String, String>> transitionData = new ArrayList<>();
-			transitionData.add(new TransitionData<String, String>(state1, state2, event1));
+			transitionData.add(new TransitionData<>(state1, state2, event1));
 			TransitionsData<String, String> transitionsData = new TransitionsData<>(transitionData);
 
 			StateMachineModel<String, String> stateMachineModel = new DefaultStateMachineModel<>(configurationData, statesData, transitionsData);
@@ -316,9 +303,9 @@ public class StateMachineModelFactoryTests extends AbstractStateMachineTests {
 	@SuppressWarnings("unchecked")
 	private static class TestStateMachineModelFactory2 implements StateMachineModelFactory<String, String>, BeanFactoryAware {
 		private BeanFactory beanFactory;
-		String state1 = "S1";
-		String state2 = "S2";
-		String event1 = "E1";
+		final String state1 = "S1";
+		final String state2 = "S2";
+		final String event1 = "E1";
 
 		@Override
 		public StateMachineModel<String, String> build() {
@@ -328,12 +315,12 @@ public class StateMachineModelFactoryTests extends AbstractStateMachineTests {
 			s2Actions.add(Actions.from(action1));
 
 			Collection<StateData<String, String>> stateData = new ArrayList<>();
-			stateData.add(new StateData<String, String>(state1, true));
-			stateData.add(new StateData<String, String>(null, null, state2, null, s2Actions, null));
+			stateData.add(new StateData<>(state1, true));
+			stateData.add(new StateData<>(null, null, state2, null, s2Actions, null));
 			StatesData<String, String> statesData = new StatesData<>(stateData);
 
 			Collection<TransitionData<String, String>> transitionData = new ArrayList<>();
-			transitionData.add(new TransitionData<String, String>(state1, state2, event1));
+			transitionData.add(new TransitionData<>(state1, state2, event1));
 			TransitionsData<String, String> transitionsData = new TransitionsData<>(transitionData);
 
 			StateMachineModel<String, String> stateMachineModel = new DefaultStateMachineModel<>(null, statesData, transitionsData);

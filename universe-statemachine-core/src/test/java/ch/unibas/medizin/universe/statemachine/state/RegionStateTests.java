@@ -41,42 +41,42 @@ public class RegionStateTests extends AbstractStateMachineTests {
 
 	@Test
 	public void testSimpleRegionState() {
-		PseudoState<TestStates,TestEvents> pseudoState = new DefaultPseudoState<TestStates,TestEvents>(PseudoStateKind.INITIAL);
-		State<TestStates,TestEvents> stateSI = new EnumState<TestStates,TestEvents>(TestStates.SI, pseudoState);
-		State<TestStates,TestEvents> stateS1 = new EnumState<TestStates,TestEvents>(TestStates.S1);
-		State<TestStates,TestEvents> stateS2 = new EnumState<TestStates,TestEvents>(TestStates.S2);
-		State<TestStates,TestEvents> stateS3 = new EnumState<TestStates,TestEvents>(TestStates.S3);
+		PseudoState<TestStates,TestEvents> pseudoState = new DefaultPseudoState<>(PseudoStateKind.INITIAL);
+		State<TestStates,TestEvents> stateSI = new EnumState<>(TestStates.SI, pseudoState);
+		State<TestStates,TestEvents> stateS1 = new EnumState<>(TestStates.S1);
+		State<TestStates,TestEvents> stateS2 = new EnumState<>(TestStates.S2);
+		State<TestStates,TestEvents> stateS3 = new EnumState<>(TestStates.S3);
 
-		Collection<State<TestStates,TestEvents>> states = new ArrayList<State<TestStates,TestEvents>>();
+		Collection<State<TestStates,TestEvents>> states = new ArrayList<>();
 		states.add(stateSI);
 		states.add(stateS1);
 		states.add(stateS2);
 		states.add(stateS3);
 
-		Collection<Transition<TestStates,TestEvents>> transitions = new ArrayList<Transition<TestStates,TestEvents>>();
+		Collection<Transition<TestStates,TestEvents>> transitions = new ArrayList<>();
 
 		DefaultExternalTransition<TestStates,TestEvents> transitionFromSIToS1 =
-				new DefaultExternalTransition<TestStates,TestEvents>(stateSI, stateS1, null, TestEvents.E1, null, new EventTrigger<TestStates,TestEvents>(TestEvents.E1));
+                new DefaultExternalTransition<>(stateSI, stateS1, null, TestEvents.E1, null, new EventTrigger<>(TestEvents.E1));
 
 		DefaultExternalTransition<TestStates,TestEvents> transitionFromS1ToS2 =
-				new DefaultExternalTransition<TestStates,TestEvents>(stateS1, stateS2, null, TestEvents.E2, null, new EventTrigger<TestStates,TestEvents>(TestEvents.E2));
+                new DefaultExternalTransition<>(stateS1, stateS2, null, TestEvents.E2, null, new EventTrigger<>(TestEvents.E2));
 
 		DefaultExternalTransition<TestStates,TestEvents> transitionFromS2ToS3 =
-				new DefaultExternalTransition<TestStates,TestEvents>(stateS2, stateS3, null, TestEvents.E3, null, new EventTrigger<TestStates,TestEvents>(TestEvents.E3));
+                new DefaultExternalTransition<>(stateS2, stateS3, null, TestEvents.E3, null, new EventTrigger<>(TestEvents.E3));
 
 		transitions.add(transitionFromSIToS1);
 		transitions.add(transitionFromS1ToS2);
 		transitions.add(transitionFromS2ToS3);
 
 		BeanFactory beanFactory = new DefaultListableBeanFactory();
-		ObjectStateMachine<TestStates, TestEvents> machine = new ObjectStateMachine<TestStates, TestEvents>(states, transitions, stateSI);
+		ObjectStateMachine<TestStates, TestEvents> machine = new ObjectStateMachine<>(states, transitions, stateSI);
 		machine.setBeanFactory(beanFactory);
 		machine.afterPropertiesSet();
 		machine.start();
 
-		Collection<Region<TestStates,TestEvents>> regions = new ArrayList<Region<TestStates,TestEvents>>();
+		Collection<Region<TestStates,TestEvents>> regions = new ArrayList<>();
 		regions.add(machine);
-		RegionState<TestStates,TestEvents> state = new RegionState<TestStates,TestEvents>(TestStates.S11, regions);
+		RegionState<TestStates,TestEvents> state = new RegionState<>(TestStates.S11, regions);
 
 		assertThat(state.isSimple()).isFalse();
 		assertThat(state.isComposite()).isTrue();

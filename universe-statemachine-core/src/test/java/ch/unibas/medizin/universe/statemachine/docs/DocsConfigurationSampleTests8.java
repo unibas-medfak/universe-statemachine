@@ -60,14 +60,14 @@ public class DocsConfigurationSampleTests8 {
 		public StateMachineModel<String, String> build() {
 			ConfigurationData<String, String> configurationData = new ConfigurationData<>();
 			Collection<StateData<String, String>> stateData = new ArrayList<>();
-			stateData.add(new StateData<String, String>("S1", true));
-			stateData.add(new StateData<String, String>("S2"));
+			stateData.add(new StateData<>("S1", true));
+			stateData.add(new StateData<>("S2"));
 			StatesData<String, String> statesData = new StatesData<>(stateData);
 			Collection<TransitionData<String, String>> transitionData = new ArrayList<>();
-			transitionData.add(new TransitionData<String, String>("S1", "S2", "E1"));
+			transitionData.add(new TransitionData<>("S1", "S2", "E1"));
 			TransitionsData<String, String> transitionsData = new TransitionsData<>(transitionData);
-			StateMachineModel<String, String> stateMachineModel = new DefaultStateMachineModel<String, String>(configurationData,
-					statesData, transitionsData);
+			StateMachineModel<String, String> stateMachineModel = new DefaultStateMachineModel<>(configurationData,
+                    statesData, transitionsData);
 			return stateMachineModel;
 		}
 

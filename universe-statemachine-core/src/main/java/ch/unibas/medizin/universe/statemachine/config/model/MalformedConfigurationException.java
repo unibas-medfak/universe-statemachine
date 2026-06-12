@@ -16,6 +16,7 @@
 package ch.unibas.medizin.universe.statemachine.config.model;
 
 import java.io.IOException;
+import java.io.Serial;
 
 import ch.unibas.medizin.universe.statemachine.StateMachineException;
 
@@ -27,7 +28,8 @@ import ch.unibas.medizin.universe.statemachine.StateMachineException;
  */
 public class MalformedConfigurationException extends StateMachineException {
 
-	private static final long serialVersionUID = -1658322647044177891L;
+	@Serial
+    private static final long serialVersionUID = -1658322647044177891L;
 
 	private StringBuilder trace;
 
@@ -87,7 +89,7 @@ public class MalformedConfigurationException extends StateMachineException {
 		if (trace == null) return super.getMessage();
 		StringBuilder buffer = new StringBuilder(512);
 		buffer.append(super.getMessage());
-		if (buffer.length() > 0) {
+		if (!buffer.isEmpty()) {
 			buffer.append('\n');
 		}
 		buffer.append("Statemachine trace:");

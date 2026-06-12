@@ -34,7 +34,7 @@ import ch.unibas.medizin.universe.statemachine.config.common.annotation.simple.S
 @Configuration
 public class ComplexTestConfiguration extends AbstractAnnotationConfiguration<ComplexTestConfigBuilder, ComplexTestConfig> {
 
-	ComplexTestConfigBuilder builder = new ComplexTestConfigBuilder();
+	final ComplexTestConfigBuilder builder = new ComplexTestConfigBuilder();
 
 	@Autowired(required=false)
 	@Qualifier("simpleConfig")

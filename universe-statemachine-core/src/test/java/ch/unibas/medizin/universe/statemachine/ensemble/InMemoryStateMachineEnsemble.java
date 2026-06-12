@@ -24,7 +24,7 @@ import ch.unibas.medizin.universe.statemachine.ensemble.StateMachineEnsembleObje
 
 public class InMemoryStateMachineEnsemble<S, E> extends StateMachineEnsembleObjectSupport<S, E> {
 
-	private final Set<StateMachine<S, E>> joined = new HashSet<StateMachine<S,E>>();
+	private final Set<StateMachine<S, E>> joined = new HashSet<>();
 	private StateMachine<S, E> leader;
 	private StateMachineContext<S, E> current;
 

@@ -157,7 +157,7 @@ public class ActionAndTimerTests extends AbstractStateMachineTests {
 
 	private static class TestListener extends StateMachineListenerAdapter<TestStates, TestEvents> {
 
-		volatile CountDownLatch s3EnteredLatch = new CountDownLatch(1);
+		final CountDownLatch s3EnteredLatch = new CountDownLatch(1);
 
 		@Override
 		public void stateEntered(State<TestStates, TestEvents> state) {
@@ -169,7 +169,7 @@ public class ActionAndTimerTests extends AbstractStateMachineTests {
 
 	private static class TestTimerAction implements Action<TestStates, TestEvents> {
 
-		volatile CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 		volatile Exception e;
 
 		@Override
@@ -186,7 +186,7 @@ public class ActionAndTimerTests extends AbstractStateMachineTests {
 
 	private static class TestExitAction implements Action<TestStates, TestEvents> {
 
-		volatile CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 		volatile Exception e;
 
 		@Override

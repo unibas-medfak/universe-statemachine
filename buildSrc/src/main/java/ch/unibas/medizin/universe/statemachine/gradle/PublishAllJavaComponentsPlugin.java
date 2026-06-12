@@ -15,7 +15,6 @@
  */
 package ch.unibas.medizin.universe.statemachine.gradle;
 
-import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaPlatformPlugin;
@@ -30,17 +29,14 @@ public class PublishAllJavaComponentsPlugin implements Plugin<Project> {
 	public void apply(Project project) {
 		project.getPlugins().withType(MavenPublishPlugin.class).all((mavenPublish) -> {
 			PublishingExtension publishing = project.getExtensions().getByType(PublishingExtension.class);
-			publishing.getPublications().create("mavenJava", MavenPublication.class, new Action<MavenPublication>() {
-				@Override
-				public void execute(MavenPublication maven) {
-					project.getPlugins().withType(JavaPlugin.class, (plugin) -> {
-							maven.from(project.getComponents().getByName("java"));
-					});
-					project.getPlugins().withType(JavaPlatformPlugin.class, (plugin) -> {
-							maven.from(project.getComponents().getByName("javaPlatform"));
-					});
-				}
-			});
+			publishing.getPublications().create("mavenJava", MavenPublication.class, maven -> {
+                project.getPlugins().withType(JavaPlugin.class, (plugin) -> {
+                    maven.from(project.getComponents().getByName("java"));
+                });
+                project.getPlugins().withType(JavaPlatformPlugin.class, (plugin) -> {
+                    maven.from(project.getComponents().getByName("javaPlatform"));
+                });
+            });
 		});
 	}
 }

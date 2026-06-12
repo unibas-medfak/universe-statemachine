@@ -16,6 +16,7 @@
 package ch.unibas.medizin.universe.statemachine.ensemble;
 
 import java.io.IOException;
+import java.io.Serial;
 
 import ch.unibas.medizin.universe.statemachine.StateMachineException;
 
@@ -27,7 +28,8 @@ import ch.unibas.medizin.universe.statemachine.StateMachineException;
  */
 public class StateMachineEnsembleException extends StateMachineException {
 
-	private static final long serialVersionUID = 960498044587123343L;
+	@Serial
+    private static final long serialVersionUID = 960498044587123343L;
 
 	/**
 	 * Instantiates a new state machine ensemble exception.

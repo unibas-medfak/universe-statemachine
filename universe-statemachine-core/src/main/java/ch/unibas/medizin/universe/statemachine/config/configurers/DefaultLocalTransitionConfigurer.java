@@ -110,7 +110,7 @@ public class DefaultLocalTransitionConfigurer<S, E> extends AbstractTransitionCo
 	public LocalTransitionConfigurer<S, E> guardExpression(String expression) {
 		SpelExpressionParser parser = new SpelExpressionParser(
 				new SpelParserConfiguration(SpelCompilerMode.MIXED, null));
-		setGuard(new SpelExpressionGuard<S, E>(parser.parseExpression(expression)));
+		setGuard(new SpelExpressionGuard<>(parser.parseExpression(expression)));
 		return this;
 	}
 

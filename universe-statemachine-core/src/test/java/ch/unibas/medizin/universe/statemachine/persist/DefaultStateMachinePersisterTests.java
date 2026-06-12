@@ -168,35 +168,35 @@ public class DefaultStateMachinePersisterTests {
 		context = persist.contexts.get("xxx");
 		assertThat(context.getState()).isEqualTo("S3");
 		assertThat(context.getChilds()).hasSize(1);
-		assertThat(context.getChilds().get(0).getChilds()).hasSize(2);
+		assertThat(context.getChilds().getFirst().getChilds()).hasSize(2);
 
 		doSendEventAndConsumeAll(machine, "E2");
 		persister.persist(machine, "xxx");
 		context = persist.contexts.get("xxx");
 		assertThat(context.getState()).isEqualTo("S3");
 		assertThat(context.getChilds()).hasSize(1);
-		assertThat(context.getChilds().get(0).getChilds()).hasSize(2);
+		assertThat(context.getChilds().getFirst().getChilds()).hasSize(2);
 
 		doSendEventAndConsumeAll(machine, "E3");
 		persister.persist(machine, "xxx");
 		context = persist.contexts.get("xxx");
 		assertThat(context.getState()).isEqualTo("S3");
 		assertThat(context.getChilds()).hasSize(1);
-		assertThat(context.getChilds().get(0).getChilds()).hasSize(2);
+		assertThat(context.getChilds().getFirst().getChilds()).hasSize(2);
 
 		doSendEventAndConsumeAll(machine, "E4");
 		persister.persist(machine, "xxx");
 		context = persist.contexts.get("xxx");
 		assertThat(context.getState()).isEqualTo("S3");
 		assertThat(context.getChilds()).hasSize(1);
-		assertThat(context.getChilds().get(0).getChilds()).hasSize(2);
+		assertThat(context.getChilds().getFirst().getChilds()).hasSize(2);
 
 		doSendEventAndConsumeAll(machine, "E5");
 		persister.persist(machine, "xxx");
 		context = persist.contexts.get("xxx");
 		assertThat(context.getState()).isEqualTo("END");
 		assertThat(context.getChilds()).hasSize(1);
-		assertThat(context.getChilds().get(0).getChilds().isEmpty()).isTrue();
+		assertThat(context.getChilds().getFirst().getChilds().isEmpty()).isTrue();
 	}
 
 	private StateMachine<String, String> buildSimpleFlat() throws Exception {

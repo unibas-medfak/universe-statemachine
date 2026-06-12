@@ -42,12 +42,12 @@ public class DefaultChoiceTransitionConfigurer<S, E>
 
 	private S source;
 	private ChoiceData<S, E> first;
-	private final List<ChoiceData<S, E>> thens = new ArrayList<ChoiceData<S, E>>();
+	private final List<ChoiceData<S, E>> thens = new ArrayList<>();
 	private ChoiceData<S, E> last;
 
 	@Override
 	public void configure(StateMachineTransitionBuilder<S, E> builder) throws Exception {
-		List<ChoiceData<S, E>> choices = new ArrayList<ChoiceData<S, E>>();
+		List<ChoiceData<S, E>> choices = new ArrayList<>();
 		if (first != null) {
 			choices.add(first);
 		}
@@ -80,7 +80,7 @@ public class DefaultChoiceTransitionConfigurer<S, E>
 		if (action != null) {
 			actions.add(error != null ? Actions.errorCallingAction(action, error) : action);
 		}
-		this.first = new ChoiceData<S, E>(source, target, guard, actions);
+		this.first = new ChoiceData<>(source, target, guard, actions);
 		return this;
 	}
 
@@ -100,7 +100,7 @@ public class DefaultChoiceTransitionConfigurer<S, E>
 		if (action != null) {
 			actions.add(error != null ? Actions.errorCallingAction(action, error) : action);
 		}
-		thens.add(new ChoiceData<S, E>(source, target, guard, actions));
+		thens.add(new ChoiceData<>(source, target, guard, actions));
 		return this;
 	}
 
@@ -120,7 +120,7 @@ public class DefaultChoiceTransitionConfigurer<S, E>
 		if (action != null) {
 			actions.add(error != null ? Actions.errorCallingAction(action, error) : action);
 		}
-		this.last = new ChoiceData<S, E>(source, target, null, actions);
+		this.last = new ChoiceData<>(source, target, null, actions);
 		return this;
 	}
 }

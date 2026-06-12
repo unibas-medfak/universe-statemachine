@@ -76,8 +76,8 @@ public abstract class AbstractStateMachinePersister<S, E, T> implements StateMac
 		ExtendedState extendedState = new DefaultExtendedState();
 		extendedState.getVariables().putAll(stateMachine.getExtendedState().getVariables());
 
-		ArrayList<StateMachineContext<S, E>> childs = new ArrayList<StateMachineContext<S, E>>();
-		S id = null;
+		ArrayList<StateMachineContext<S, E>> childs = new ArrayList<>();
+		S id;
 		State<S, E> state = stateMachine.getState();
 		if (state.isSubmachineState()) {
 			StateMachine<S, E> submachine = ((AbstractState<S, E>) state).getSubmachine();
@@ -95,7 +95,7 @@ public abstract class AbstractStateMachinePersister<S, E, T> implements StateMac
 		}
 
 		// building history state mappings
-		Map<S, S> historyStates = new HashMap<S, S>();
+		Map<S, S> historyStates = new HashMap<>();
 		PseudoState<S, E> historyState = ((AbstractStateMachine<S, E>) stateMachine).getHistoryState();
 		if (historyState != null && ((HistoryPseudoState<S, E>)historyState).getState() != null) {
 			historyStates.put(null, ((HistoryPseudoState<S, E>) historyState).getState().getId());
@@ -113,6 +113,6 @@ public abstract class AbstractStateMachinePersister<S, E, T> implements StateMac
 				}
 			}
 		}
-		return new DefaultStateMachineContext<S, E>(childs, id, null, null, extendedState, historyStates, stateMachine.getId());
+		return new DefaultStateMachineContext<>(childs, id, null, null, extendedState, historyStates, stateMachine.getId());
 	}
 }

@@ -50,13 +50,13 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 
 	/** Configurers which are added to this builder before the configure step */
 	private final LinkedHashMap<Class<? extends AnnotationConfigurer<O, B>>, List<AnnotationConfigurer<O, B>>> mainConfigurers =
-			new LinkedHashMap<Class<? extends AnnotationConfigurer<O, B>>, List<AnnotationConfigurer<O, B>>>();
+            new LinkedHashMap<>();
 
 	/** Configurers which are added to this builder during the configuration phase */
 	private final LinkedHashMap<Class<? extends AnnotationConfigurer<O, B>>, List<AnnotationConfigurer<O, B>>> postConfigurers =
-			new LinkedHashMap<Class<? extends AnnotationConfigurer<O, B>>, List<AnnotationConfigurer<O, B>>>();
+            new LinkedHashMap<>();
 
-	private final Map<Class<Object>, Object> sharedObjects = new HashMap<Class<Object>, Object>();
+	private final Map<Class<Object>, Object> sharedObjects = new HashMap<>();
 
 	private final boolean allowConfigurersOfSameType;
 
@@ -240,7 +240,7 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 			synchronized (mainConfigurers) {
 				List<AnnotationConfigurer<O, B>> configs = allowConfigurersOfSameType ? this.mainConfigurers.get(clazz) : null;
 				if (configs == null) {
-					configs = new ArrayList<AnnotationConfigurer<O, B>>(1);
+					configs = new ArrayList<>(1);
 				}
 				configs.add(configurer);
 				this.mainConfigurers.put(clazz, configs);
@@ -252,7 +252,7 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 			synchronized (postConfigurers) {
 				List<AnnotationConfigurer<O, B>> configs = allowConfigurersOfSameType ? this.postConfigurers.get(clazz) : null;
 				if (configs == null) {
-					configs = new ArrayList<AnnotationConfigurer<O, B>>(1);
+					configs = new ArrayList<>(1);
 				}
 				configs.add(configurer);
 				this.postConfigurers.put(clazz, configs);
@@ -273,9 +273,9 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 	public <C extends AnnotationConfigurer<O, B>> List<C> getConfigurers(Class<C> clazz) {
 		List<C> configs = (List<C>) this.mainConfigurers.get(clazz);
 		if (configs == null) {
-			return new ArrayList<C>();
+			return new ArrayList<>();
 		}
-		return new ArrayList<C>(configs);
+		return new ArrayList<>(configs);
 	}
 
 	/**
@@ -290,9 +290,9 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 	public <C extends AnnotationConfigurer<O, B>> List<C> removeConfigurers(Class<C> clazz) {
 		List<C> configs = (List<C>) this.mainConfigurers.remove(clazz);
 		if (configs == null) {
-			return new ArrayList<C>();
+			return new ArrayList<>();
 		}
-		return new ArrayList<C>(configs);
+		return new ArrayList<>(configs);
 	}
 
 	/**
@@ -313,7 +313,7 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 		if (configs.size() != 1) {
 			throw new IllegalStateException("Only one configurer expected for type " + clazz + ", but got " + configs);
 		}
-		return (C) configs.get(0);
+		return (C) configs.getFirst();
 	}
 
 	/**
@@ -334,7 +334,7 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 		if (configs.size() != 1) {
 			throw new IllegalStateException("Only one configurer expected for type " + clazz + ", but got " + configs);
 		}
-		return (C) configs.get(0);
+		return (C) configs.getFirst();
 	}
 
 	/**
@@ -358,7 +358,7 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 	 * @return the possibly modified Object to use
 	 */
 	protected <P> P postProcess(P object) {
-		return (P) this.objectPostProcessor.postProcess(object);
+		return this.objectPostProcessor.postProcess(object);
 	}
 
 	/**
@@ -429,7 +429,7 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 	 * @return the configurers
 	 */
 	private Collection<AnnotationConfigurer<O, B>> getMainConfigurers() {
-		List<AnnotationConfigurer<O, B>> result = new ArrayList<AnnotationConfigurer<O, B>>();
+		List<AnnotationConfigurer<O, B>> result = new ArrayList<>();
 		for (List<AnnotationConfigurer<O, B>> configs : this.mainConfigurers.values()) {
 			result.addAll(configs);
 		}
@@ -437,7 +437,7 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 	}
 
 	private Collection<AnnotationConfigurer<O, B>> getPostConfigurers() {
-		List<AnnotationConfigurer<O, B>> result = new ArrayList<AnnotationConfigurer<O, B>>();
+		List<AnnotationConfigurer<O, B>> result = new ArrayList<>();
 		for (List<AnnotationConfigurer<O, B>> configs : this.postConfigurers.values()) {
 			result.addAll(configs);
 		}
@@ -458,7 +458,7 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 	/**
 	 * The build state for the application
 	 */
-	private static enum BuildState {
+	private enum BuildState {
 
 		/**
 		 * This is the state before the {@link AnnotationBuilder#build()} is invoked

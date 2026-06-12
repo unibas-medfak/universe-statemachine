@@ -186,7 +186,7 @@ public class DocsConfigurationSampleTests2 extends AbstractStateMachineTests {
 				.sendEvent(Mono.just(MessageBuilder
 					.withPayload(event).build()))
 				.subscribe();
-			return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(HttpStatus.ACCEPTED);
 		}
 
 		@RequestMapping(path="/state", method=RequestMethod.GET)

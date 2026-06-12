@@ -120,7 +120,7 @@ public class ClassAnnotationTests extends AbstractStateMachineTests {
 	@WithStateMachine(name = "barMachine")
 	static class BarBean {
 
-		CountDownLatch onBarMethodLatch = new CountDownLatch(1);
+		final CountDownLatch onBarMethodLatch = new CountDownLatch(1);
 
 		@OnTransition(source = "S1", target = "S2")
 		public void barMethod() {
@@ -138,7 +138,7 @@ public class ClassAnnotationTests extends AbstractStateMachineTests {
 	@WithJeeMachine
 	static class JeeBean {
 
-		CountDownLatch onJeeMethodLatch = new CountDownLatch(1);
+		final CountDownLatch onJeeMethodLatch = new CountDownLatch(1);
 
 		@OnTransition(source = "S1", target = "S2")
 		public void jeeMethod() {

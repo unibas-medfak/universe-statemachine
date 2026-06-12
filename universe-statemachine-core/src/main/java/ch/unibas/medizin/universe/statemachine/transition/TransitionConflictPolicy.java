@@ -34,5 +34,5 @@ public enum TransitionConflictPolicy {
 	/**
 	 * Policy choosing from a parent.
 	 */
-	PARENT;
+	PARENT
 }

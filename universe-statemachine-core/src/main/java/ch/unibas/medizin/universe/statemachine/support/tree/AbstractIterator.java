@@ -40,15 +40,12 @@ public abstract class AbstractIterator<T> implements Iterator<T> {
 	@Override
 	public final boolean hasNext() {
 		Assert.state(state != State.FAILED, "state cannot be null");
-		switch (state) {
-		case DONE:
-			return false;
-		case READY:
-			return true;
-		default:
-		}
-		return tryToComputeNext();
-	}
+        return switch (state) {
+            case DONE -> false;
+            case READY -> true;
+            default -> tryToComputeNext();
+        };
+    }
 
 	private boolean tryToComputeNext() {
 		state = State.FAILED;

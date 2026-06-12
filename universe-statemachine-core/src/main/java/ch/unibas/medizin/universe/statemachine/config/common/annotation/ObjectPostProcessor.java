@@ -20,7 +20,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- * Allows initialization of Objects. Typically this is used to call the
+ * Allows initialization of Objects. Typically, this is used to call the
  * {@link Aware} methods, {@link InitializingBean#afterPropertiesSet()}, and
  * ensure that {@link DisposableBean#destroy()} has been invoked.
  *
@@ -35,7 +35,7 @@ public interface ObjectPostProcessor<T> {
 	 * be used instead.
 	 *
 	 * @param object the object to initialize
-	 * @param <O> the type of a processed object
+	 * @param <O> the type of processed object
 	 * @return the initialized version of the object
 	 */
 	<O extends T> O postProcess(O object);
@@ -43,11 +43,11 @@ public interface ObjectPostProcessor<T> {
 	/**
 	 * A do nothing implementation of the {@link ObjectPostProcessor}
 	 */
-	ObjectPostProcessor<Object> QUIESCENT_POSTPROCESSOR = new ObjectPostProcessor<Object>() {
-		@Override
-		public <T> T postProcess(T object) {
-			return object;
-		}
-	};
+	ObjectPostProcessor<Object> QUIESCENT_POSTPROCESSOR = new ObjectPostProcessor<>() {
+        @Override
+        public <T> T postProcess(T object) {
+            return object;
+        }
+    };
 
 }

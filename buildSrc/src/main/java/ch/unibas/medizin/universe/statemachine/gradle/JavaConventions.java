@@ -96,7 +96,7 @@ class JavaConventions {
 					if (hasIncludeTags) {
 						Object includeTagsProperty = project.property(INCLUDE_TAGS);
 						if (includeTagsProperty instanceof String p) {
-							if (p.length() > 0) {
+							if (!p.isEmpty()) {
 								options.includeTags(p.split(","));
 							}
 						}
@@ -104,7 +104,7 @@ class JavaConventions {
 					if (hasExcludeTags) {
 						Object excludeTagsProperty = project.property(EXCLUDE_TAGS);
 						if (excludeTagsProperty instanceof String p) {
-							if (p.length() > 0) {
+							if (!p.isEmpty()) {
 								options.excludeTags(p.split(","));
 							}
 						}

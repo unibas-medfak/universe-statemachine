@@ -33,23 +33,23 @@ public class ReactiveLifecycleManager implements StateMachineReactiveLifecycle {
 
 	private static final Log log = LogFactory.getLog(ReactiveLifecycleManager.class);
 	private final AtomicEnum state = new AtomicEnum(LifecycleState.STOPPED);
-	private Many<Mono<Void>> startRequestsSink;
-	private Many<Mono<Void>> stopRequestsSink;
-	private Flux<Mono<Void>> startRequests;
-	private Flux<Mono<Void>> stopRequests;
-	private Supplier<Mono<Void>> preStartRequest;
-	private Supplier<Mono<Void>> preStopRequest;
-	private Supplier<Mono<Void>> postStartRequest;
-	private Supplier<Mono<Void>> postStopRequest;
-	private AtomicBoolean stopRequested = new AtomicBoolean();
+	private final Many<Mono<Void>> startRequestsSink;
+	private final Many<Mono<Void>> stopRequestsSink;
+	private final Flux<Mono<Void>> startRequests;
+	private final Flux<Mono<Void>> stopRequests;
+	private final Supplier<Mono<Void>> preStartRequest;
+	private final Supplier<Mono<Void>> preStopRequest;
+	private final Supplier<Mono<Void>> postStartRequest;
+	private final Supplier<Mono<Void>> postStopRequest;
+	private final AtomicBoolean stopRequested = new AtomicBoolean();
 	private Object owner;
 
 	public enum LifecycleState {
 		STOPPED,
 		STARTING,
 		STARTED,
-		STOPPING;
-	}
+		STOPPING
+    }
 
 	public ReactiveLifecycleManager(Supplier<Mono<Void>> preStartRequest, Supplier<Mono<Void>> preStopRequest,
 			Supplier<Mono<Void>> postStartRequest, Supplier<Mono<Void>> postStopRequest) {
@@ -127,7 +127,7 @@ public class ReactiveLifecycleManager implements StateMachineReactiveLifecycle {
 		private final AtomicReference<LifecycleState> ref;
 
 		public AtomicEnum(final LifecycleState initialValue) {
-			this.ref = new AtomicReference<LifecycleState>(initialValue);
+			this.ref = new AtomicReference<>(initialValue);
 		}
 
 		public void set(final LifecycleState newValue) {

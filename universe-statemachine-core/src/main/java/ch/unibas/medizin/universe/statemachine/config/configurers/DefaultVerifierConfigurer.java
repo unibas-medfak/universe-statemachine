@@ -43,7 +43,7 @@ public class DefaultVerifierConfigurer <S, E>
 		if (verifier != null) {
 			builder.setVerifier(verifier);
 		} else {
-			builder.setVerifier(new CompositeStateMachineModelVerifier<S, E>());
+			builder.setVerifier(new CompositeStateMachineModelVerifier<>());
 		}
 	}
 

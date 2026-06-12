@@ -96,7 +96,7 @@ public abstract class AbstractSimpleState<S, E> extends AbstractState<S, E> {
 			Collection<Function<StateContext<S, E>, Mono<Void>>> exitActions, PseudoState<S, E> pseudoState,
 			Collection<Region<S, E>> regions) {
 		super(id, deferred, entryActions, exitActions, pseudoState, regions);
-		this.ids = new ArrayList<S>();
+		this.ids = new ArrayList<>();
 		this.ids.add(id);
 	}
 
@@ -115,7 +115,7 @@ public abstract class AbstractSimpleState<S, E> extends AbstractState<S, E> {
 			Collection<Function<StateContext<S, E>, Mono<Void>>> exitActions, PseudoState<S, E> pseudoState,
 			StateMachine<S, E> submachine) {
 		super(id, deferred, entryActions, exitActions, pseudoState, submachine);
-		this.ids = new ArrayList<S>();
+		this.ids = new ArrayList<>();
 		this.ids.add(id);
 	}
 
@@ -132,7 +132,7 @@ public abstract class AbstractSimpleState<S, E> extends AbstractState<S, E> {
 			Collection<Function<StateContext<S, E>, Mono<Void>>> entryActions,
 			Collection<Function<StateContext<S, E>, Mono<Void>>> exitActions, PseudoState<S, E> pseudoState) {
 		super(id, deferred, entryActions, exitActions, pseudoState);
-		this.ids = new ArrayList<S>();
+		this.ids = new ArrayList<>();
 		this.ids.add(id);
 	}
 
@@ -154,7 +154,7 @@ public abstract class AbstractSimpleState<S, E> extends AbstractState<S, E> {
 			Collection<Function<StateContext<S, E>, Mono<Void>>> stateActions, PseudoState<S, E> pseudoState,
 			Collection<Region<S, E>> regions, StateMachine<S, E> submachine) {
 		super(id, deferred, entryActions, exitActions, stateActions, pseudoState, regions, submachine);
-		this.ids = new ArrayList<S>();
+		this.ids = new ArrayList<>();
 		this.ids.add(id);
 	}
 
@@ -165,7 +165,7 @@ public abstract class AbstractSimpleState<S, E> extends AbstractState<S, E> {
 
 	@Override
 	public Collection<State<S, E>> getStates() {
-		ArrayList<State<S, E>> states = new ArrayList<State<S, E>>();
+		ArrayList<State<S, E>> states = new ArrayList<>();
 		states.add(this);
 		return states;
 	}

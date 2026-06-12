@@ -59,16 +59,16 @@ public class StateMachineModelTests {
 				eventSecurityRule, transitionSecurityRule, verifierEnabled, verifier, null, null, null);
 
 		Collection<StateData<String, String>> stateData = new ArrayList<>();
-		StateData<String, String> stateData1 = new StateData<String, String>(null, null, "S1", null, null, null);
+		StateData<String, String> stateData1 = new StateData<>(null, null, "S1", null, null, null);
 		stateData1.setInitial(true);
 		stateData.add(stateData1);
-		StateData<String, String> stateData2 = new StateData<String, String>(null, null, "S2", null, null, null);
+		StateData<String, String> stateData2 = new StateData<>(null, null, "S2", null, null, null);
 		stateData.add(stateData2);
 		StatesData<String, String> statesData = new StatesData<>(stateData);
 
 
 		Collection<TransitionData<String, String>> transitions = new ArrayList<>();
-		TransitionData<String, String> transitionData1 = new TransitionData<String, String>("S1", "S2", null, "E1", null, null, null, null, TransitionKind.EXTERNAL, null, "");
+		TransitionData<String, String> transitionData1 = new TransitionData<>("S1", "S2", null, "E1", null, null, null, null, TransitionKind.EXTERNAL, null, "");
 		transitions.add(transitionData1);
 		Map<String, List<ChoiceData<String, String>>> choices = new HashMap<>();
 		Map<String, List<JunctionData<String, String>>> junctions = new HashMap<>();
@@ -91,12 +91,12 @@ public class StateMachineModelTests {
 		ConfigurationData<String, String> configurationData = new ConfigurationData<>();
 
 		Collection<StateData<String, String>> stateData = new ArrayList<>();
-		stateData.add(new StateData<String, String>("S1", true));
-		stateData.add(new StateData<String, String>("S2"));
+		stateData.add(new StateData<>("S1", true));
+		stateData.add(new StateData<>("S2"));
 		StatesData<String, String> statesData = new StatesData<>(stateData);
 
 		Collection<TransitionData<String, String>> transitionData = new ArrayList<>();
-		transitionData.add(new TransitionData<String, String>("S1", "S2", "E1"));
+		transitionData.add(new TransitionData<>("S1", "S2", "E1"));
 		TransitionsData<String, String> transitionsData = new TransitionsData<>(transitionData);
 
 		StateMachineModel<String, String> stateMachineModel = new DefaultStateMachineModel<>(configurationData, statesData, transitionsData);
@@ -119,22 +119,22 @@ public class StateMachineModelTests {
 		ConfigurationData<String, String> configurationData = new ConfigurationData<>();
 
 		Collection<StateData<String, String>> stateData2 = new ArrayList<>();
-		stateData2.add(new StateData<String, String>("S2", null, "S20", true));
-		stateData2.add(new StateData<String, String>("S2", null, "S21", false));
-		stateData2.add(new StateData<String, String>("S21", null, "S30", true));
-		stateData2.add(new StateData<String, String>("S21", null, "S31", false));
+		stateData2.add(new StateData<>("S2", null, "S20", true));
+		stateData2.add(new StateData<>("S2", null, "S21", false));
+		stateData2.add(new StateData<>("S21", null, "S30", true));
+		stateData2.add(new StateData<>("S21", null, "S31", false));
 
 		Collection<StateData<String, String>> stateData1 = new ArrayList<>();
-		stateData1.add(new StateData<String, String>("S1", true));
-		StateData<String, String> stateDataS2 = new StateData<String, String>("S2");
+		stateData1.add(new StateData<>("S1", true));
+		StateData<String, String> stateDataS2 = new StateData<>("S2");
 		stateDataS2.setSubmachineStateData(stateData2);
 		stateData1.add(stateDataS2);
 		StatesData<String, String> statesData = new StatesData<>(stateData1);
 
 		Collection<TransitionData<String, String>> transitionData = new ArrayList<>();
-		transitionData.add(new TransitionData<String, String>("S1", "S2", "E1"));
-		transitionData.add(new TransitionData<String, String>("S20", "S21", "E2"));
-		transitionData.add(new TransitionData<String, String>("S30", "S31", "E3"));
+		transitionData.add(new TransitionData<>("S1", "S2", "E1"));
+		transitionData.add(new TransitionData<>("S20", "S21", "E2"));
+		transitionData.add(new TransitionData<>("S30", "S31", "E3"));
 		TransitionsData<String, String> transitionsData = new TransitionsData<>(transitionData);
 
 		StateMachineModel<String, String> stateMachineModel = new DefaultStateMachineModel<>(configurationData, statesData, transitionsData);

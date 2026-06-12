@@ -51,7 +51,7 @@ public class StateMachineHandler<T extends Annotation, S, E> implements Ordered 
 	 * @param method the method
 	 */
 	public StateMachineHandler(Class<?> beanClass, Object target, Method method, T metaAnnotation, Annotation annotation) {
-		this(beanClass, metaAnnotation, annotation, new MethodInvokingStateMachineRuntimeProcessor<T, S, E>(target, method));
+		this(beanClass, metaAnnotation, annotation, new MethodInvokingStateMachineRuntimeProcessor<>(target, method));
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class StateMachineHandler<T extends Annotation, S, E> implements Ordered 
 	 * @param annotation the annotation
 	 */
 	public StateMachineHandler(Class<?> beanClass, Object target, String methodName, T metaAnnotation, Annotation annotation) {
-		this(beanClass, metaAnnotation, annotation, new MethodInvokingStateMachineRuntimeProcessor<T, S, E>(target, methodName));
+		this(beanClass, metaAnnotation, annotation, new MethodInvokingStateMachineRuntimeProcessor<>(target, methodName));
 	}
 
 	/**

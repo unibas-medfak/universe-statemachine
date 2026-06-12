@@ -54,7 +54,7 @@ public interface ExtendedState {
 	/**
 	 * The listener interface for receiving extended state change events.
 	 */
-	public interface ExtendedStateChangeListener {
+    interface ExtendedStateChangeListener {
 
 		/**
 		 * Called when extended state variable has been changed.

@@ -166,13 +166,13 @@ public class ActionSecurityTests extends AbstractStateMachineTests {
 
 	}
 
-	public static enum States {
-	    S0, S1;
-	}
+	public enum States {
+	    S0, S1
+    }
 
-	public static enum Events {
-	    A;
-	}
+	public enum Events {
+	    A
+    }
 
 	private static class TestSecAction implements Action<States, Events> {
 

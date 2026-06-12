@@ -29,23 +29,23 @@ public class DefaultStateMachineContextTests {
 
 	@Test
 	public void testEquals() {
-		DefaultStateMachineContext<String, String> c1 = new DefaultStateMachineContext<String, String>(null, null, null,
-				null);
-		DefaultStateMachineContext<String, String> c2 = new DefaultStateMachineContext<String, String>(null, null, null,
-				null);
+		DefaultStateMachineContext<String, String> c1 = new DefaultStateMachineContext<>(null, null, null,
+                null);
+		DefaultStateMachineContext<String, String> c2 = new DefaultStateMachineContext<>(null, null, null,
+                null);
 		assertThat(c1.equals(c2)).isTrue();
 
-		DefaultStateMachineContext<String, String> c0 = new DefaultStateMachineContext<String, String>(null, null, null,
-				null);
+		DefaultStateMachineContext<String, String> c0 = new DefaultStateMachineContext<>(null, null, null,
+                null);
 
-		c1 = new DefaultStateMachineContext<String, String>(Arrays.asList("x", "y"), Arrays.asList(c0), "s1", "e1",
-				new HashMap<>(), new DefaultExtendedState(), new HashMap<>(), "id");
-		c2 = new DefaultStateMachineContext<String, String>(Arrays.asList("x", "y"), Arrays.asList(c0), "s1", "e1",
-				new HashMap<>(), new DefaultExtendedState(), new HashMap<>(), "id");
+		c1 = new DefaultStateMachineContext<>(Arrays.asList("x", "y"), Arrays.asList(c0), "s1", "e1",
+                new HashMap<>(), new DefaultExtendedState(), new HashMap<>(), "id");
+		c2 = new DefaultStateMachineContext<>(Arrays.asList("x", "y"), Arrays.asList(c0), "s1", "e1",
+                new HashMap<>(), new DefaultExtendedState(), new HashMap<>(), "id");
 		assertThat(c1.equals(c2)).isTrue();
 
-		c2 = new DefaultStateMachineContext<String, String>(Arrays.asList("d", "y"), Arrays.asList(c0), "s1", "e1",
-				new HashMap<>(), new DefaultExtendedState(), new HashMap<>(), "id");
+		c2 = new DefaultStateMachineContext<>(Arrays.asList("d", "y"), Arrays.asList(c0), "s1", "e1",
+                new HashMap<>(), new DefaultExtendedState(), new HashMap<>(), "id");
 		assertThat(c1.equals(c2)).isFalse();
 	}
 }

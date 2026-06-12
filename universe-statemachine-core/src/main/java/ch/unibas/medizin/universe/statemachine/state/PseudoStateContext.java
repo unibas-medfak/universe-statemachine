@@ -42,11 +42,11 @@ public interface PseudoStateContext<S, E> {
 	/**
 	 * The PseudoAction enumeration.
 	 */
-	public enum PseudoAction {
+    enum PseudoAction {
 		
 		/**
 		 * Indication that states has been joined.
 		 */
-		JOIN_COMPLETED;
-	}
+		JOIN_COMPLETED
+    }
 }

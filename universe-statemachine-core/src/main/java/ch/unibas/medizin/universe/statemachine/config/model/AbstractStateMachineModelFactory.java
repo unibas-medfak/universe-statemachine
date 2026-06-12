@@ -28,7 +28,7 @@ import org.springframework.util.Assert;
 /**
  * Base implementation of a {@link StateMachineModelFactory} providing
  * some common grounds for various implementations.
- *
+ * <p>
  * This factory is able to resolve {@link Action}s or {@link Guard}s either from
  * a {@link BeanFactory} if knows, or from manually registered instances. Manually
  * registered actions or guards are needed if those are not created as beans or if
@@ -45,7 +45,7 @@ public abstract class AbstractStateMachineModelFactory<S, E>
 	private BeanFactory beanFactory;
 	private ResourceLoader resourceLoader = new DefaultResourceLoader();
 	private StateMachineComponentResolver<S, E> stateMachineComponentResolver;
-	private final DefaultStateMachineComponentResolver<S, E> internalResolver = new DefaultStateMachineComponentResolver<S, E>();
+	private final DefaultStateMachineComponentResolver<S, E> internalResolver = new DefaultStateMachineComponentResolver<>();
 
 	/**
 	 * Instantiates a new abstract state machine model factory.

@@ -72,14 +72,14 @@ public class StateMachineTransitionBuilder<S, E>
 		AbstractConfiguredAnnotationBuilder<TransitionsData<S, E>, StateMachineTransitionConfigurer<S, E>, StateMachineTransitionBuilder<S, E>>
 		implements StateMachineTransitionConfigurer<S, E> {
 
-	private final Collection<TransitionData<S, E>> transitionData = new ArrayList<TransitionData<S, E>>();
-	private final Map<S, List<ChoiceData<S, E>>> choices = new HashMap<S, List<ChoiceData<S, E>>>();
-	private final Map<S, List<JunctionData<S, E>>> junctions = new HashMap<S, List<JunctionData<S, E>>>();
-	private final Map<S, List<S>> forks = new HashMap<S, List<S>>();
-	private final Map<S, List<S>> joins = new HashMap<S, List<S>>();
-	private final Collection<EntryData<S, E>> entryData = new ArrayList<EntryData<S, E>>();
-	private final Collection<ExitData<S, E>> exitData = new ArrayList<ExitData<S, E>>();
-	private final Collection<HistoryData<S, E>> historyData = new ArrayList<HistoryData<S, E>>();
+	private final Collection<TransitionData<S, E>> transitionData = new ArrayList<>();
+	private final Map<S, List<ChoiceData<S, E>>> choices = new HashMap<>();
+	private final Map<S, List<JunctionData<S, E>>> junctions = new HashMap<>();
+	private final Map<S, List<S>> forks = new HashMap<>();
+	private final Map<S, List<S>> joins = new HashMap<>();
+	private final Collection<EntryData<S, E>> entryData = new ArrayList<>();
+	private final Collection<ExitData<S, E>> exitData = new ArrayList<>();
+	private final Collection<HistoryData<S, E>> historyData = new ArrayList<>();
 
 	/**
 	 * Instantiates a new state machine transition builder.
@@ -115,52 +115,52 @@ public class StateMachineTransitionBuilder<S, E>
 
 	@Override
 	public ExternalTransitionConfigurer<S, E> withExternal() throws Exception {
-		return apply(new DefaultExternalTransitionConfigurer<S, E>());
+		return apply(new DefaultExternalTransitionConfigurer<>());
 	}
 
 	@Override
 	public InternalTransitionConfigurer<S, E> withInternal() throws Exception {
-		return apply(new DefaultInternalTransitionConfigurer<S, E>());
+		return apply(new DefaultInternalTransitionConfigurer<>());
 	}
 
 	@Override
 	public LocalTransitionConfigurer<S, E> withLocal() throws Exception {
-		return apply(new DefaultLocalTransitionConfigurer<S, E>());
+		return apply(new DefaultLocalTransitionConfigurer<>());
 	}
 
 	@Override
 	public ChoiceTransitionConfigurer<S, E> withChoice() throws Exception {
-		return apply(new DefaultChoiceTransitionConfigurer<S, E>());
+		return apply(new DefaultChoiceTransitionConfigurer<>());
 	}
 
 	@Override
 	public JunctionTransitionConfigurer<S, E> withJunction() throws Exception {
-		return apply(new DefaultJunctionTransitionConfigurer<S, E>());
+		return apply(new DefaultJunctionTransitionConfigurer<>());
 	}
 
 	@Override
 	public ForkTransitionConfigurer<S, E> withFork() throws Exception {
-		return apply(new DefaultForkTransitionConfigurer<S, E>());
+		return apply(new DefaultForkTransitionConfigurer<>());
 	}
 
 	@Override
 	public JoinTransitionConfigurer<S, E> withJoin() throws Exception {
-		return apply(new DefaultJoinTransitionConfigurer<S, E>());
+		return apply(new DefaultJoinTransitionConfigurer<>());
 	}
 
 	@Override
 	public EntryTransitionConfigurer<S, E> withEntry() throws Exception {
-		return apply(new DefaultEntryTransitionConfigurer<S, E>());
+		return apply(new DefaultEntryTransitionConfigurer<>());
 	}
 
 	@Override
 	public ExitTransitionConfigurer<S, E> withExit() throws Exception {
-		return apply(new DefaultExitTransitionConfigurer<S, E>());
+		return apply(new DefaultExitTransitionConfigurer<>());
 	}
 
 	@Override
 	public HistoryTransitionConfigurer<S, E> withHistory() throws Exception {
-		return apply(new DefaultHistoryTransitionConfigurer<S, E>());
+		return apply(new DefaultHistoryTransitionConfigurer<>());
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class StateMachineTransitionBuilder<S, E>
 	 * @param target the target
 	 */
 	public void addEntry(S source, S target) {
-		this.entryData.add(new EntryData<S, E>(source, target));
+		this.entryData.add(new EntryData<>(source, target));
 	}
 
 	/**
@@ -228,7 +228,7 @@ public class StateMachineTransitionBuilder<S, E>
 	 * @param target the target
 	 */
 	public void addExit(S source, S target) {
-		this.exitData.add(new ExitData<S, E>(source, target));
+		this.exitData.add(new ExitData<>(source, target));
 	}
 
 	/**
@@ -258,6 +258,6 @@ public class StateMachineTransitionBuilder<S, E>
 	 * @param target the target
 	 */
 	public void addDefaultHistory(S source, S target) {
-		this.historyData.add(new HistoryData<S, E>(source, target));
+		this.historyData.add(new HistoryData<>(source, target));
 	}
 }

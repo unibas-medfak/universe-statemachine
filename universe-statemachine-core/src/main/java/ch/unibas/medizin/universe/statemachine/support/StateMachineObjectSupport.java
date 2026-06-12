@@ -15,7 +15,6 @@
  */
 package ch.unibas.medizin.universe.statemachine.support;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -49,8 +48,8 @@ public abstract class StateMachineObjectSupport<S, E> extends LifecycleObjectSup
 
 	private static final Log log = LogFactory.getLog(StateMachineObjectSupport.class);
 
-	private final CompositeStateMachineListener<S, E> stateListener = new CompositeStateMachineListener<S, E>();
-	private final CompositeStateMachineMonitor<S, E> stateMachineMonitor = new CompositeStateMachineMonitor<S, E>();
+	private final CompositeStateMachineListener<S, E> stateListener = new CompositeStateMachineListener<>();
+	private final CompositeStateMachineMonitor<S, E> stateMachineMonitor = new CompositeStateMachineMonitor<>();
 
 	/** Context application event publisher if exist */
 	private volatile StateMachineEventPublisher stateMachineEventPublisher;
@@ -58,10 +57,10 @@ public abstract class StateMachineObjectSupport<S, E> extends LifecycleObjectSup
 	/** Flag for application context events */
 	private boolean contextEventsEnabled = true;
 
-	private final StateMachineInterceptorList<S, E> interceptors = new StateMachineInterceptorList<S, E>();
+	private final StateMachineInterceptorList<S, E> interceptors = new StateMachineInterceptorList<>();
 	private String beanName;
 	private volatile boolean handlersInitialized;
-	private final StateMachineHandlerCallHelper<S, E> stateMachineHandlerCallHelper = new StateMachineHandlerCallHelper<S, E>();
+	private final StateMachineHandlerCallHelper<S, E> stateMachineHandlerCallHelper = new StateMachineHandlerCallHelper<>();
 
 	protected void doStart() {
 		if (!handlersInitialized) {
@@ -344,7 +343,7 @@ public abstract class StateMachineObjectSupport<S, E> extends LifecycleObjectSup
 	}
 
 	protected void setStateMachineInterceptors(List<StateMachineInterceptor<S,E>> interceptors) {
-		Collections.sort(interceptors, new OrderComparator());
+		interceptors.sort(new OrderComparator());
 		this.interceptors.set(interceptors);
 	}
 

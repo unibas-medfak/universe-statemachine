@@ -39,7 +39,7 @@ public class MethodInvokingStateMachineRuntimeProcessor<T, S, E> implements Stat
 	 * @param method the method
 	 */
 	public MethodInvokingStateMachineRuntimeProcessor(Object targetObject, Method method) {
-		delegate = new StateMachineMethodInvokerHelper<T, S, E>(targetObject, method);
+		delegate = new StateMachineMethodInvokerHelper<>(targetObject, method);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class MethodInvokingStateMachineRuntimeProcessor<T, S, E> implements Stat
 	 * @param methodName the method name
 	 */
 	public MethodInvokingStateMachineRuntimeProcessor(Object targetObject, String methodName) {
-		delegate = new StateMachineMethodInvokerHelper<T, S, E>(targetObject, methodName);
+		delegate = new StateMachineMethodInvokerHelper<>(targetObject, methodName);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class MethodInvokingStateMachineRuntimeProcessor<T, S, E> implements Stat
 	 * @param annotationType the annotation type
 	 */
 	public MethodInvokingStateMachineRuntimeProcessor(Object targetObject, Class<? extends Annotation> annotationType) {
-		delegate = new StateMachineMethodInvokerHelper<T, S, E>(targetObject, annotationType);
+		delegate = new StateMachineMethodInvokerHelper<>(targetObject, annotationType);
 	}
 
 	@Override

@@ -432,8 +432,8 @@ public class ChoiceStateTests extends AbstractStateMachineTests {
 
 	private static class TestStateEntryExitListener extends StateMachineListenerAdapter<TestStates, TestEvents> {
 
-		List<State<TestStates, TestEvents>> entered = new ArrayList<>();
-		List<State<TestStates, TestEvents>> exited = new ArrayList<>();
+		final List<State<TestStates, TestEvents>> entered = new ArrayList<>();
+		final List<State<TestStates, TestEvents>> exited = new ArrayList<>();
 
 		@Override
 		public void stateEntered(State<TestStates, TestEvents> state) {
@@ -466,7 +466,7 @@ public class ChoiceStateTests extends AbstractStateMachineTests {
 	}
 
 	private static class LatchAction implements Action<TestStates, TestEvents> {
-		CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 
 		@Override
 		public void execute(StateContext<TestStates, TestEvents> context) {

@@ -88,7 +88,7 @@ public class TimerTrigger<S, E> extends LifecycleObjectSupport implements Trigge
 			if (count > 0) {
 				return Mono.empty();
 			}
-			return Mono.fromRunnable(() -> schedule());
+			return Mono.fromRunnable(this::schedule);
 		});
 	}
 

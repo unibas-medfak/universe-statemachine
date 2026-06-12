@@ -27,7 +27,7 @@ public class EnumStateTests {
 
 	@Test
 	public void testSimpleEnumState() {
-		State<TestStates,TestEvents> stateSI = new EnumState<TestStates,TestEvents>(TestStates.SI);
+		State<TestStates,TestEvents> stateSI = new EnumState<>(TestStates.SI);
 		assertThat(stateSI.isSimple()).isTrue();
 		assertThat(stateSI.isComposite()).isFalse();
 		assertThat(stateSI.isOrthogonal()).isFalse();

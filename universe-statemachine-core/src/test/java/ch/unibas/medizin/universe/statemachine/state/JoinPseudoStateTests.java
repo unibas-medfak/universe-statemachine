@@ -33,14 +33,14 @@ public class JoinPseudoStateTests {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testResetWithSingleStates() throws Exception {
-		ObjectState<String, String> s1 = new ObjectState<String, String>("S1");
-		ObjectState<String, String> s2 = new ObjectState<String, String>("S2");
+		ObjectState<String, String> s1 = new ObjectState<>("S1");
+		ObjectState<String, String> s2 = new ObjectState<>("S2");
 
-		List<List<State<String, String>>> joins = new ArrayList<List<State<String, String>>>();
+		List<List<State<String, String>>> joins = new ArrayList<>();
 		joins.add(Collections.singletonList(s1));
 		joins.add(Collections.singletonList(s2));
 
-		JoinPseudoState<String,String> pseudoState = new JoinPseudoState<String, String>(joins, Collections.emptyList());
+		JoinPseudoState<String,String> pseudoState = new JoinPseudoState<>(joins, Collections.emptyList());
 
 		Object obj1 = TestUtils.readField("tracker", pseudoState);
 		Object obj2 = TestUtils.readField("track", obj1);
@@ -52,7 +52,7 @@ public class JoinPseudoStateTests {
 
 		pseudoState.reset(Arrays.asList("S1"));
 		assertThat(track).hasSize(1);
-		assertThat(track.get(0)).hasSize(1);
+		assertThat(track.getFirst()).hasSize(1);
 
 		pseudoState.reset(Arrays.asList("S1", "S2"));
 		assertThat(track).isEmpty();
@@ -66,16 +66,16 @@ public class JoinPseudoStateTests {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testResetWithMultipleStates() throws Exception {
-		ObjectState<String, String> s11 = new ObjectState<String, String>("S11");
-		ObjectState<String, String> s12 = new ObjectState<String, String>("S12");
-		ObjectState<String, String> s21 = new ObjectState<String, String>("S21");
-		ObjectState<String, String> s22 = new ObjectState<String, String>("S22");
+		ObjectState<String, String> s11 = new ObjectState<>("S11");
+		ObjectState<String, String> s12 = new ObjectState<>("S12");
+		ObjectState<String, String> s21 = new ObjectState<>("S21");
+		ObjectState<String, String> s22 = new ObjectState<>("S22");
 
-		List<List<State<String, String>>> joins = new ArrayList<List<State<String, String>>>();
+		List<List<State<String, String>>> joins = new ArrayList<>();
 		joins.add(Arrays.asList(s11, s12));
 		joins.add(Arrays.asList(s21, s22));
 
-		JoinPseudoState<String,String> pseudoState = new JoinPseudoState<String, String>(joins, Collections.emptyList());
+		JoinPseudoState<String,String> pseudoState = new JoinPseudoState<>(joins, Collections.emptyList());
 
 		Object obj1 = TestUtils.readField("tracker", pseudoState);
 		Object obj2 = TestUtils.readField("track", obj1);
@@ -87,7 +87,7 @@ public class JoinPseudoStateTests {
 
 		pseudoState.reset(Arrays.asList("S11"));
 		assertThat(track).hasSize(1);
-		assertThat(track.get(0)).hasSize(2);
+		assertThat(track.getFirst()).hasSize(2);
 
 		pseudoState.reset(Arrays.asList("S11", "S21"));
 		assertThat(track).isEmpty();

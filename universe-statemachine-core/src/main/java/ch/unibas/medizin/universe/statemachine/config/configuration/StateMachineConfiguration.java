@@ -61,7 +61,7 @@ import org.springframework.util.StringUtils;
 public class StateMachineConfiguration<S, E> extends
 		AbstractImportingAnnotationConfiguration<StateMachineConfigBuilder<S, E>, StateMachineConfig<S, E>> {
 
-	private final StateMachineConfigBuilder<S, E> builder = new StateMachineConfigBuilder<S, E>();
+	private final StateMachineConfigBuilder<S, E> builder = new StateMachineConfigBuilder<>();
 
 	@Override
 	protected BeanDefinition buildBeanDefinition(AnnotationMetadata importingClassMetadata,
@@ -110,7 +110,7 @@ public class StateMachineConfiguration<S, E> extends
 
 	@Override
 	protected List<Class<? extends Annotation>> getAnnotations() {
-		List<Class<? extends Annotation>> types = new ArrayList<Class<? extends Annotation>>();
+		List<Class<? extends Annotation>> types = new ArrayList<>();
 		types.add(EnableStateMachine.class);
 		return types;
 	}
@@ -131,8 +131,8 @@ public class StateMachineConfiguration<S, E> extends
 		extends BeanDelegatingFactoryBean<StateMachine<S, E>,StateMachineConfigBuilder<S, E>,StateMachineConfig<S, E>>
 		implements SmartLifecycle, BeanNameAware, BeanClassLoaderAware {
 
-		private String clazzName;
-		private Boolean contextEvents;
+		private final String clazzName;
+		private final Boolean contextEvents;
 		private SmartLifecycle lifecycle;
 		private DisposableBean disposableBean;
 		private String beanName;

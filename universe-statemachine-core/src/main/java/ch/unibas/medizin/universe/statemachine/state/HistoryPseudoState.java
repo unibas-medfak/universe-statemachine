@@ -41,7 +41,7 @@ public class HistoryPseudoState<S, E> extends AbstractPseudoState<S, E> {
 	 * @param containingState the parent containing state
 	 */
 	public HistoryPseudoState(PseudoStateKind kind, StateHolder<S, E> containingState) {
-		this(kind, containingState, new StateHolder<S, E>(null));
+		this(kind, containingState, new StateHolder<>(null));
 	}
 
 	/**

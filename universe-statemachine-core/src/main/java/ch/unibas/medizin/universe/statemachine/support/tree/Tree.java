@@ -32,16 +32,16 @@ import java.util.Map;
  */
 public class Tree<T> {
 
-	private final Node<T> root = new Node<T>(null);
-	private final Map<Object, Node<T>> map = new HashMap<Object, Node<T>>();
-	private final List<DataWrap<T>> notMapped = new ArrayList<DataWrap<T>>();
+	private final Node<T> root = new Node<>(null);
+	private final Map<Object, Node<T>> map = new HashMap<>();
+	private final List<DataWrap<T>> notMapped = new ArrayList<>();
 
 	public Node<T> getRoot() {
 		return root;
 	}
 
 	public void add(T data, Object id, Object parent) {
-		notMapped.add(new DataWrap<T>(data, id, parent));
+		notMapped.add(new DataWrap<>(data, id, parent));
 		tryMapping();
 	}
 
@@ -51,13 +51,13 @@ public class Tree<T> {
 		while(iter.hasNext()) {
 			DataWrap<T> next = iter.next();
 			if (next.parent == null) {
-				Node<T> n = new Node<T>(next.data);
+				Node<T> n = new Node<>(next.data);
 				map.put(next.id, n);
 				root.getChildren().add(n);
 				iter.remove();
 			} else {
 				if (map.containsKey(next.parent)) {
-					Node<T> n = new Node<T>(next.data);
+					Node<T> n = new Node<>(next.data);
 					Node<T> node = map.get(next.parent);
 					map.put(next.id, n);
 					node.getChildren().add(n);
@@ -80,7 +80,7 @@ public class Tree<T> {
 
 		public Node(T data, List<Node<T>> children) {
 			this.data = data;
-			this.children = children != null ? children : new ArrayList<Node<T>>();
+			this.children = children != null ? children : new ArrayList<>();
 		}
 
 		public T getData() {

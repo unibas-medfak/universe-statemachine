@@ -48,7 +48,7 @@ import reactor.core.publisher.Mono;
  * {@code DistributedStateMachine} is wrapping a real {@link StateMachine} and works
  * together with a {@link StateMachineEnsemble} order to provide a distributed state
  * machine.
- *
+ * <p>
  * Every distributed state machine will enter its initial state regardless of
  * a distributed state status.
  *
@@ -230,8 +230,8 @@ public class DistributedStateMachine<S, E> extends LifecycleObjectSupport implem
 			if (message != null
 					&& ObjectUtils.nullSafeEquals(delegate.getUuid(),
 							message.getHeaders().get(StateMachineSystemConstants.STATEMACHINE_IDENTIFIER))) {
-				ensemble.setState(new DefaultStateMachineContext<S, E>(transition.getTarget().getId(), message
-						.getPayload(), message.getHeaders(), stateMachine.getExtendedState()));
+				ensemble.setState(new DefaultStateMachineContext<>(transition.getTarget().getId(), message
+                        .getPayload(), message.getHeaders(), stateMachine.getExtendedState()));
 			}
 		}
 
@@ -254,14 +254,14 @@ public class DistributedStateMachine<S, E> extends LifecycleObjectSupport implem
 							stateContext.getMessageHeader(StateMachineSystemConstants.STATEMACHINE_IDENTIFIER))) {
 				StateMachineContext<S, E> current = ensemble.getState();
 				if (current != null) {
-					ensemble.setState(new DefaultStateMachineContext<S, E>(
-							current.getState(), stateContext.getEvent(), stateContext
-									.getMessageHeaders(), stateContext.getStateMachine().getExtendedState()));
+					ensemble.setState(new DefaultStateMachineContext<>(
+                            current.getState(), stateContext.getEvent(), stateContext
+                            .getMessageHeaders(), stateContext.getStateMachine().getExtendedState()));
 				} else if (stateContext.getStateMachine().getState() != null) {
 					// if current ensemble state is null, get it from sm itself
-					ensemble.setState(new DefaultStateMachineContext<S, E>(stateContext.getStateMachine().getState()
-							.getId(), stateContext.getEvent(), stateContext.getMessageHeaders(), stateContext
-							.getStateMachine().getExtendedState()));
+					ensemble.setState(new DefaultStateMachineContext<>(stateContext.getStateMachine().getState()
+                            .getId(), stateContext.getEvent(), stateContext.getMessageHeaders(), stateContext
+                            .getStateMachine().getExtendedState()));
 				}
 			}
 			return stateContext;
@@ -285,7 +285,7 @@ public class DistributedStateMachine<S, E> extends LifecycleObjectSupport implem
 			if (log.isDebugEnabled()) {
 				log.debug("Event stateMachineJoined stateMachine=[" + stateMachine + "] context=[" + context + "]");
 			}
-			if (stateMachine != null && stateMachine == DistributedStateMachine.this) {
+			if (stateMachine == DistributedStateMachine.this) {
 				delegate.stopReactively().block();
 				setStateMachineError(null);
 				if (context != null) {
@@ -306,7 +306,7 @@ public class DistributedStateMachine<S, E> extends LifecycleObjectSupport implem
 
 		@Override
 		public void stateMachineLeft(StateMachine<S, E> stateMachine, StateMachineContext<S, E> context) {
-			if (stateMachine != null && stateMachine == DistributedStateMachine.this) {
+			if (stateMachine == DistributedStateMachine.this) {
 				log.info("Requesting to stop delegating state machine " + delegate);
 				delegate.stopReactively().block();
 			}

@@ -78,7 +78,7 @@ public class StateMachineAutoConfigurationTests {
 		List<Object> list = TestUtils.readField("list", orderedCompositeItem);
 		assertThat(list).isNotNull();
 		assertThat(list.size()).isEqualTo(1);
-		assertThat(list.get(0)).isInstanceOf(BootStateMachineMonitor.class);
+		assertThat(list.getFirst()).isInstanceOf(BootStateMachineMonitor.class);
 	}
 
 	@Configuration

@@ -181,7 +181,7 @@ public class StateChangeInterceptorTests extends AbstractStateMachineTests {
 		assertThat(interceptor.postStateChangeCount2).isEqualTo(1);
 		assertThat(interceptor.preStateChangeStates2).hasSize(1);
 		assertThat(interceptor.postStateChangeStates2).hasSize(1);
-		assertThat(interceptor.preStateChangeStates2.get(0).getId()).isEqualTo(interceptor.postStateChangeStates2.get(0).getId());
+		assertThat(interceptor.preStateChangeStates2.getFirst().getId()).isEqualTo(interceptor.postStateChangeStates2.getFirst().getId());
 	}
 
 	@Test
@@ -212,7 +212,7 @@ public class StateChangeInterceptorTests extends AbstractStateMachineTests {
 		assertThat(interceptor.postStateChangeCount2).isEqualTo(1);
 		assertThat(interceptor.preStateChangeStates2).hasSize(1);
 		assertThat(interceptor.postStateChangeStates2).hasSize(1);
-		assertThat(interceptor.preStateChangeStates2.get(0).getId()).isEqualTo(interceptor.postStateChangeStates2.get(0).getId());
+		assertThat(interceptor.preStateChangeStates2.getFirst().getId()).isEqualTo(interceptor.postStateChangeStates2.getFirst().getId());
 	}
 
 	@Test
@@ -555,11 +555,11 @@ public class StateChangeInterceptorTests extends AbstractStateMachineTests {
 		}
 	}
 
-	public static enum States {
-		S0, S1, S11, S12, S2, S21, S211, S212, S3;
-	}
+	public enum States {
+		S0, S1, S11, S12, S2, S21, S211, S212, S3
+    }
 
-	public static enum Events {
+	public enum Events {
 		A, B, C, D, E, F, G, H, I
 	}
 
@@ -632,8 +632,8 @@ public class StateChangeInterceptorTests extends AbstractStateMachineTests {
 		volatile CountDownLatch postStateChangeLatch2 = new CountDownLatch(1);
 		volatile int preStateChangeCount2 = 0;
 		volatile int postStateChangeCount2 = 0;
-		ArrayList<State<States, Events>> preStateChangeStates2 = new ArrayList<>();
-		ArrayList<State<States, Events>> postStateChangeStates2 = new ArrayList<>();
+		final ArrayList<State<States, Events>> preStateChangeStates2 = new ArrayList<>();
+		final ArrayList<State<States, Events>> postStateChangeStates2 = new ArrayList<>();
 
 		@Override
 		public Message<Events> preEvent(Message<Events> message, StateMachine<States, Events> stateMachine) {

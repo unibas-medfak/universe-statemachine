@@ -378,9 +378,9 @@ public class ConfigurationTests extends AbstractStateMachineTests {
 		@Override
 		public void configure(StateMachineStateConfigurer<TestStates, TestEvents> states) throws Exception {
 			TestEntryAction action1 = action1();
-			Collection<TestEntryAction> actions1 = new ArrayList<TestEntryAction>();
+			Collection<TestEntryAction> actions1 = new ArrayList<>();
 			actions1.add(action1);
-			Collection<Action<TestStates, TestEvents>> actions3 = new ArrayList<Action<TestStates,TestEvents>>();
+			Collection<Action<TestStates, TestEvents>> actions3 = new ArrayList<>();
 			actions3.add(action3());
 			states
 				.withStates()
@@ -622,8 +622,8 @@ public class ConfigurationTests extends AbstractStateMachineTests {
 					.enabled(false)
 					.and()
 				.withConfiguration()
-					.listener(new StateMachineListenerAdapter<TestStates, TestEvents>())
-					.listener(new StateMachineListenerAdapter<TestStates, TestEvents>());
+					.listener(new StateMachineListenerAdapter<>())
+					.listener(new StateMachineListenerAdapter<>());
 		}
 
 		@Override
@@ -720,7 +720,7 @@ public class ConfigurationTests extends AbstractStateMachineTests {
 	@Configuration
 	public static class Config16 {
 
-		public static BeanFactory beanFactory = new DefaultListableBeanFactory();
+		public static final BeanFactory beanFactory = new DefaultListableBeanFactory();
 
 		@Bean
 		StateMachine<String, String> stateMachine() throws Exception {
@@ -747,7 +747,7 @@ public class ConfigurationTests extends AbstractStateMachineTests {
 	@Configuration
 	public static class Config17 {
 
-		public static BeanFactory beanFactory = new DefaultListableBeanFactory();
+		public static final BeanFactory beanFactory = new DefaultListableBeanFactory();
 
 		@Bean
 		StateMachine<String, String> stateMachine() throws Exception {

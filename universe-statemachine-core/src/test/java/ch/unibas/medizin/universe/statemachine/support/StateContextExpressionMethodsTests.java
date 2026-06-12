@@ -92,15 +92,15 @@ public class StateContextExpressionMethodsTests {
 	}
 
 	private StateContext<SpelStates, SpelEvents> mockStateContext(StateMachine<SpelStates, SpelEvents> stateMachine) {
-		Map<String, Object> headers = new HashMap<String, Object>();
+		Map<String, Object> headers = new HashMap<>();
 		headers.put("foo", "bar");
 		MessageHeaders messageHeaders = new MessageHeaders(headers);
 		ExtendedState extendedState = new DefaultExtendedState();
 		extendedState.getVariables().put("key1", "val1");
 		extendedState.getVariables().put("boolean1", true);
 		extendedState.getVariables().put("boolean2", false);
-		StateContext<SpelStates, SpelEvents> stateContext = new DefaultStateContext<SpelStates, SpelEvents>(
-				null, MessageBuilder.withPayload(SpelEvents.E1).build(), messageHeaders, extendedState, new MockTransition(), stateMachine, null, null, null);
+		StateContext<SpelStates, SpelEvents> stateContext = new DefaultStateContext<>(
+                null, MessageBuilder.withPayload(SpelEvents.E1).build(), messageHeaders, extendedState, new MockTransition(), stateMachine, null, null, null);
 		return stateContext;
 	}
 
@@ -118,12 +118,12 @@ public class StateContextExpressionMethodsTests {
 
 		@Override
 		public State<SpelStates, SpelEvents> getSource() {
-			return new EnumState<SpelStates, SpelEvents>(SpelStates.S1);
+			return new EnumState<>(SpelStates.S1);
 		}
 
 		@Override
 		public State<SpelStates, SpelEvents> getTarget() {
-			return new EnumState<SpelStates, SpelEvents>(SpelStates.S2);
+			return new EnumState<>(SpelStates.S2);
 		}
 
 		@Override
@@ -167,7 +167,7 @@ public class StateContextExpressionMethodsTests {
 
 	private static class MockStatemachine implements StateMachine<SpelStates, SpelEvents> {
 
-		ArrayList<Message<SpelEvents>> events = new ArrayList<Message<SpelEvents>>();
+		final ArrayList<Message<SpelEvents>> events = new ArrayList<>();
 
 		@Override
 		public StateMachineAccessor<SpelStates, SpelEvents> getStateMachineAccessor() {

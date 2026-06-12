@@ -80,19 +80,19 @@ public class StateMachineAnnotationPostProcessor implements BeanPostProcessor, B
 
 	/** Post processors map - annotation -> method post processor */
 	private final Map<Class<? extends Annotation>, MethodAnnotationPostProcessor<?>> postProcessors =
-			new HashMap<Class<? extends Annotation>, MethodAnnotationPostProcessor<?>>();
+            new HashMap<>();
 
 	/**
 	 * Application events for post processed beans (if bean instance of ApplicationListener) will
 	 * be dispatched from here via callback in this class.
 	 */
-	private final Set<ApplicationListener<ApplicationEvent>> listeners = new HashSet<ApplicationListener<ApplicationEvent>>();
+	private final Set<ApplicationListener<ApplicationEvent>> listeners = new HashSet<>();
 
 	/**
 	 * Lifecycle callbacks for post processed bean (if bean instance of Lifecycle) will
 	 * be dispatched from here via callback in this class.
 	 */
-	private final Set<Lifecycle> lifecycles = new HashSet<Lifecycle>();
+	private final Set<Lifecycle> lifecycles = new HashSet<>();
 
 	/** Flag for Lifecycle in this class */
 	private volatile boolean running = true;
@@ -147,69 +147,65 @@ public class StateMachineAnnotationPostProcessor implements BeanPostProcessor, B
 			return bean;
 		}
 
-		ReflectionUtils.doWithMethods(beanClass, new ReflectionUtils.MethodCallback() {
+		ReflectionUtils.doWithMethods(beanClass, method -> {
 
-			@SuppressWarnings({ "unchecked", "rawtypes" })
-			public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
+            Map<Class<? extends Annotation>, List<Annotation>> annotationChains = new HashMap<>();
+            for (Class<? extends Annotation> annotationType : postProcessors.keySet()) {
+                if (AnnotatedElementUtils.isAnnotated(method, annotationType.getName())) {
+                    List<Annotation> annotationChain = getAnnotationChain(method, annotationType);
+                    if (!annotationChain.isEmpty()) {
+                        annotationChains.put(annotationType, annotationChain);
+                    }
+                }
+            }
 
-				Map<Class<? extends Annotation>, List<Annotation>> annotationChains = new HashMap<>();
-				for (Class<? extends Annotation> annotationType : postProcessors.keySet()) {
-					if (AnnotatedElementUtils.isAnnotated(method, annotationType.getName())) {
-						List<Annotation> annotationChain = getAnnotationChain(method, annotationType);
-						if (annotationChain.size() > 0) {
-							annotationChains.put(annotationType, annotationChain);
-						}
-					}
-				}
+            for (Entry<Class<? extends Annotation>, List<Annotation>> entry : annotationChains.entrySet()) {
+                Class<? extends Annotation> annotationType = entry.getKey();
+                List<Annotation> annotations = entry.getValue();
+                Annotation metaAnnotation = null;
+                Annotation annotation = null;
+                if (annotations.size() == 2) {
+                    annotation = annotations.get(0);
+                    metaAnnotation = annotations.get(1);
+                } else if (annotations.size() == 1) {
+                    annotation = annotations.getFirst();
+                    metaAnnotation = annotations.getFirst();
+                }
 
-				for (Entry<Class<? extends Annotation>, List<Annotation>> entry : annotationChains.entrySet()) {
-					Class<? extends Annotation> annotationType = entry.getKey();
-					List<Annotation> annotations = entry.getValue();
-					Annotation metaAnnotation = null;
-					Annotation annotation = null;
-					if (annotations.size() == 2) {
-						annotation = annotations.get(0);
-						metaAnnotation = annotations.get(1);
-					} else if (annotations.size() == 1) {
-						annotation = annotations.get(0);
-						metaAnnotation = annotations.get(0);
-					}
+                MethodAnnotationPostProcessor postProcessor = metaAnnotation != null ? postProcessors.get(annotationType) : null;
+                if (postProcessor != null) {
+                    // TODO: should change post processor to handle annotation list
+                    Object result = postProcessor.postProcess(beanClass, bean, beanName, method, metaAnnotation, annotation);
+                    if (result instanceof StateMachineHandler) {
+                        String endpointBeanName = generateBeanName(beanName, method, annotation.annotationType());
 
-					MethodAnnotationPostProcessor postProcessor = metaAnnotation != null ? postProcessors.get(annotationType) : null;
-					if (postProcessor != null) {
-						// TODO: should change post processor to handle annotation list
-						Object result = postProcessor.postProcess(beanClass, bean, beanName, method, metaAnnotation, annotation);
-						if (result != null && result instanceof StateMachineHandler) {
-							String endpointBeanName = generateBeanName(beanName, method, annotation.annotationType());
-
-							if (result instanceof BeanNameAware) {
-								((BeanNameAware) result).setBeanName(endpointBeanName);
-							}
-							beanFactory.registerSingleton(endpointBeanName, result);
-							if (result instanceof BeanFactoryAware) {
-								((BeanFactoryAware) result).setBeanFactory(beanFactory);
-							}
-							if (result instanceof InitializingBean) {
-								try {
-									((InitializingBean) result).afterPropertiesSet();
-								} catch (Exception e) {
-									throw new BeanInitializationException("failed to initialize annotated component", e);
-								}
-							}
-							if (result instanceof Lifecycle) {
-								lifecycles.add((Lifecycle) result);
-								if (result instanceof SmartLifecycle && ((SmartLifecycle) result).isAutoStartup()) {
-									((SmartLifecycle) result).start();
-								}
-							}
-							if (result instanceof ApplicationListener) {
-								listeners.add((ApplicationListener) result);
-							}
-						}
-					}
-				}
-			}
-		}, ReflectionUtils.USER_DECLARED_METHODS);
+                        if (result instanceof BeanNameAware) {
+                            ((BeanNameAware) result).setBeanName(endpointBeanName);
+                        }
+                        beanFactory.registerSingleton(endpointBeanName, result);
+                        if (result instanceof BeanFactoryAware) {
+                            ((BeanFactoryAware) result).setBeanFactory(beanFactory);
+                        }
+                        if (result instanceof InitializingBean) {
+                            try {
+                                ((InitializingBean) result).afterPropertiesSet();
+                            } catch (Exception e) {
+                                throw new BeanInitializationException("failed to initialize annotated component", e);
+                            }
+                        }
+                        if (result instanceof Lifecycle) {
+                            lifecycles.add((Lifecycle) result);
+                            if (result instanceof SmartLifecycle && ((SmartLifecycle) result).isAutoStartup()) {
+                                ((SmartLifecycle) result).start();
+                            }
+                        }
+                        if (result instanceof ApplicationListener) {
+                            listeners.add((ApplicationListener) result);
+                        }
+                    }
+                }
+            }
+        }, ReflectionUtils.USER_DECLARED_METHODS);
 		return bean;
 	}
 
@@ -276,11 +272,11 @@ public class StateMachineAnnotationPostProcessor implements BeanPostProcessor, B
 	}
 
 	private List<Annotation> getAnnotationChain(Method method, Class<? extends Annotation> annotationType) {
-		List<Annotation> annotationChain = new LinkedList<Annotation>();
+		List<Annotation> annotationChain = new LinkedList<>();
 		Set<Annotation> visited = new HashSet<>();
 		for (MergedAnnotation<Annotation> mergedAnnotation : MergedAnnotations.from(method)) {
 			recursiveFindAnnotation(annotationType, mergedAnnotation.synthesize(), annotationChain, visited);
-			if (annotationChain.size() > 0) {
+			if (!annotationChain.isEmpty()) {
 				Collections.reverse(annotationChain);
 				return annotationChain;
 			}

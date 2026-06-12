@@ -68,7 +68,7 @@ public class StateMachineConfigurationBuilder<S, E>
 	private Long stateDoActionPolicyTimeout;
 	private RegionExecutionPolicy regionExecutionPolicy;
 	private StateMachineEnsemble<S, E> ensemble;
-	private final List<StateMachineListener<S, E>> listeners = new ArrayList<StateMachineListener<S, E>>();
+	private final List<StateMachineListener<S, E>> listeners = new ArrayList<>();
 	private boolean securityEnabled = false;
 	private boolean verifierEnabled = true;
 	private StateMachineModelVerifier<S, E> verifier;
@@ -77,7 +77,7 @@ public class StateMachineConfigurationBuilder<S, E>
 	private SecurityRule eventSecurityRule;
 	private SecurityRule transitionSecurityRule;
 	private StateMachineMonitor<S, E> stateMachineMonitor;
-	private final List<StateMachineInterceptor<S, E>> interceptors = new ArrayList<StateMachineInterceptor<S, E>>();
+	private final List<StateMachineInterceptor<S, E>> interceptors = new ArrayList<>();
 	private StateMachineRuntimePersister<S, E, ?> persister;
 
 	/**
@@ -109,47 +109,47 @@ public class StateMachineConfigurationBuilder<S, E>
 
 	@Override
 	public ConfigurationConfigurer<S, E> withConfiguration() throws Exception {
-		return apply(new DefaultConfigurationConfigurer<S, E>());
+		return apply(new DefaultConfigurationConfigurer<>());
 	}
 
 	@Override
 	public DistributedStateMachineConfigurer<S, E> withDistributed() throws Exception {
-		return apply(new DefaultDistributedStateMachineConfigurer<S, E>());
+		return apply(new DefaultDistributedStateMachineConfigurer<>());
 	}
 
 	@Override
 	public SecurityConfigurer<S, E> withSecurity() throws Exception {
-		return apply(new DefaultSecurityConfigurer<S, E>());
+		return apply(new DefaultSecurityConfigurer<>());
 	}
 
 	@Override
 	public VerifierConfigurer<S, E> withVerifier() throws Exception {
-		return apply(new DefaultVerifierConfigurer<S, E>());
+		return apply(new DefaultVerifierConfigurer<>());
 	}
 
 	@Override
 	public MonitoringConfigurer<S, E> withMonitoring() throws Exception {
-		return apply(new DefaultMonitoringConfigurer<S, E>());
+		return apply(new DefaultMonitoringConfigurer<>());
 	}
 
 	@Override
 	public PersistenceConfigurer<S, E> withPersistence() throws Exception {
-		return apply(new DefaultPersistenceConfigurer<S, E>());
+		return apply(new DefaultPersistenceConfigurer<>());
 	}
 
 	@Override
 	protected ConfigurationData<S, E> performBuild() throws Exception {
-		ArrayList<StateMachineInterceptor<S, E>> interceptorsCopy = new ArrayList<StateMachineInterceptor<S, E>>(interceptors);
+		ArrayList<StateMachineInterceptor<S, E>> interceptorsCopy = new ArrayList<>(interceptors);
 		if (persister != null) {
 			StateMachineInterceptor<S, E> interceptor = persister.getInterceptor();
 			if (interceptor != null) {
 				interceptorsCopy.add(interceptor);
 			}
 		}
-		return new ConfigurationData<S, E>(beanFactory, autoStart, ensemble, listeners, securityEnabled,
-				transitionSecurityAccessDecisionManager, eventSecurityAccessDecisionManager, eventSecurityRule,
-				transitionSecurityRule, verifierEnabled, verifier, machineId, stateMachineMonitor, interceptorsCopy,
-				transitionConflictPolicy, stateDoActionPolicy, stateDoActionPolicyTimeout, regionExecutionPolicy);
+		return new ConfigurationData<>(beanFactory, autoStart, ensemble, listeners, securityEnabled,
+                transitionSecurityAccessDecisionManager, eventSecurityAccessDecisionManager, eventSecurityRule,
+                transitionSecurityRule, verifierEnabled, verifier, machineId, stateMachineMonitor, interceptorsCopy,
+                transitionConflictPolicy, stateDoActionPolicy, stateDoActionPolicyTimeout, regionExecutionPolicy);
 	}
 
 	/**

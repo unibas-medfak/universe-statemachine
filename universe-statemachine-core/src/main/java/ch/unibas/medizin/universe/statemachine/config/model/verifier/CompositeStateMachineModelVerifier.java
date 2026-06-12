@@ -33,7 +33,7 @@ public class CompositeStateMachineModelVerifier<S, E> extends AbstractCompositeI
 
 	public CompositeStateMachineModelVerifier() {
 		super();
-		register(new BaseStructureVerifier<S, E>());
+		register(new BaseStructureVerifier<>());
 	}
 
 	@Override

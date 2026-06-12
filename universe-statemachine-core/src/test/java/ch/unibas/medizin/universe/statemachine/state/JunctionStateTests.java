@@ -385,7 +385,7 @@ public class JunctionStateTests extends AbstractStateMachineTests {
 	}
 
 	private static class LatchAction implements Action<TestStates, TestEvents> {
-		CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 
 		@Override
 		public void execute(StateContext<TestStates, TestEvents> context) {

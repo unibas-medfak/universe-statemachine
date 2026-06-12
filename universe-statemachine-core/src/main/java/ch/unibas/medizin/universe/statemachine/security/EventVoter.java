@@ -37,9 +37,7 @@ import org.springframework.security.core.Authentication;
  */
 public class EventVoter<T> implements AccessDecisionVoter<Message<T>>{
 
-	private String eventPrefix = "EVENT_";
-
-	@Override
+    @Override
 	public boolean supports(ConfigAttribute attribute) {
 		if ((attribute.getAttribute() != null) && attribute.getAttribute().startsWith(getEventPrefix())) {
 			return true;
@@ -66,7 +64,7 @@ public class EventVoter<T> implements AccessDecisionVoter<Message<T>>{
 			if (this.supports(attribute)) {
 				result = ACCESS_DENIED;
 				String attr = attribute.getAttribute();
-				if (attr.startsWith(getEventPrefix()) && attr.equals(getEventPrefix() + e.toString())) {
+				if (attr.startsWith(getEventPrefix()) && attr.equals(getEventPrefix() + e)) {
 					return ACCESS_GRANTED;
 				}
 			}
@@ -80,7 +78,8 @@ public class EventVoter<T> implements AccessDecisionVoter<Message<T>>{
 	 * @return the event prefix
 	 */
 	public String getEventPrefix() {
-		return eventPrefix;
+        String eventPrefix = "EVENT_";
+        return eventPrefix;
 	}
 
 }

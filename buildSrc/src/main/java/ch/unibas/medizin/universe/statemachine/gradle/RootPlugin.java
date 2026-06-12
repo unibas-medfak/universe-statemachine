@@ -62,10 +62,8 @@ class RootPlugin implements Plugin<Project> {
 
 		project.getRootProject().getAllprojects().forEach(p -> {
 			p.getPlugins().withType(AsciidoctorJPlugin.class, a -> {
-				p.getTasksByName("asciidoctor", false).forEach(t -> {
-					zipTask.dependsOn(t);
-				});;
-			});
+				p.getTasksByName("asciidoctor", false).forEach(zipTask::dependsOn);
+            });
 		});
 
 		project.getPlugins().withType(MavenPublishPlugin.class).all(mavenPublish -> {

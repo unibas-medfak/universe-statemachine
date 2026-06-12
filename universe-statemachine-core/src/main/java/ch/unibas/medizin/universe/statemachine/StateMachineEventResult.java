@@ -63,7 +63,7 @@ public interface StateMachineEventResult<S, E> {
 	 * Enumeration of a result type indicating whether a region accepted, denied or
 	 * deferred an event.
 	 */
-	public enum ResultType {
+    enum ResultType {
 		ACCEPTED,
 		DENIED,
 		DEFERRED
@@ -80,8 +80,8 @@ public interface StateMachineEventResult<S, E> {
 	 * @param resultType the result type
 	 * @return the state machine event result
 	 */
-	public static <S, E> StateMachineEventResult<S, E> from(Region<S, E> region, Message<E> message,
-			ResultType resultType) {
+	static <S, E> StateMachineEventResult<S, E> from(Region<S, E> region, Message<E> message,
+                                                     ResultType resultType) {
 		return new DefaultStateMachineEventResult<>(region, message, resultType, null);
 	}
 
@@ -98,17 +98,17 @@ public interface StateMachineEventResult<S, E> {
 	 * @param complete the completion mono
 	 * @return the state machine event result
 	 */
-	public static <S, E> StateMachineEventResult<S, E> from(Region<S, E> region, Message<E> message,
-			ResultType resultType, Mono<Void> complete) {
+	static <S, E> StateMachineEventResult<S, E> from(Region<S, E> region, Message<E> message,
+                                                     ResultType resultType, Mono<Void> complete) {
 		return new DefaultStateMachineEventResult<>(region, message, resultType, complete);
 	}
 
-	static class DefaultStateMachineEventResult<S, E> implements StateMachineEventResult<S, E> {
+	class DefaultStateMachineEventResult<S, E> implements StateMachineEventResult<S, E> {
 
 		private final Region<S, E> region;
 		private final Message<E> message;
 		private final ResultType resultType;
-		private Mono<Void> complete;
+		private final Mono<Void> complete;
 
 		DefaultStateMachineEventResult(Region<S, E> region, Message<E> message, ResultType resultType,
 				Mono<Void> complete) {

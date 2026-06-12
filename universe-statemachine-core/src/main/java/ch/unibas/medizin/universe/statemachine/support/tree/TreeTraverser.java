@@ -32,12 +32,7 @@ public abstract class TreeTraverser<T> {
 
 	public final Iterable<T> postOrderTraversal(final T root) {
 		Assert.notNull(root, "root cannot be null");
-		return new Iterable<T>() {
-			@Override
-			public Iterator<T> iterator() {
-				return postOrderIterator(root);
-			}
-		};
+		return () -> postOrderIterator(root);
 	}
 
 	Iterator<T> postOrderIterator(T root) {
@@ -60,7 +55,7 @@ public abstract class TreeTraverser<T> {
 		private final ArrayDeque<PostOrderNode<T>> stack;
 
 		PostOrderIterator(T root) {
-			this.stack = new ArrayDeque<PostOrderNode<T>>();
+			this.stack = new ArrayDeque<>();
 			stack.addLast(expand(root));
 		}
 
@@ -80,7 +75,7 @@ public abstract class TreeTraverser<T> {
 		}
 
 		private PostOrderNode<T> expand(T t) {
-			return new PostOrderNode<T>(t, children(t).iterator());
+			return new PostOrderNode<>(t, children(t).iterator());
 		}
 	}
 

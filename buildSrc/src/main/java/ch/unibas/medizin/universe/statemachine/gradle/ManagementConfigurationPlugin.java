@@ -22,6 +22,7 @@ import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaTestFixturesPlugin;
 import org.gradle.api.plugins.PluginContainer;
 import org.gradle.api.publish.PublishingExtension;
+import org.gradle.api.publish.VariantVersionMappingStrategy;
 import org.gradle.api.publish.maven.MavenPublication;
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
 
@@ -58,7 +59,7 @@ public class ManagementConfigurationPlugin implements Plugin<Project> {
 				PublishingExtension publishing = project.getExtensions().getByType(PublishingExtension.class);
 				publishing.getPublications().withType(MavenPublication.class, (mavenPublication -> {
 					mavenPublication.versionMapping((versions) ->
-							versions.allVariants(versionMapping -> versionMapping.fromResolutionResult())
+							versions.allVariants(VariantVersionMappingStrategy::fromResolutionResult)
 					);
 				}));
 			});

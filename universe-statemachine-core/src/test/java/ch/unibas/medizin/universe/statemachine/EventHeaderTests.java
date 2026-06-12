@@ -614,7 +614,7 @@ public class EventHeaderTests extends AbstractStateMachineTests {
 
 		volatile CountDownLatch stateChangedLatch = new CountDownLatch(1);
 		volatile int stateChangedCount = 0;
-		volatile CountDownLatch stateMachineStartedLatch = new CountDownLatch(1);
+		final CountDownLatch stateMachineStartedLatch = new CountDownLatch(1);
 
 		@Override
 		public void stateMachineStarted(StateMachine<String, String> stateMachine) {

@@ -49,7 +49,6 @@ import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineConfi
 import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineStateConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineTransitionConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.configurers.StateConfigurer.History;
-import ch.unibas.medizin.universe.statemachine.config.model.StateMachineModel;
 import ch.unibas.medizin.universe.statemachine.config.model.verifier.StateMachineModelVerifier;
 import ch.unibas.medizin.universe.statemachine.ensemble.StateMachineEnsemble;
 import ch.unibas.medizin.universe.statemachine.event.OnExtendedStateChanged;
@@ -107,7 +106,7 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 				.withStates()
 					.initial("S1")
 					.end("SF")
-					.states(new HashSet<String>(Arrays.asList("S1","S2","S3","S4")));
+					.states(new HashSet<>(Arrays.asList("S1", "S2", "S3", "S4")));
 		}
 
 	}
@@ -195,13 +194,7 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 
 		@Bean
 		public Guard<States, Events> guard() {
-			return new Guard<States, Events>() {
-
-				@Override
-				public boolean evaluate(StateContext<States, Events> context) {
-					return true;
-				}
-			};
+			return context -> true;
 		}
 
 	}
@@ -226,13 +219,9 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 
 		@Bean
 		public Action<States, Events> action() {
-			return new Action<States, Events>() {
-
-				@Override
-				public void execute(StateContext<States, Events> context) {
-					// do something
-				}
-			};
+			return context -> {
+                // do something
+            };
 		}
 
 	}
@@ -258,13 +247,9 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 
 			@Bean
 			public Action<States, Events> action() {
-				return new Action<States, Events>() {
-
-					@Override
-					public void execute(StateContext<States, Events> context) {
-						// do something
-					}
-				};
+				return context -> {
+                    // do something
+                };
 			}
 
 		}
@@ -289,26 +274,18 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 
 			@Bean
 			public Action<States, Events> action() {
-				return new Action<States, Events>() {
-
-					@Override
-					public void execute(StateContext<States, Events> context) {
-						throw new RuntimeException("MyError");
-					}
-				};
+				return context -> {
+                    throw new RuntimeException("MyError");
+                };
 			}
 
 			@Bean
 			public Action<States, Events> errorAction() {
-				return new Action<States, Events>() {
-
-					@Override
-					public void execute(StateContext<States, Events> context) {
-						// RuntimeException("MyError") added to context
-						Exception exception = context.getException();
-						exception.getMessage();
-					}
-				};
+				return context -> {
+                    // RuntimeException("MyError") added to context
+                    Exception exception = context.getException();
+                    exception.getMessage();
+                };
 			}
 
 		}
@@ -334,26 +311,18 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 
 			@Bean
 			public Action<States, Events> action() {
-				return new Action<States, Events>() {
-
-					@Override
-					public void execute(StateContext<States, Events> context) {
-						throw new RuntimeException("MyError");
-					}
-				};
+				return context -> {
+                    throw new RuntimeException("MyError");
+                };
 			}
 
 			@Bean
 			public Action<States, Events> errorAction() {
-				return new Action<States, Events>() {
-
-					@Override
-					public void execute(StateContext<States, Events> context) {
-						// RuntimeException("MyError") added to context
-						Exception exception = context.getException();
-						exception.getMessage();
-					}
-				};
+				return context -> {
+                    // RuntimeException("MyError") added to context
+                    Exception exception = context.getException();
+                    exception.getMessage();
+                };
 			}
 		}
 
@@ -377,26 +346,18 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 
 			@Bean
 			public Action<States, Events> action() {
-				return new Action<States, Events>() {
-
-					@Override
-					public void execute(StateContext<States, Events> context) {
-						throw new RuntimeException("MyError");
-					}
-				};
+				return context -> {
+                    throw new RuntimeException("MyError");
+                };
 			}
 
 			@Bean
 			public Action<States, Events> errorAction() {
-				return new Action<States, Events>() {
-
-					@Override
-					public void execute(StateContext<States, Events> context) {
-						// RuntimeException("MyError") added to context
-						Exception exception = context.getException();
-						exception.getMessage();
-					}
-				};
+				return context -> {
+                    // RuntimeException("MyError") added to context
+                    Exception exception = context.getException();
+                    exception.getMessage();
+                };
 			}
 		}
 // end::snippetEE[]
@@ -427,7 +388,7 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 			.withStates()
 				.initial("S1")
 				.end("SF")
-				.states(new HashSet<String>(Arrays.asList("S1","S2","S3","S4")));
+				.states(new HashSet<>(Arrays.asList("S1", "S2", "S3", "S4")));
 		return builder.build();
 	}
 // end::snippetFB[]
@@ -713,13 +674,9 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 
 		@Bean
 		public Action<States, Events> initialAction() {
-			return new Action<States, Events>() {
-
-				@Override
-				public void execute(StateContext<States, Events> context) {
-					// do something initially
-				}
-			};
+			return context -> {
+                // do something initially
+            };
 		}
 
 	}
@@ -789,24 +746,12 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 
 		@Bean
 		public Guard<States, Events> s2Guard() {
-			return new Guard<States, Events>() {
-
-				@Override
-				public boolean evaluate(StateContext<States, Events> context) {
-					return false;
-				}
-			};
+			return context -> false;
 		}
 
 		@Bean
 		public Guard<States, Events> s3Guard() {
-			return new Guard<States, Events>() {
-
-				@Override
-				public boolean evaluate(StateContext<States, Events> context) {
-					return true;
-				}
-			};
+			return context -> true;
 		}
 
 	}
@@ -884,24 +829,12 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 
 			@Bean
 			public Guard<States, Events> s2Guard() {
-				return new Guard<States, Events>() {
-
-					@Override
-					public boolean evaluate(StateContext<States, Events> context) {
-						return false;
-					}
-				};
+				return context -> false;
 			}
 
 			@Bean
 			public Guard<States, Events> s3Guard() {
-				return new Guard<States, Events>() {
-
-					@Override
-					public boolean evaluate(StateContext<States, Events> context) {
-						return true;
-					}
-				};
+				return context -> true;
 			}
 
 		}
@@ -1142,13 +1075,7 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 // tag::snippetVC[]
 		@Bean
 		public Guard<States, Events> guard1() {
-			return new Guard<States, Events>() {
-
-				@Override
-				public boolean evaluate(StateContext<States, Events> context) {
-					return true;
-				}
-			};
+			return context -> true;
 		}
 
 		@Bean
@@ -1168,12 +1095,8 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 // tag::snippetVD[]
 		@Bean
 		public Action<States, Events> action1() {
-			return new Action<States, Events>() {
-
-				@Override
-				public void execute(StateContext<States, Events> context) {
-				}
-			};
+			return context -> {
+            };
 		}
 
 		@Bean
@@ -1221,7 +1144,7 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 						.autoStartup(true)
 						.machineId("myMachineId")
 						.beanFactory(new StaticListableBeanFactory())
-						.listener(new StateMachineListenerAdapter<States, Events>())
+						.listener(new StateMachineListenerAdapter<>())
 						.transitionConflictPolicy(TransitionConflictPolicy.CHILD)
 						.regionExecutionPolicy(RegionExecutionPolicy.PARALLEL);
 			}
@@ -1268,20 +1191,16 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 
 			@Bean
 			public StateMachineModelVerifier<States, Events> verifier() {
-				return new StateMachineModelVerifier<States, Events>() {
-
-					@Override
-					public void verify(StateMachineModel<States, Events> model) {
-						// throw exception indicating malformed model
-					}
-				};
+				return model -> {
+                    // throw exception indicating malformed model
+                };
 			}
 		}
 // end::snippetYC[]
 
 		public class AccessorSamples {
 
-			StateMachine<String, String> stateMachine = null;
+			final StateMachine<String, String> stateMachine = null;
 
 			void s1() {
 // tag::snippetZA[]
@@ -1307,8 +1226,7 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 					access.setRelay(stateMachine);
 				}
 
-				stateMachine.getStateMachineAccessor().withAllRegions()
-					.stream().forEach(access -> access.setRelay(stateMachine));
+				stateMachine.getStateMachineAccessor().withAllRegions().forEach(access -> access.setRelay(stateMachine));
 // end::snippetZC[]
 			}
 
@@ -1323,46 +1241,46 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 
 		public class InterceptorSamples {
 
-			StateMachine<String, String> stateMachine = null;
+			final StateMachine<String, String> stateMachine = null;
 
 			void s1() {
 // tag::snippetZH[]
 				stateMachine.getStateMachineAccessor()
-					.withRegion().addStateMachineInterceptor(new StateMachineInterceptor<String, String>() {
+					.withRegion().addStateMachineInterceptor(new StateMachineInterceptor<>() {
 
-						@Override
-						public Message<String> preEvent(Message<String> message, StateMachine<String, String> stateMachine) {
-							return message;
-						}
+                            @Override
+                            public Message<String> preEvent(Message<String> message, StateMachine<String, String> stateMachine) {
+                                return message;
+                            }
 
-						@Override
-						public StateContext<String, String> preTransition(StateContext<String, String> stateContext) {
-							return stateContext;
-						}
+                            @Override
+                            public StateContext<String, String> preTransition(StateContext<String, String> stateContext) {
+                                return stateContext;
+                            }
 
-						@Override
-						public void preStateChange(State<String, String> state, Message<String> message,
-								Transition<String, String> transition, StateMachine<String, String> stateMachine,
-								StateMachine<String, String> rootStateMachine) {
-						}
+                            @Override
+                            public void preStateChange(State<String, String> state, Message<String> message,
+                                                       Transition<String, String> transition, StateMachine<String, String> stateMachine,
+                                                       StateMachine<String, String> rootStateMachine) {
+                            }
 
-						@Override
-						public StateContext<String, String> postTransition(StateContext<String, String> stateContext) {
-							return stateContext;
-						}
+                            @Override
+                            public StateContext<String, String> postTransition(StateContext<String, String> stateContext) {
+                                return stateContext;
+                            }
 
-						@Override
-						public void postStateChange(State<String, String> state, Message<String> message,
-								Transition<String, String> transition, StateMachine<String, String> stateMachine,
-								StateMachine<String, String> rootStateMachine) {
-						}
+                            @Override
+                            public void postStateChange(State<String, String> state, Message<String> message,
+                                                        Transition<String, String> transition, StateMachine<String, String> stateMachine,
+                                                        StateMachine<String, String> rootStateMachine) {
+                            }
 
-						@Override
-						public Exception stateMachineError(StateMachine<String, String> stateMachine,
-								Exception exception) {
-							return exception;
-						}
-					});
+                            @Override
+                            public Exception stateMachineError(StateMachine<String, String> stateMachine,
+                                                               Exception exception) {
+                                return exception;
+                            }
+                        });
 // end::snippetZH[]
 			}
 
@@ -1377,13 +1295,13 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 			void addInterceptor() {
 				stateMachine.getStateMachineAccessor()
 						.doWithRegion(function ->
-							function.addStateMachineInterceptor(new StateMachineInterceptorAdapter<String, String>() {
-								@Override
-								public Exception stateMachineError(StateMachine<String, String> stateMachine,
-																   Exception exception) {
-									return exception;
-								}
-							})
+							function.addStateMachineInterceptor(new StateMachineInterceptorAdapter<>() {
+                                @Override
+                                public Exception stateMachineError(StateMachine<String, String> stateMachine,
+                                                                   Exception exception) {
+                                    return exception;
+                                }
+                            })
 						);
 
 			}
@@ -1451,14 +1369,8 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 
 // tag::snippet7[]
 			public Action<String, String> myVariableAction() {
-				return new Action<String, String>() {
-
-					@Override
-					public void execute(StateContext<String, String> context) {
-						context.getExtendedState()
-							.getVariables().put("mykey", "myvalue");
-					}
-				};
+				return context -> context.getExtendedState()
+                        .getVariables().put("mykey", "myvalue");
 			}
 // end::snippet7[]
 

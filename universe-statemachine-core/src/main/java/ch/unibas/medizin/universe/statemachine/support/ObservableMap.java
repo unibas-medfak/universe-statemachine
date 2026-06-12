@@ -43,7 +43,7 @@ public class ObservableMap<K, V> implements Map<K, V> {
 	public ObservableMap() {
 		// default constructor needed for kryo, thus
 		// we create delegate here, listener not needed.
-		delegate = new ConcurrentHashMap<K, V>();
+		delegate = new ConcurrentHashMap<>();
 	}
 
 	/**

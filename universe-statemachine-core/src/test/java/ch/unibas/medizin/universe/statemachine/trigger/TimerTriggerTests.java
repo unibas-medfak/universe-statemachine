@@ -72,13 +72,7 @@ public class TimerTriggerTests extends AbstractStateMachineTests {
 		final CountDownLatch latch = new CountDownLatch(2);
 		@SuppressWarnings("rawtypes")
 		TimerTrigger timerTrigger = context.getBean(TimerTrigger.class);
-		timerTrigger.addTriggerListener(new TriggerListener() {
-
-			@Override
-			public void triggered() {
-				latch.countDown();
-			}
-		});
+		timerTrigger.addTriggerListener(latch::countDown);
 		timerTrigger.afterPropertiesSet();
 		timerTrigger.start();
 
@@ -136,8 +130,8 @@ public class TimerTriggerTests extends AbstractStateMachineTests {
 
 	private class TestTriggerListener implements TriggerListener {
 
-		AtomicInteger count = new AtomicInteger();
-		CountDownLatch latch = new CountDownLatch(1);
+		final AtomicInteger count = new AtomicInteger();
+		final CountDownLatch latch = new CountDownLatch(1);
 
 		@Override
 		public void triggered() {
@@ -160,8 +154,7 @@ public class TimerTriggerTests extends AbstractStateMachineTests {
 		for (Entry<Trigger<?, ?>, Transition<?, ?>> entry : triggerToTransitionMap.entrySet()) {
 			if (entry.getKey() instanceof TimerTrigger) {
 				trigger = (TimerTrigger<?, ?>) entry.getKey();
-				continue;
-			}
+            }
 		}
 		assertThat(trigger).isNotNull();
 		TestTriggerListener tlistener = new TestTriggerListener();
@@ -193,7 +186,7 @@ public class TimerTriggerTests extends AbstractStateMachineTests {
 
 		@Bean
 		public TimerTrigger<TestStates, TestEvents> timerTrigger() {
-			return new TimerTrigger<TestStates, TestEvents>(100);
+			return new TimerTrigger<>(100);
 		}
 	}
 
@@ -351,7 +344,7 @@ public class TimerTriggerTests extends AbstractStateMachineTests {
 
 	private static class TestListener extends StateMachineListenerAdapter<TestStates, TestEvents> {
 
-		volatile CountDownLatch stateMachineStartedLatch = new CountDownLatch(1);
+		final CountDownLatch stateMachineStartedLatch = new CountDownLatch(1);
 		volatile CountDownLatch stateChangedLatch = new CountDownLatch(1);
 		volatile CountDownLatch transitionLatch = new CountDownLatch(0);
 		volatile int stateChangedCount = 0;
@@ -386,7 +379,7 @@ public class TimerTriggerTests extends AbstractStateMachineTests {
 
 	private static class TestListener2 extends StateMachineListenerAdapter<String, String> {
 
-		volatile CountDownLatch stateMachineStartedLatch = new CountDownLatch(1);
+		final CountDownLatch stateMachineStartedLatch = new CountDownLatch(1);
 		volatile CountDownLatch stateChangedLatch = new CountDownLatch(1);
 		volatile CountDownLatch transitionLatch = new CountDownLatch(0);
 		volatile int stateChangedCount = 0;

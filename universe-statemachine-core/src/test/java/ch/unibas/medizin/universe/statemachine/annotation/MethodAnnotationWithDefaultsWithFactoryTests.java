@@ -95,7 +95,7 @@ public class MethodAnnotationWithDefaultsWithFactoryTests extends AbstractStateM
 	@WithStateMachine(id = StateMachineSystemConstants.DEFAULT_ID_STATEMACHINE)
 	static class Bean2 {
 
-		CountDownLatch onStateChangedLatch = new CountDownLatch(1);
+		final CountDownLatch onStateChangedLatch = new CountDownLatch(1);
 
 		@OnStateChanged
 		public void onStateChanged() {

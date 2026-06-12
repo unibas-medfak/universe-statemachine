@@ -18,7 +18,6 @@
 
 import java.util.concurrent.Callable;
 
-import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.publish.Publication;
@@ -30,25 +29,17 @@ public class SpringSigningPlugin implements Plugin<Project> {
 	@Override
 	public void apply(Project project) {
 		project.getPluginManager().apply(SigningPlugin.class);
-		project.getPlugins().withType(SigningPlugin.class).all(new Action<SigningPlugin>() {
-			@Override
-			public void execute(SigningPlugin signingPlugin) {
-				boolean hasSigningKey = project.hasProperty("signingKey");
-				if (hasSigningKey) {
-					sign(project);
-				}
-			}
-		});
+		project.getPlugins().withType(SigningPlugin.class).all(signingPlugin -> {
+            boolean hasSigningKey = project.hasProperty("signingKey");
+            if (hasSigningKey) {
+                sign(project);
+            }
+        });
 	}
 
 	private void sign(Project project) {
 		SigningExtension signing = project.getExtensions().findByType(SigningExtension.class);
-		signing.setRequired(new Callable<Boolean>() {
-			@Override
-			public Boolean call() throws Exception {
-				return project.getGradle().getTaskGraph().hasTask("publishArtifacts");
-			}
-		});
+		signing.setRequired((Callable<Boolean>) () -> project.getGradle().getTaskGraph().hasTask("publishArtifacts"));
 		String signingKeyId = (String) project.findProperty("signingKeyId");
 		String signingKey = (String) project.findProperty("signingKey");
 		String signingPassword = (String) project.findProperty("signingPassword");
@@ -58,13 +49,10 @@ public class SpringSigningPlugin implements Plugin<Project> {
 			signing.useInMemoryPgpKeys(signingKey, signingPassword);
 		}
 		project.getPlugins().withType(PublishAllJavaComponentsPlugin.class)
-				.all(new Action<PublishAllJavaComponentsPlugin>() {
-					@Override
-					public void execute(PublishAllJavaComponentsPlugin publishingPlugin) {
-						PublishingExtension publishing = project.getExtensions().findByType(PublishingExtension.class);
-						Publication maven = publishing.getPublications().getByName("mavenJava");
-						signing.sign(maven);
-					}
-				});
+				.all(publishingPlugin -> {
+                    PublishingExtension publishing = project.getExtensions().findByType(PublishingExtension.class);
+                    Publication maven = publishing.getPublications().getByName("mavenJava");
+                    signing.sign(maven);
+                });
 	}
 }

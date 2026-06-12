@@ -35,7 +35,7 @@ import ch.unibas.medizin.universe.statemachine.config.common.annotation.Annotati
 public class DefaultPropertiesConfigurer<O,I,B extends AnnotationBuilder<O>>
 		extends AnnotationConfigurerAdapter<O,I,B> implements PropertiesConfigurer<I> {
 
-	private Properties properties = new Properties();
+	private final Properties properties = new Properties();
 
 	/**
 	 * Adds a {@link Properties} to this builder.
@@ -101,6 +101,6 @@ public class DefaultPropertiesConfigurer<O,I,B extends AnnotationBuilder<O>>
 	 */
 	protected boolean configureProperties(B builder, Properties properties){
 		return false;
-	};
+	}
 
 }

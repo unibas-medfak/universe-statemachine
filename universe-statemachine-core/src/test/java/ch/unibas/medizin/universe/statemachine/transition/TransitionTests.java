@@ -729,7 +729,7 @@ public class TransitionTests extends AbstractStateMachineTests {
 
 	private static class HeaderTestAction implements Action<TestStates, TestEvents> {
 
-		volatile CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 		String testHeader = null;
 
 		@Override
@@ -747,9 +747,9 @@ public class TransitionTests extends AbstractStateMachineTests {
 
 	static class TestListener extends StateMachineListenerAdapter<TestStates, TestEvents> {
 
-		volatile CountDownLatch stateMachineStartedLatch = new CountDownLatch(1);
+		final CountDownLatch stateMachineStartedLatch = new CountDownLatch(1);
 		volatile CountDownLatch stateChangedLatch = new CountDownLatch(1);
-		volatile CountDownLatch s20Latch = new CountDownLatch(1);
+		final CountDownLatch s20Latch = new CountDownLatch(1);
 		volatile int stateChangedCount = 0;
 
 		@Override

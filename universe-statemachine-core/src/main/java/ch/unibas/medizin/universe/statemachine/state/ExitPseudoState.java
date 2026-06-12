@@ -32,7 +32,7 @@ import reactor.core.publisher.Mono;
  */
 public class ExitPseudoState<S, E> implements PseudoState<S, E> {
 
-	private StateHolder<S, E> state;
+	private final StateHolder<S, E> state;
 
 	/**
 	 * Instantiates a new exit pseudo state.

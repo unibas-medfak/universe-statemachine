@@ -131,7 +131,7 @@ public class DefaultStateContext<S, E> implements StateContext<S, E> {
 		if (header instanceof String) {
 			return messageHeaders.get((String)header);
 		} else if (header instanceof Enum<?>) {
-			return messageHeaders.get(((Enum<?>)header).toString());
+			return messageHeaders.get(header.toString());
 		}
 		return null;
 	}

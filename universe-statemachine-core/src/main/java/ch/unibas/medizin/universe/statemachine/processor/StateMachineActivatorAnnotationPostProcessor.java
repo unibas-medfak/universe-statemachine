@@ -34,7 +34,7 @@ public class StateMachineActivatorAnnotationPostProcessor<T extends Annotation> 
 
 	@Override
 	public Object postProcess(Class<?> beanClass, Object bean, String beanName, Method method, T metaAnnotation, Annotation annotation) {
-		StateMachineHandler<T, Object, Object> handler = new StateMachineHandler<T, Object, Object>(beanClass, bean, method, metaAnnotation, annotation);
+		StateMachineHandler<T, Object, Object> handler = new StateMachineHandler<>(beanClass, bean, method, metaAnnotation, annotation);
 
 		Integer order = findOrder(bean, method);
 		if (order != null) {

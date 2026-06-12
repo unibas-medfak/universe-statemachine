@@ -27,8 +27,8 @@ import ch.unibas.medizin.universe.statemachine.config.common.annotation.simple.S
  */
 public class ComplexTestConfig {
 
-	public String complexData;
-	public Properties complexProperties;
+	public final String complexData;
+	public final Properties complexProperties;
 	public ComplexTestConfigBeanA complexBeanA;
 	public ComplexTestConfigBeanB complexBeanB;
 	public SimpleTestConfig simpleTestConfig;

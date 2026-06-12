@@ -44,11 +44,11 @@ public class FixedMethodFilter implements MethodFilter {
 
 	public List<Method> filter(List<Method> methods) {
 		if (methods != null && methods.contains(this.method)) {
-			List<Method> filteredList = new ArrayList<Method>(1);
+			List<Method> filteredList = new ArrayList<>(1);
 			filteredList.add(this.method);
 			return filteredList;
 		}
-		return Collections.<Method> emptyList();
+		return Collections.emptyList();
 	}
 
 }

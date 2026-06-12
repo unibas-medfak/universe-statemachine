@@ -54,7 +54,6 @@ import ch.unibas.medizin.universe.statemachine.support.FixedMethodFilter;
 import ch.unibas.medizin.universe.statemachine.support.UniqueMethodFilter;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.util.ReflectionUtils.MethodCallback;
 import org.springframework.util.ReflectionUtils.MethodFilter;
 import org.springframework.util.StringUtils;
 
@@ -77,7 +76,7 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 
 	private volatile String displayString;
 
-	private volatile boolean requiresReply;
+	private final boolean requiresReply;
 
 	private final Map<Class<?>, HandlerMethod> handlerMethods;
 
@@ -115,7 +114,7 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 	}
 
 	public T process(StateMachineRuntime<S, E> stateMachineRuntime) throws Exception {
-		ParametersWrapper<S, E> wrapper = new ParametersWrapper<S, E>(stateMachineRuntime.getStateContext());
+		ParametersWrapper<S, E> wrapper = new ParametersWrapper<>(stateMachineRuntime.getStateContext());
 		return processInternal(wrapper);
 	}
 
@@ -171,7 +170,7 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 			this.handlerMethod = null;
 			this.handlerMethods = handlerMethods;
 			this.handlerMessageMethods = handlerMessageMethods;
-			this.handlerMethodsList = new LinkedList<Map<Class<?>, HandlerMethod>>();
+			this.handlerMethodsList = new LinkedList<>();
 
 			// TODO Consider to use global option to determine a precedence of
 			// methods
@@ -193,7 +192,7 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 		} else if (targetMethod instanceof String) {
 			sb.append("." + targetMethod);
 		}
-		this.displayString = sb.toString() + "]";
+		this.displayString = sb + "]";
 	}
 
 	private void prepareEvaluationContext(StandardEvaluationContext context, Object method,
@@ -261,70 +260,67 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 	private Map<String, Map<Class<?>, HandlerMethod>> findHandlerMethodsForTarget(final Object targetObject,
 			final Class<? extends Annotation> annotationType, final String methodName, final boolean requiresReply) {
 
-		Map<String, Map<Class<?>, HandlerMethod>> handlerMethods = new HashMap<String, Map<Class<?>, HandlerMethod>>();
+		Map<String, Map<Class<?>, HandlerMethod>> handlerMethods = new HashMap<>();
 
-		final Map<Class<?>, HandlerMethod> candidateMethods = new HashMap<Class<?>, HandlerMethod>();
-		final Map<Class<?>, HandlerMethod> candidateMessageMethods = new HashMap<Class<?>, HandlerMethod>();
+		final Map<Class<?>, HandlerMethod> candidateMethods = new HashMap<>();
+		final Map<Class<?>, HandlerMethod> candidateMessageMethods = new HashMap<>();
 		final Class<?> targetClass = this.getTargetClass(targetObject);
 		MethodFilter methodFilter = new UniqueMethodFilter(targetClass);
-		ReflectionUtils.doWithMethods(targetClass, new MethodCallback() {
-			@Override
-			public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
-				boolean matchesAnnotation = false;
-				if (method.isBridge()) {
-					return;
-				}
-				if (isMethodDefinedOnObjectClass(method)) {
-					return;
-				}
-				if (method.getDeclaringClass().equals(Proxy.class)) {
-					return;
-				}
-				if (!Modifier.isPublic(method.getModifiers())) {
-					return;
-				}
-				if (requiresReply && void.class.equals(method.getReturnType())) {
-					return;
-				}
-				if (methodName != null && !methodName.equals(method.getName())) {
-					return;
-				}
-				if (annotationType != null && AnnotationUtils.findAnnotation(method, annotationType) != null) {
-					matchesAnnotation = true;
-				}
-				HandlerMethod handlerMethod = null;
-				try {
-					handlerMethod = new HandlerMethod(method);
-				}
-				catch (Exception e) {
-					if (logger.isDebugEnabled()) {
-						logger.debug("Method [" + method + "] is not eligible for container handling.", e);
-					}
-					return;
-				}
-				Class<?> targetParameterType = handlerMethod.getTargetParameterType();
-				if (matchesAnnotation || annotationType == null) {
-					if (handlerMethod.isMessageMethod()) {
-						if (candidateMessageMethods.containsKey(targetParameterType)) {
-							throw new IllegalArgumentException("Found more than one method match for type " +
-									"[Message<" + targetParameterType + ">]");
-						}
-						candidateMessageMethods.put(targetParameterType, handlerMethod);
-					} else {
-						if (candidateMethods.containsKey(targetParameterType)) {
-							String exceptionMessage = "Found more than one method match for ";
-							if (Void.class.equals(targetParameterType)) {
-								exceptionMessage += "empty parameter for 'payload'";
-							} else {
-								exceptionMessage += "type [" + targetParameterType + "]";
-							}
-							throw new IllegalArgumentException(exceptionMessage);
-						}
-						candidateMethods.put(targetParameterType, handlerMethod);
-					}
-				}
-			}
-		}, methodFilter);
+		ReflectionUtils.doWithMethods(targetClass, method -> {
+            boolean matchesAnnotation = false;
+            if (method.isBridge()) {
+                return;
+            }
+            if (isMethodDefinedOnObjectClass(method)) {
+                return;
+            }
+            if (method.getDeclaringClass().equals(Proxy.class)) {
+                return;
+            }
+            if (!Modifier.isPublic(method.getModifiers())) {
+                return;
+            }
+            if (requiresReply && void.class.equals(method.getReturnType())) {
+                return;
+            }
+            if (methodName != null && !methodName.equals(method.getName())) {
+                return;
+            }
+            if (annotationType != null && AnnotationUtils.findAnnotation(method, annotationType) != null) {
+                matchesAnnotation = true;
+            }
+            HandlerMethod handlerMethod;
+            try {
+                handlerMethod = new HandlerMethod(method);
+            }
+            catch (Exception e) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Method [" + method + "] is not eligible for container handling.", e);
+                }
+                return;
+            }
+            Class<?> targetParameterType = handlerMethod.getTargetParameterType();
+            if (matchesAnnotation || annotationType == null) {
+                if (handlerMethod.isMessageMethod()) {
+                    if (candidateMessageMethods.containsKey(targetParameterType)) {
+                        throw new IllegalArgumentException("Found more than one method match for type " +
+                                "[Message<" + targetParameterType + ">]");
+                    }
+                    candidateMessageMethods.put(targetParameterType, handlerMethod);
+                } else {
+                    if (candidateMethods.containsKey(targetParameterType)) {
+                        String exceptionMessage = "Found more than one method match for ";
+                        if (Void.class.equals(targetParameterType)) {
+                            exceptionMessage += "empty parameter for 'payload'";
+                        } else {
+                            exceptionMessage += "type [" + targetParameterType + "]";
+                        }
+                        throw new IllegalArgumentException(exceptionMessage);
+                    }
+                    candidateMethods.put(targetParameterType, handlerMethod);
+                }
+            }
+        }, methodFilter);
 
 		if (!candidateMethods.isEmpty() || !candidateMessageMethods.isEmpty()) {
 			handlerMethods.put(CANDIDATE_METHODS, candidateMethods);
@@ -405,7 +401,7 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 
 		private volatile TypeDescriptor targetParameterTypeDescriptor;
 
-		private volatile Class<?> targetParameterType = Void.class;
+		private final Class<?> targetParameterType = Void.class;
 
 		private volatile boolean messageMethod;
 
@@ -516,7 +512,7 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 
 		private String determineHeaderExpression(Annotation headerAnnotation, MethodParameter methodParameter) {
 			methodParameter.initParameterNameDiscovery(PARAMETER_NAME_DISCOVERER);
-			String headerName = null;
+			String headerName;
 			String relativeExpression = "";
 			AnnotationAttributes annotationAttributes = (AnnotationAttributes) AnnotationUtils
 					.getAnnotationAttributes(headerAnnotation);

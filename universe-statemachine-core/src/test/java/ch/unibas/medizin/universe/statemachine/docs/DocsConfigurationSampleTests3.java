@@ -107,13 +107,13 @@ public class DocsConfigurationSampleTests3 {
 		@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 		@Bean
 		public Action<String, String> securedAction() {
-			return new Action<String, String>() {
+			return new Action<>() {
 
-				@Secured("ROLE_ANONYMOUS")
-				@Override
-				public void execute(StateContext<String, String> context) {
-				}
-			};
+                @Secured("ROLE_ANONYMOUS")
+                @Override
+                public void execute(StateContext<String, String> context) {
+                }
+            };
 		}
 
 	}

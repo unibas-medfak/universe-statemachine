@@ -310,7 +310,7 @@ public class StateMachineFactoryTests extends AbstractStateMachineTests {
 
 	static class TestStateMachineListener extends StateMachineListenerAdapter<TestStates, TestEvents> {
 
-		CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch = new CountDownLatch(1);
 
 		@Override
 		public void stateChanged(State<TestStates, TestEvents> from, State<TestStates, TestEvents> to) {

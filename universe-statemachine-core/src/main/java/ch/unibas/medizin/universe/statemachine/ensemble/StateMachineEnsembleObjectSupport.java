@@ -33,7 +33,7 @@ public abstract class StateMachineEnsembleObjectSupport<S, E> extends LifecycleO
 
 	private final static Log log = LogFactory.getLog(StateMachineEnsembleObjectSupport.class);
 
-	private final CompositeEnsembleListener<S, E> ensembleListener = new CompositeEnsembleListener<S, E>();
+	private final CompositeEnsembleListener<S, E> ensembleListener = new CompositeEnsembleListener<>();
 
 	@Override
 	public abstract void join(StateMachine<S, E> stateMachine);

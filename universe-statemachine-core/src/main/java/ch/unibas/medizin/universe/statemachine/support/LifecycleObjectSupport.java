@@ -57,10 +57,10 @@ public abstract class LifecycleObjectSupport
 
 	public LifecycleObjectSupport() {
 		this.reactiveLifecycleManager = new ReactiveLifecycleManager(
-				() -> doPreStartReactively(),
-				() -> doPreStopReactively(),
-				() -> doPostStartReactively(),
-				() -> doPostStopReactively()
+                this::doPreStartReactively,
+                this::doPreStopReactively,
+                this::doPostStartReactively,
+                this::doPostStopReactively
 				);
 		this.reactiveLifecycleManager.setOwner(this);
 	}
@@ -173,9 +173,9 @@ public abstract class LifecycleObjectSupport
 	/**
 	 * Subclasses may implement this for destroy logic.
 	 */
-	protected void doDestroy() {};
+	protected void doDestroy() {}
 
-	/**
+    /**
 	 * Subclasses may implement this for pre start logic.
 	 *
 	 * @return the mono for completion

@@ -25,8 +25,8 @@ import java.util.Properties;
  */
 public class SimpleTestConfig {
 
-	public String simpleData;
-	public Properties simpleProperties;
+	public final String simpleData;
+	public final Properties simpleProperties;
 	public SimpleTestConfigBeanA simpleBeanA;
 	public SimpleTestConfigBeanB simpleBeanB;
 

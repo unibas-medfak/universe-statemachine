@@ -189,7 +189,7 @@ public class StateMachineTests extends AbstractStateMachineTests {
 
 		private static final Log log = LogFactory.getLog(StateMachineTests.LoggingAction.class);
 
-		private String message;
+		private final String message;
 
 		public LoggingAction(String message) {
 			this.message = message;
@@ -486,8 +486,8 @@ public class StateMachineTests extends AbstractStateMachineTests {
 
 	private static class TestStateEntryExitListener extends StateMachineListenerAdapter<TestStates, TestEvents> {
 
-		List<State<TestStates, TestEvents>> entered = new ArrayList<>();
-		List<State<TestStates, TestEvents>> exited = new ArrayList<>();
+		final List<State<TestStates, TestEvents>> entered = new ArrayList<>();
+		final List<State<TestStates, TestEvents>> exited = new ArrayList<>();
 
 		@Override
 		public void stateEntered(State<TestStates, TestEvents> state) {

@@ -64,14 +64,14 @@ public class DefaultStateMachineComponentResolver<S, E> implements StateMachineC
 	public DefaultStateMachineComponentResolver(BeanFactory beanFactory, Map<String, Action<S, E>> registeredActions,
 			Map<String, Guard<S, E>> registeredGuards) {
 		this.beanFactory = beanFactory;
-		this.registeredActions = registeredActions != null ? registeredActions : new HashMap<String, Action<S, E>>();
-		this.registeredGuards =  registeredGuards != null ? registeredGuards : new HashMap<String, Guard<S, E>>();
+		this.registeredActions = registeredActions != null ? registeredActions : new HashMap<>();
+		this.registeredGuards =  registeredGuards != null ? registeredGuards : new HashMap<>();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Action<S, E> resolveAction(String id) {
-		Action<S, E> a = null;
+		Action<S, E> a;
 		a = registeredActions.get(id);
 		if (a == null && beanFactory != null) {
 			a = beanFactory.getBean(id, Action.class);
@@ -82,7 +82,7 @@ public class DefaultStateMachineComponentResolver<S, E> implements StateMachineC
 	@SuppressWarnings("unchecked")
 	@Override
 	public Guard<S, E> resolveGuard(String id) {
-		Guard<S, E> g = null;
+		Guard<S, E> g;
 		g = registeredGuards.get(id);
 		if (g == null && beanFactory != null) {
 			g = beanFactory.getBean(id, Guard.class);

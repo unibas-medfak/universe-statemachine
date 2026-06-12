@@ -38,7 +38,7 @@ public class DefaultJoinTransitionConfigurer<S, E>
 
 	private S target;
 
-	private final List<S> sources = new ArrayList<S>();
+	private final List<S> sources = new ArrayList<>();
 
 	@Override
 	public void configure(StateMachineTransitionBuilder<S, E> builder) throws Exception {

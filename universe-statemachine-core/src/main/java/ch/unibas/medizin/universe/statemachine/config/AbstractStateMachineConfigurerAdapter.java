@@ -80,7 +80,7 @@ public abstract class AbstractStateMachineConfigurerAdapter<S, E> implements Sta
 		if (modelBuilder != null) {
 			return modelBuilder;
 		}
-		modelBuilder = new StateMachineModelBuilder<S, E>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
+		modelBuilder = new StateMachineModelBuilder<>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
 		configure(modelBuilder);
 		return modelBuilder;
 	}
@@ -89,7 +89,7 @@ public abstract class AbstractStateMachineConfigurerAdapter<S, E> implements Sta
 		if (transitionBuilder != null) {
 			return transitionBuilder;
 		}
-		transitionBuilder = new StateMachineTransitionBuilder<S, E>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
+		transitionBuilder = new StateMachineTransitionBuilder<>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
 		configure(transitionBuilder);
 		return transitionBuilder;
 	}
@@ -98,7 +98,7 @@ public abstract class AbstractStateMachineConfigurerAdapter<S, E> implements Sta
 		if (stateBuilder != null) {
 			return stateBuilder;
 		}
-		stateBuilder = new StateMachineStateBuilder<S, E>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
+		stateBuilder = new StateMachineStateBuilder<>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
 		configure(stateBuilder);
 		return stateBuilder;
 	}
@@ -107,7 +107,7 @@ public abstract class AbstractStateMachineConfigurerAdapter<S, E> implements Sta
 		if (configurationBuilder != null) {
 			return configurationBuilder;
 		}
-		configurationBuilder = new StateMachineConfigurationBuilder<S, E>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
+		configurationBuilder = new StateMachineConfigurationBuilder<>(ObjectPostProcessor.QUIESCENT_POSTPROCESSOR, true);
 		configure(configurationBuilder);
 		return configurationBuilder;
 	}

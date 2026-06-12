@@ -136,7 +136,7 @@ public class ObjectStateTests {
 
 	private static class TestAction implements ReactiveAction<String, String> {
 
-		AtomicInteger count = new AtomicInteger();
+		final AtomicInteger count = new AtomicInteger();
 
 		@Override
 		public Mono<Void> apply(StateContext<String, String> context) {
@@ -148,9 +148,9 @@ public class ObjectStateTests {
 
 	private static class TestBlockingAction implements ReactiveAction<String, String> {
 
-		AtomicInteger countBefore = new AtomicInteger();
-		AtomicInteger countAfter = new AtomicInteger();
-		AtomicInteger countInterrupt = new AtomicInteger();
+		final AtomicInteger countBefore = new AtomicInteger();
+		final AtomicInteger countAfter = new AtomicInteger();
+		final AtomicInteger countInterrupt = new AtomicInteger();
 
 		@Override
 		public Mono<Void> apply(StateContext<String, String> context) {
@@ -168,9 +168,7 @@ public class ObjectStateTests {
 			// 	countAfter.incrementAndGet();
 			// });
 
-			return Mono.fromRunnable(() -> {
-				sleep();
-			});
+			return Mono.fromRunnable(this::sleep);
 		}
 
 		private void sleep() {

@@ -122,7 +122,7 @@ public class BeanFactoryTypeConverter implements TypeConverter, BeanFactoryAware
 				editor = this.getDefaultEditor(sourceType.getType());
 			}
 			if (editor != null) { // INT-1441
-				String text = null;
+				String text;
 				synchronized (editor) {
 					editor.setValue(value);
 					text = editor.getAsText();

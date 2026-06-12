@@ -23,15 +23,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.asciidoctor.gradle.base.AsciidoctorAttributeProvider;
 import org.asciidoctor.gradle.jvm.AbstractAsciidoctorTask;
 import org.asciidoctor.gradle.jvm.AsciidoctorJExtension;
 import org.asciidoctor.gradle.jvm.AsciidoctorJPlugin;
 import org.asciidoctor.gradle.jvm.AsciidoctorTask;
-import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaLibraryPlugin;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.PluginManager;
@@ -145,22 +142,13 @@ class DocsPlugin implements Plugin<Project> {
 
 	private void configureCommonAttributes(Project project, AbstractAsciidoctorTask asciidoctorTask,
 			ExtractVersionConstraints dependencyVersions) {
-		asciidoctorTask.doFirst(new Action<Task>() {
-
-			@Override
-			public void execute(Task arg0) {
-				asciidoctorTask.getAttributeProviders().add(new AsciidoctorAttributeProvider() {
-					@Override
-					public Map<String, Object> getAttributes() {
-						Map<String, String> versionConstraints = dependencyVersions.getVersionConstraints();
-						Map<String, Object> attrs = new HashMap<>();
-						attrs.put("spring-version", versionConstraints.get("org.springframework:spring-core"));
-						attrs.put("spring-boot-version", versionConstraints.get("org.springframework.boot:spring-boot"));
-						return attrs;
-					}
-				});
-			}
-		});
+		asciidoctorTask.doFirst(arg0 -> asciidoctorTask.getAttributeProviders().add(() -> {
+            Map<String, String> versionConstraints = dependencyVersions.getVersionConstraints();
+            Map<String, Object> attrs = new HashMap<>();
+            attrs.put("spring-version", versionConstraints.get("org.springframework:spring-core"));
+            attrs.put("spring-boot-version", versionConstraints.get("org.springframework.boot:spring-boot"));
+            return attrs;
+        }));
 
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put("toc", "left");
@@ -173,17 +161,14 @@ class DocsPlugin implements Plugin<Project> {
 		attributes.put("today-year", LocalDate.now().getYear());
 		attributes.put("snippets", "docs");
 
-		asciidoctorTask.getAttributeProviders().add(new AsciidoctorAttributeProvider() {
-			@Override
-			public Map<String, Object> getAttributes() {
-				Object version = project.getVersion();
-				Map<String, Object> attrs = new HashMap<>();
-				if (version != null && version.toString() != Project.DEFAULT_VERSION) {
-					attrs.put("project-version", version);
-				}
-				return attrs;
-			}
-		});
+		asciidoctorTask.getAttributeProviders().add(() -> {
+            Object version = project.getVersion();
+            Map<String, Object> attrs = new HashMap<>();
+            if (!version.toString().equals(Project.DEFAULT_VERSION)) {
+                attrs.put("project-version", version);
+            }
+            return attrs;
+        });
 		asciidoctorTask.attributes(attributes);
 	}
 }

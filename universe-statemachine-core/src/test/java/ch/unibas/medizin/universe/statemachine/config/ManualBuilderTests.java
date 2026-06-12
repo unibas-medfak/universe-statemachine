@@ -45,7 +45,7 @@ public class ManualBuilderTests {
 
 	@Test
 	public void testManualBuildConcept() throws Exception {
-		StateMachineConfigBuilder<String, String> builder = new StateMachineConfigBuilder<String, String>();
+		StateMachineConfigBuilder<String, String> builder = new StateMachineConfigBuilder<>();
 		Config config = new Config();
 		builder.apply(config);
 		StateMachineConfig<String, String> stateMachineConfig = builder.getOrBuild();
@@ -53,8 +53,8 @@ public class ManualBuilderTests {
 		TransitionsData<String, String> stateMachineTransitions = stateMachineConfig.getTransitions();
 		StatesData<String, String> stateMachineStates = stateMachineConfig.getStates();
 		ConfigurationData<String, String> stateMachineConfigurationConfig = stateMachineConfig.getStateMachineConfigurationConfig();
-		ObjectStateMachineFactory<String, String> stateMachineFactory = new ObjectStateMachineFactory<String, String>(
-				new DefaultStateMachineModel<String, String>(stateMachineConfigurationConfig, stateMachineStates, stateMachineTransitions));
+		ObjectStateMachineFactory<String, String> stateMachineFactory = new ObjectStateMachineFactory<>(
+                new DefaultStateMachineModel<>(stateMachineConfigurationConfig, stateMachineStates, stateMachineTransitions));
 
 		StaticListableBeanFactory beanFactory = new StaticListableBeanFactory();
 		stateMachineFactory.setBeanFactory(beanFactory);
@@ -168,11 +168,11 @@ public class ManualBuilderTests {
 		assertThat(((SmartLifecycle)stateMachine).isRunning()).isTrue();
 	}
 
-	static enum MyStates {
+	enum MyStates {
 		S1, S2
 	}
 
-	static enum MyEvents {
+	enum MyEvents {
 		E1, E2
 	}
 
@@ -199,7 +199,7 @@ public class ManualBuilderTests {
 
 	private static class TestListener extends StateMachineListenerAdapter<String, String> {
 
-		volatile CountDownLatch stateChangedLatch = new CountDownLatch(1);
+		final CountDownLatch stateChangedLatch = new CountDownLatch(1);
 		volatile int stateChangedCount = 0;
 
 		@Override
