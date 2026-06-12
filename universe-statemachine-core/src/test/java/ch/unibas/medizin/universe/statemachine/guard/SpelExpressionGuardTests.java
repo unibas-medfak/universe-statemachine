@@ -1,0 +1,104 @@
+/*
+ * Copyright 2015-2020 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package ch.unibas.medizin.universe.statemachine.guard;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
+import ch.unibas.medizin.universe.statemachine.guard.SpelExpressionGuard;
+import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.expression.Expression;
+import org.springframework.expression.spel.SpelCompilerMode;
+import org.springframework.expression.spel.SpelParserConfiguration;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.support.MessageBuilder;
+import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests;
+import ch.unibas.medizin.universe.statemachine.ObjectStateMachine;
+import ch.unibas.medizin.universe.statemachine.StateMachineSystemConstants;
+import ch.unibas.medizin.universe.statemachine.config.EnableStateMachine;
+import ch.unibas.medizin.universe.statemachine.config.EnumStateMachineConfigurerAdapter;
+import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineStateConfigurer;
+import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineTransitionConfigurer;
+import ch.unibas.medizin.universe.statemachine.support.DefaultStateContext;
+
+/**
+ * Tests for using spel expressions in guards.
+ *
+ * @author Janne Valkealahti
+ *
+ */
+public class SpelExpressionGuardTests extends AbstractStateMachineTests {
+
+	@Test
+	public void testSimpleSpel() {
+		SpelExpressionParser parser = new SpelExpressionParser(
+				new SpelParserConfiguration(SpelCompilerMode.MIXED, null));
+		Expression expression = parser.parseExpression("messageHeaders.get('foo')=='bar'");
+		SpelExpressionGuard<TestStates, TestEvents> guard = new SpelExpressionGuard<TestStates, TestEvents>(expression);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("foo", "bar");
+		MessageHeaders headers = new MessageHeaders(map);
+		DefaultStateContext<TestStates, TestEvents> stateContext = new DefaultStateContext<TestStates, TestEvents>(null, null, headers,
+				null, null, null, null, null, null);
+		assertThat(guard.evaluate(stateContext)).isTrue();
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	@Test
+	public void testGuardDenyStateChange() throws Exception {
+		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Config1.class);
+		assertThat(ctx.containsBean(StateMachineSystemConstants.DEFAULT_ID_STATEMACHINE)).isTrue();
+		ObjectStateMachine<TestStates,TestEvents> machine =
+				ctx.getBean(StateMachineSystemConstants.DEFAULT_ID_STATEMACHINE, ObjectStateMachine.class);
+		machine.start();
+
+		assertThat(machine.getState().getIds()).containsExactly(TestStates.S1);
+		machine.sendEvent(MessageBuilder.withPayload(TestEvents.E1).build());
+		assertThat(machine.getState().getIds()).containsExactly(TestStates.S1);
+		ctx.close();
+	}
+
+	@Configuration
+	@EnableStateMachine
+	public static class Config1 extends EnumStateMachineConfigurerAdapter<TestStates, TestEvents> {
+
+		@Override
+		public void configure(StateMachineStateConfigurer<TestStates, TestEvents> states) throws Exception {
+			states
+				.withStates()
+					.initial(TestStates.S1)
+					.states(EnumSet.allOf(TestStates.class));
+		}
+
+		@Override
+		public void configure(StateMachineTransitionConfigurer<TestStates, TestEvents> transitions) throws Exception {
+			transitions
+				.withExternal()
+					.source(TestStates.S1)
+					.target(TestStates.S2)
+					.event(TestEvents.E1)
+					.guardExpression("false");
+		}
+
+	}
+
+}

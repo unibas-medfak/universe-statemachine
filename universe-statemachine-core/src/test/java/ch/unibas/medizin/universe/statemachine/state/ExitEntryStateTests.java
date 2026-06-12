@@ -1,0 +1,255 @@
+/*
+ * Copyright 2016-2020 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package ch.unibas.medizin.universe.statemachine.state;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static ch.unibas.medizin.universe.statemachine.TestUtils.doSendEventAndConsumeAll;
+import static ch.unibas.medizin.universe.statemachine.TestUtils.doStartAndAssert;
+import static ch.unibas.medizin.universe.statemachine.TestUtils.resolveMachine;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ch.unibas.medizin.universe.statemachine.state.State;
+import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests;
+import ch.unibas.medizin.universe.statemachine.StateMachine;
+import ch.unibas.medizin.universe.statemachine.config.EnableStateMachine;
+import ch.unibas.medizin.universe.statemachine.config.StateMachineConfigurerAdapter;
+import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineStateConfigurer;
+import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineTransitionConfigurer;
+import ch.unibas.medizin.universe.statemachine.listener.StateMachineListenerAdapter;
+
+public class ExitEntryStateTests extends AbstractStateMachineTests {
+
+	@Test
+	public void testSimpleEntryExit() {
+		context.register(Config1.class);
+		context.refresh();
+		StateMachine<String, String> machine = resolveMachine(context);
+		assertThat(machine).isNotNull();
+		TestStateEntryExitListener listener = new TestStateEntryExitListener();
+		machine.addStateListener(listener);
+		doStartAndAssert(machine);
+		assertThat(machine.getState().getIds()).containsExactly("S1");
+		listener.reset();
+		doSendEventAndConsumeAll(machine, "ENTRY1");
+		assertThat(machine.getState().getIds()).containsExactly("S2", "S22");
+		assertThat(listener.exited).containsExactly("S1");
+		assertThat(listener.entered).containsExactly("S2", "S22");
+		doSendEventAndConsumeAll(machine, "EXIT1");
+		assertThat(machine.getState().getIds()).containsExactly("S4");
+	}
+
+	@Test
+	public void testSimpleEntryToInitial() {
+		context.register(Config1.class);
+		context.refresh();
+		StateMachine<String, String> machine = resolveMachine(context);
+		assertThat(machine).isNotNull();
+		TestStateEntryExitListener listener = new TestStateEntryExitListener();
+		machine.addStateListener(listener);
+		doStartAndAssert(machine);
+		assertThat(machine.getState().getIds()).containsExactly("S1");
+		listener.reset();
+		doSendEventAndConsumeAll(machine, "ENTRY3");
+		assertThat(machine.getState().getIds()).containsExactly("S2", "S21");
+		assertThat(listener.exited).containsExactly("S1");
+		assertThat(listener.entered).containsExactly("S2", "S21");
+	}
+
+	@Test
+	public void testMultipleExitsToSameState() {
+		context.register(Config2.class);
+		context.refresh();
+		StateMachine<String, String> machine = resolveMachine(context);
+		assertThat(machine).isNotNull();
+		doStartAndAssert(machine);
+
+		assertThat(machine.getState().getIds()).containsExactly("S1");
+		doSendEventAndConsumeAll(machine, "E1");
+		assertThat(machine.getState().getIds()).containsExactly("S2", "S22");
+		doSendEventAndConsumeAll(machine, "EXIT2");
+		assertThat(machine.getState().getIds()).containsExactly("S1");
+
+		doSendEventAndConsumeAll(machine, "E2");
+		assertThat(machine.getState().getIds()).containsExactly("S3", "S32");
+		doSendEventAndConsumeAll(machine, "EXIT3");
+		assertThat(machine.getState().getIds()).containsExactly("S1");
+	}
+
+	@Configuration
+	@EnableStateMachine
+	static class Config1 extends StateMachineConfigurerAdapter<String, String> {
+
+		@Override
+		public void configure(StateMachineStateConfigurer<String, String> states) throws Exception {
+			// entry point takes to S22 instead of initial S21
+			// exit point takes to S4 instead from S2 to S3
+			states
+				.withStates()
+					.initial("S1")
+					.state("S2")
+					.state("S3")
+					.state("S4")
+					.state("S5")
+					.and()
+					.withStates()
+						.parent("S2")
+						.initial("S21")
+						.entry("S2ENTRY1")
+						.entry("S2ENTRY2")
+						.entry("S2ENTRY3")
+						.exit("S2EXIT1")
+						.exit("S2EXIT2")
+						.state("S22")
+						.state("S23");
+		}
+
+		@Override
+		public void configure(StateMachineTransitionConfigurer<String, String> transitions) throws Exception {
+			transitions
+				.withExternal()
+					.source("S1").target("S2")
+					.event("E1")
+					.and()
+				.withExternal()
+					.source("S2").target("S3")
+					.event("E2")
+					.and()
+				.withExternal()
+					.source("S1").target("S2ENTRY1")
+					.event("ENTRY1")
+					.and()
+				.withExternal()
+					.source("S1").target("S2ENTRY2")
+					.event("ENTRY2")
+					.and()
+				.withExternal()
+					.source("S1").target("S2ENTRY3")
+					.event("ENTRY3")
+					.and()
+				.withExternal()
+					.source("S22").target("S2EXIT1")
+					.event("EXIT1")
+					.and()
+				.withExternal()
+					.source("S22").target("S2EXIT2")
+					.event("EXIT2")
+					.and()
+				.withEntry()
+					.source("S2ENTRY1").target("S22")
+					.and()
+				.withEntry()
+					.source("S2ENTRY2").target("S23")
+					.and()
+				.withEntry()
+					.source("S2ENTRY3").target("S21")
+					.and()
+				.withExit()
+					.source("S2EXIT1").target("S4")
+					.and()
+				.withExit()
+					.source("S2EXIT2").target("S5");
+		}
+	}
+
+	@Configuration
+	@EnableStateMachine
+	static class Config2 extends StateMachineConfigurerAdapter<String, String> {
+
+		@Override
+		public void configure(StateMachineStateConfigurer<String, String> states) throws Exception {
+			states
+				.withStates()
+					.initial("S1")
+					.state("S2")
+					.state("S3")
+					.and()
+					.withStates()
+						.parent("S2")
+						.initial("S21")
+						.exit("S2EXIT")
+						.state("S22")
+						.and()
+					.withStates()
+						.parent("S3")
+						.initial("S31")
+						.exit("S3EXIT")
+						.state("S32");
+		}
+
+		@Override
+		public void configure(StateMachineTransitionConfigurer<String, String> transitions) throws Exception {
+			transitions
+				.withExternal()
+					.source("S1").target("S2")
+					.event("E1")
+					.and()
+				.withExternal()
+					.source("S1").target("S3")
+					.event("E2")
+					.and()
+				.withExternal()
+					.source("S21").target("S22")
+					.and()
+				.withExternal()
+					.source("S31").target("S32")
+					.and()
+				.withExternal()
+					.source("S22").target("S2EXIT")
+					.event("EXIT2")
+					.and()
+				.withExternal()
+					.source("S32").target("S3EXIT")
+					.event("EXIT3")
+					.and()
+				.withExit()
+					.source("S2EXIT").target("S1")
+					.and()
+				.withExit()
+					.source("S3EXIT").target("S1");
+		}
+	}
+
+	private static class TestStateEntryExitListener extends StateMachineListenerAdapter<String, String> {
+
+		List<String> entered = new ArrayList<>();
+		List<String> exited = new ArrayList<>();
+
+		@Override
+		public void stateEntered(State<String, String> state) {
+			entered.add(state.getId());
+		}
+
+		@Override
+		public void stateExited(State<String, String> state) {
+			exited.add(state.getId());
+		}
+
+		public void reset() {
+			entered.clear();
+			exited.clear();
+		}
+	}
+
+	@Override
+	protected AnnotationConfigApplicationContext buildContext() {
+		return new AnnotationConfigApplicationContext();
+	}
+}

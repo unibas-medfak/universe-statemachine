@@ -1,0 +1,159 @@
+/*
+ * Copyright 2015-2020 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package ch.unibas.medizin.universe.statemachine.config;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static ch.unibas.medizin.universe.statemachine.TestUtils.doSendEventAndConsumeAll;
+import static ch.unibas.medizin.universe.statemachine.TestUtils.doStartAndAssert;
+import static ch.unibas.medizin.universe.statemachine.TestUtils.resolveMachine;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import ch.unibas.medizin.universe.statemachine.config.StateMachineBuilder;
+import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests;
+import ch.unibas.medizin.universe.statemachine.StateMachine;
+import ch.unibas.medizin.universe.statemachine.config.StateMachineBuilder.Builder;
+import ch.unibas.medizin.universe.statemachine.listener.StateMachineListenerAdapter;
+import ch.unibas.medizin.universe.statemachine.state.State;
+
+public class ManualBuilderContextTests extends AbstractStateMachineTests {
+
+	@Override
+	protected AnnotationConfigApplicationContext buildContext() {
+		return new AnnotationConfigApplicationContext();
+	}
+
+	@Test
+	public void testAsBeanViaBuilder1() throws Exception {
+		context.register(Config1.class);
+		context.refresh();
+		TestListener listener = context.getBean(TestListener.class);
+		StateMachine<String, String> stateMachine = resolveMachine(context);
+		assertThat(listener.stateMachineStartedLatch.await(2, TimeUnit.SECONDS)).isTrue();
+		assertThat(stateMachine.getState().getIds()).containsOnly("S1");
+		listener.reset(1);
+		doSendEventAndConsumeAll(stateMachine, "E1");
+		assertThat(listener.stateChangedLatch.await(2, TimeUnit.SECONDS)).isTrue();
+		assertThat(listener.stateChangedCount).isEqualTo(1);
+		assertThat(stateMachine.getState().getIds()).containsOnly("S2");
+	}
+
+	@Test
+	public void testAsBeanViaBuilder2() throws Exception {
+		context.register(Config2.class);
+		context.refresh();
+		TestListener listener = context.getBean(TestListener.class);
+		StateMachine<String, String> stateMachine = resolveMachine(context);
+		doStartAndAssert(stateMachine);
+		assertThat(listener.stateMachineStartedLatch.await(2, TimeUnit.SECONDS)).isTrue();
+		assertThat(stateMachine.getState().getIds()).containsOnly("S1");
+		listener.reset(1);
+		doSendEventAndConsumeAll(stateMachine, "E1");
+		assertThat(listener.stateChangedLatch.await(2, TimeUnit.SECONDS)).isTrue();
+		assertThat(listener.stateChangedCount).isEqualTo(1);
+		assertThat(stateMachine.getState().getIds()).containsOnly("S2");
+	}
+
+	@Configuration
+	static class Config1 {
+
+		@Bean
+		StateMachine<String, String> stateMachine() throws Exception {
+			Builder<String, String> builder = StateMachineBuilder.builder();
+			builder.configureConfiguration()
+				.withConfiguration()
+					.autoStartup(true)
+					.listener(testListener());
+			builder.configureStates()
+				.withStates()
+					.initial("S1").state("S2");
+			builder.configureTransitions()
+				.withExternal()
+					.source("S1").target("S2").event("E1")
+					.and()
+				.withExternal()
+					.source("S2").target("S1").event("E2");
+			StateMachine<String, String> stateMachine = builder.build();
+			return stateMachine;
+		}
+
+		@Bean
+		TestListener testListener() {
+			return new TestListener();
+		}
+
+	}
+
+	@Configuration
+	static class Config2 {
+
+		@Bean
+		StateMachine<String, String> stateMachine() throws Exception {
+			Builder<String, String> builder = StateMachineBuilder.builder();
+			builder.configureConfiguration()
+				.withConfiguration()
+					.autoStartup(false)
+					.listener(testListener());
+			builder.configureStates()
+				.withStates()
+					.initial("S1").state("S2");
+			builder.configureTransitions()
+				.withExternal()
+					.source("S1").target("S2").event("E1")
+					.and()
+				.withExternal()
+					.source("S2").target("S1").event("E2");
+			StateMachine<String, String> stateMachine = builder.build();
+			return stateMachine;
+		}
+
+		@Bean
+		TestListener testListener() {
+			return new TestListener();
+		}
+
+	}
+
+	private static class TestListener extends StateMachineListenerAdapter<String, String> {
+
+		volatile CountDownLatch stateMachineStartedLatch = new CountDownLatch(1);
+		volatile CountDownLatch stateChangedLatch = new CountDownLatch(1);
+		volatile int stateChangedCount = 0;
+
+		@Override
+		public void stateMachineStarted(StateMachine<String, String> stateMachine) {
+			stateMachineStartedLatch.countDown();
+		}
+
+		@Override
+		public void stateChanged(State<String, String> from, State<String, String> to) {
+			stateChangedCount++;
+			stateChangedLatch.countDown();
+		}
+
+		public void reset(int a1) {
+			stateChangedCount = 0;
+			stateChangedLatch = new CountDownLatch(a1);
+		}
+
+	}
+
+}

@@ -1,0 +1,89 @@
+/*
+ * Copyright 2016-2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package ch.unibas.medizin.universe.statemachine.docs;
+
+import java.util.function.Function;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import ch.unibas.medizin.universe.statemachine.StateContext;
+import ch.unibas.medizin.universe.statemachine.StateMachine;
+import ch.unibas.medizin.universe.statemachine.config.EnableStateMachine;
+import ch.unibas.medizin.universe.statemachine.config.StateMachineConfigurerAdapter;
+import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineConfigurationConfigurer;
+import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineStateConfigurer;
+import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineTransitionConfigurer;
+import ch.unibas.medizin.universe.statemachine.monitor.AbstractStateMachineMonitor;
+import ch.unibas.medizin.universe.statemachine.monitor.StateMachineMonitor;
+import ch.unibas.medizin.universe.statemachine.transition.Transition;
+
+import reactor.core.publisher.Mono;
+
+public class DocsConfigurationSampleTests9 {
+
+// tag::snippetA[]
+	@Configuration
+	@EnableStateMachine
+	public class Config1 extends StateMachineConfigurerAdapter<String, String> {
+
+		@Override
+		public void configure(StateMachineConfigurationConfigurer<String, String> config)
+				throws Exception {
+			config
+				.withMonitoring()
+					.monitor(stateMachineMonitor());
+		}
+
+		@Override
+		public void configure(StateMachineStateConfigurer<String, String> states) throws Exception {
+			states
+				.withStates()
+					.initial("S1")
+					.state("S2");
+		}
+
+		@Override
+		public void configure(StateMachineTransitionConfigurer<String, String> transitions) throws Exception {
+			transitions
+				.withExternal()
+					.source("S1")
+					.target("S2")
+					.event("E1");
+		}
+
+		@Bean
+		public StateMachineMonitor<String, String> stateMachineMonitor() {
+			return new TestStateMachineMonitor();
+		}
+	}
+// end::snippetA[]
+
+// tag::snippetB[]
+	public class TestStateMachineMonitor extends AbstractStateMachineMonitor<String, String> {
+
+		@Override
+		public void transition(StateMachine<String, String> stateMachine, Transition<String, String> transition,
+				long duration) {
+		}
+
+		@Override
+		public void action(StateMachine<String, String> stateMachine,
+				Function<StateContext<String, String>, Mono<Void>> action, long duration) {
+		}
+	}
+// end::snippetB[]
+
+}

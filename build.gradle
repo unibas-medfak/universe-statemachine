@@ -1,22 +1,20 @@
 plugins {
 	id "base"
-	id 'org.springframework.statemachine.root'
+	id 'ch.unibas.medizin.universe.statemachine.root'
 	id 'maven-publish'
 }
 
-description = 'Spring Statemachine'
+description = 'Universe Statemachine'
 
 repositories {
-	maven { url = 'https://repo.spring.io/snapshot' }
 	maven { url = 'https://repo.spring.io/release' }
 	mavenCentral()
 }
 
 allprojects {
-	group = 'org.springframework.statemachine'
+	group = 'ch.unibas.medizin.universe.statemachine'
 
 	repositories {
-		maven { url = 'https://repo.spring.io/snapshot' }
 		maven { url = 'https://repo.spring.io/release' }
 		mavenCentral()
 	}

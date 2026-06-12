@@ -1,0 +1,109 @@
+/*
+ * Copyright 2015-2020 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package ch.unibas.medizin.universe.statemachine;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static ch.unibas.medizin.universe.statemachine.TestUtils.doSendEventAndConsumeAll;
+import static ch.unibas.medizin.universe.statemachine.TestUtils.doStartAndAssert;
+import static ch.unibas.medizin.universe.statemachine.TestUtils.resolveMachine;
+
+import java.util.concurrent.TimeUnit;
+
+import ch.unibas.medizin.universe.statemachine.StateContext;
+import ch.unibas.medizin.universe.statemachine.StateMachine;
+import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.support.MessageBuilder;
+import ch.unibas.medizin.universe.statemachine.action.Action;
+import ch.unibas.medizin.universe.statemachine.config.EnableStateMachine;
+import ch.unibas.medizin.universe.statemachine.config.EnumStateMachineConfigurerAdapter;
+import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineStateConfigurer;
+import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineTransitionConfigurer;
+
+import reactor.core.publisher.Mono;
+
+public class RelayTests extends AbstractStateMachineTests {
+
+	@Override
+	protected AnnotationConfigApplicationContext buildContext() {
+		return new AnnotationConfigApplicationContext();
+	}
+
+	@Test
+	public void testRelayFromSubmachine() throws Exception {
+		context.register(Config1.class);
+		context.refresh();
+		StateMachine<TestStates, TestEvents> machine = resolveMachine(context);
+		assertThat(machine).isNotNull();
+		TestStateMachineListener listener = new TestStateMachineListener();
+		machine.addStateListener(listener);
+		doStartAndAssert(machine);
+		listener.reset(3, 0);
+		doSendEventAndConsumeAll(machine, TestEvents.E1);
+		assertThat(listener.stateChangedLatch.await(5, TimeUnit.SECONDS)).isTrue();
+		assertThat(machine.getState().getIds()).containsExactly(TestStates.S2, TestStates.S21);
+	}
+
+	@Configuration
+	@EnableStateMachine
+	static class Config1 extends EnumStateMachineConfigurerAdapter<TestStates, TestEvents> {
+
+		@Override
+		public void configure(StateMachineStateConfigurer<TestStates, TestEvents> states) throws Exception {
+			states
+				.withStates()
+					.initial(TestStates.S1)
+					.state(TestStates.S2)
+					.and()
+					.withStates()
+						.parent(TestStates.S2)
+						.initial(TestStates.S20)
+						.state(TestStates.S20, action1(), null)
+						.state(TestStates.S21);
+		}
+
+		@Override
+		public void configure(StateMachineTransitionConfigurer<TestStates, TestEvents> transitions) throws Exception {
+			transitions
+				.withExternal()
+					.source(TestStates.S1)
+					.target(TestStates.S2)
+					.event(TestEvents.E1)
+					.and()
+				.withExternal()
+					.source(TestStates.S20)
+					.target(TestStates.S21)
+					.event(TestEvents.E2);
+		}
+
+		@Bean
+		public Action<TestStates, TestEvents> action1() {
+			return new Action<TestStates, TestEvents>() {
+
+				@Override
+				public void execute(StateContext<TestStates, TestEvents> context) {
+					context.getStateMachine()
+						.sendEvent(Mono.just(MessageBuilder
+							.withPayload(TestEvents.E2).build()))
+						.subscribe();
+				}
+			};
+		}
+	}
+
+}

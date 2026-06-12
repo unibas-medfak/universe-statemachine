@@ -10,8 +10,6 @@ java {
 repositories {
 	gradlePluginPortal()
 	mavenCentral()
-	maven { url = "https://repo.spring.io/milestone" }
-	maven { url = "https://repo.spring.io/snapshot" }
 	maven { url = 'https://repo.spring.io/plugins-release/' }
 }
 
@@ -40,28 +38,28 @@ dependencies {
 gradlePlugin {
 	plugins {
 		modulePlugin {
-			id = "org.springframework.statemachine.module"
-			implementationClass = "org.springframework.statemachine.gradle.ModulePlugin"
+			id = "ch.unibas.medizin.universe.statemachine.module"
+			implementationClass = "ch.unibas.medizin.universe.statemachine.gradle.ModulePlugin"
 		}
 		starterPlugin {
-			id = "org.springframework.statemachine.starter"
-			implementationClass = "org.springframework.statemachine.gradle.StarterPlugin"
+			id = "ch.unibas.medizin.universe.statemachine.starter"
+			implementationClass = "ch.unibas.medizin.universe.statemachine.gradle.StarterPlugin"
 		}
 		bomPlugin {
-			id = "org.springframework.statemachine.bom"
-			implementationClass = "org.springframework.statemachine.gradle.BomPlugin"
+			id = "ch.unibas.medizin.universe.statemachine.bom"
+			implementationClass = "ch.unibas.medizin.universe.statemachine.gradle.BomPlugin"
 		}
 		docsPlugin {
-			id = "org.springframework.statemachine.docs"
-			implementationClass = "org.springframework.statemachine.gradle.DocsPlugin"
+			id = "ch.unibas.medizin.universe.statemachine.docs"
+			implementationClass = "ch.unibas.medizin.universe.statemachine.gradle.DocsPlugin"
 		}
 		distPlugin {
-			id = "org.springframework.statemachine.root"
-			implementationClass = "org.springframework.statemachine.gradle.RootPlugin"
+			id = "ch.unibas.medizin.universe.statemachine.root"
+			implementationClass = "ch.unibas.medizin.universe.statemachine.gradle.RootPlugin"
 		}
 		samplePlugin {
-			id = "org.springframework.statemachine.sample"
-			implementationClass = "org.springframework.statemachine.gradle.SamplePlugin"
+			id = "ch.unibas.medizin.universe.statemachine.sample"
+			implementationClass = "ch.unibas.medizin.universe.statemachine.gradle.SamplePlugin"
 		}
 	}
 }

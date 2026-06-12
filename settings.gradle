@@ -10,12 +10,12 @@ pluginManagement {
 	}
 }
 
-rootProject.name = 'spring-statemachine'
+rootProject.name = 'universe-statemachine'
 
-include 'spring-statemachine-platform'
-include 'spring-statemachine-core'
-include 'spring-statemachine-autoconfigure'
-include 'spring-statemachine-starter'
+include 'universe-statemachine-platform'
+include 'universe-statemachine-core'
+include 'universe-statemachine-autoconfigure'
+include 'universe-statemachine-starter'
 
 rootProject.children.each { project ->
 	project.buildFileName = "${project.name}.gradle"

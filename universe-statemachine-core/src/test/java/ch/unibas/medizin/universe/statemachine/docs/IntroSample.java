@@ -1,0 +1,141 @@
+/*
+ * Copyright 2015-2020 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package ch.unibas.medizin.universe.statemachine.docs;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static ch.unibas.medizin.universe.statemachine.TestUtils.doSendEventAndConsumeAll;
+import static ch.unibas.medizin.universe.statemachine.TestUtils.doStartAndAssert;
+
+import java.util.EnumSet;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.support.MessageBuilder;
+import ch.unibas.medizin.universe.statemachine.StateMachine;
+import ch.unibas.medizin.universe.statemachine.annotation.OnTransition;
+import ch.unibas.medizin.universe.statemachine.annotation.WithStateMachine;
+import ch.unibas.medizin.universe.statemachine.config.EnableStateMachine;
+import ch.unibas.medizin.universe.statemachine.config.EnumStateMachineConfigurerAdapter;
+import ch.unibas.medizin.universe.statemachine.config.StateMachineBuilder;
+import ch.unibas.medizin.universe.statemachine.config.StateMachineBuilder.Builder;
+import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineStateConfigurer;
+import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineTransitionConfigurer;
+
+import reactor.core.publisher.Mono;
+
+public class IntroSample {
+
+// tag::snippetA[]
+	public enum States {
+		STATE1, STATE2
+	}
+
+	public enum Events {
+		EVENT1, EVENT2
+	}
+// end::snippetA[]
+
+// tag::snippetB[]
+	@Configuration
+	@EnableStateMachine
+	public class Config1 extends EnumStateMachineConfigurerAdapter<States, Events> {
+
+		@Override
+		public void configure(StateMachineStateConfigurer<States, Events> states)
+				throws Exception {
+			states
+				.withStates()
+					.initial(States.STATE1)
+					.states(EnumSet.allOf(States.class));
+		}
+
+		@Override
+		public void configure(StateMachineTransitionConfigurer<States, Events> transitions)
+				throws Exception {
+			transitions
+				.withExternal()
+					.source(States.STATE1).target(States.STATE2)
+					.event(Events.EVENT1)
+					.and()
+				.withExternal()
+					.source(States.STATE2).target(States.STATE1)
+					.event(Events.EVENT2);
+		}
+	}
+// end::snippetB[]
+
+// tag::snippetC[]
+	@WithStateMachine
+	public class MyBean {
+
+		@OnTransition(target = "STATE1")
+		void toState1() {
+		}
+
+		@OnTransition(target = "STATE2")
+		void toState2() {
+		}
+	}
+// end::snippetC[]
+
+// tag::snippetD[]
+	public class MyApp {
+
+		@Autowired
+		StateMachine<States, Events> stateMachine;
+
+		void doSignals() {
+			stateMachine
+				.sendEvent(Mono.just(MessageBuilder
+					.withPayload(Events.EVENT1).build()))
+				.subscribe();
+			stateMachine
+				.sendEvent(Mono.just(MessageBuilder
+					.withPayload(Events.EVENT2).build()))
+				.subscribe();
+		}
+	}
+// end::snippetD[]
+
+	@Test
+	public void testManual() throws Exception {
+		StateMachine<States, Events> stateMachine = buildMachine();
+		doStartAndAssert(stateMachine);
+		assertThat(stateMachine.getState().getIds()).containsOnly(States.STATE1);
+		doSendEventAndConsumeAll(stateMachine, Events.EVENT1);
+		assertThat(stateMachine.getState().getIds()).containsOnly(States.STATE2);
+		doSendEventAndConsumeAll(stateMachine, Events.EVENT2);
+		assertThat(stateMachine.getState().getIds()).containsOnly(States.STATE1);
+	}
+
+	public StateMachine<States, Events> buildMachine() throws Exception {
+		Builder<States, Events> builder = StateMachineBuilder.builder();
+		builder.configureStates()
+			.withStates()
+				.initial(States.STATE1)
+				.states(EnumSet.allOf(States.class));
+		builder.configureTransitions()
+			.withExternal()
+				.source(States.STATE1).target(States.STATE2)
+				.event(Events.EVENT1)
+				.and()
+			.withExternal()
+				.source(States.STATE2).target(States.STATE1)
+				.event(Events.EVENT2);
+		return builder.build();
+	}
+}

@@ -1,0 +1,39 @@
+/*
+ * Copyright 2017 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package ch.unibas.medizin.universe.statemachine.persist;
+
+import ch.unibas.medizin.universe.statemachine.StateMachine;
+import ch.unibas.medizin.universe.statemachine.StateMachinePersist;
+import ch.unibas.medizin.universe.statemachine.support.StateMachineInterceptor;
+
+/**
+ * Interface defining a runtime persistence of a {@link StateMachine}.
+ *
+ * @author Janne Valkealahti
+ *
+ * @param <S> the type of state
+ * @param <E> the type of event
+ * @param <T> the type of persister context object
+ */
+public interface StateMachineRuntimePersister<S, E, T> extends StateMachinePersist<S, E, T> {
+
+	/**
+	 * Gets a {@link StateMachineInterceptor} handling machine persistence.
+	 *
+	 * @return the interceptor handling persistence
+	 */
+	StateMachineInterceptor<S, E> getInterceptor();
+}
