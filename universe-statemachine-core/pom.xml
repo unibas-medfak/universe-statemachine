@@ -166,7 +166,7 @@
 					<compilerArgs>
 						<arg>-XDcompilePolicy=simple</arg>
 						<arg>--should-stop=ifError=FLOW</arg>
-						<arg>-Xplugin:ErrorProne -XepOpt:NullAway:AnnotatedPackages=com.uber</arg>
+						<arg>-Xplugin:ErrorProne -XepOpt:NullAway:AnnotatedPackages=ch.unibas</arg>
 					</compilerArgs>
 					<annotationProcessorPaths>
 						<path>

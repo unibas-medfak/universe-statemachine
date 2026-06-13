@@ -284,7 +284,7 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 				return context -> {
                     // RuntimeException("MyError") added to context
                     Exception exception = context.getException();
-                    exception.getMessage();
+                    var unused = exception.getMessage();
                 };
 			}
 
@@ -321,7 +321,7 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 				return context -> {
                     // RuntimeException("MyError") added to context
                     Exception exception = context.getException();
-                    exception.getMessage();
+                    var unused = exception.getMessage();
                 };
 			}
 		}
@@ -356,7 +356,7 @@ public class DocsConfigurationSampleTests extends AbstractStateMachineTests {
 				return context -> {
                     // RuntimeException("MyError") added to context
                     Exception exception = context.getException();
-                    exception.getMessage();
+                    var unused = exception.getMessage();
                 };
 			}
 		}
