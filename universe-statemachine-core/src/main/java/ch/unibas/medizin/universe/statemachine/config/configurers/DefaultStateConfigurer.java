@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import ch.unibas.medizin.universe.statemachine.StateContext;
 import ch.unibas.medizin.universe.statemachine.StateMachine;

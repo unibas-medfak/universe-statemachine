@@ -57,7 +57,7 @@ public class InMemoryStateMachineTraceRepository implements StateMachineTraceRep
 	@Override
 	public List<StateMachineTrace> findAll() {
 		synchronized (this.traces) {
-			return Collections.unmodifiableList(new ArrayList<>(this.traces));
+			return List.copyOf(this.traces);
 		}
 	}
 

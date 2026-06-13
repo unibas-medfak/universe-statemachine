@@ -50,6 +50,7 @@ public class AnnotatedMethodFilter implements MethodFilter {
 		this.requiresReply = requiresReply;
 	}
 
+	@Override
 	public List<Method> filter(List<Method> methods) {
 		List<Method> annotatedCandidates = new ArrayList<>();
 		List<Method> fallbackCandidates = new ArrayList<>();

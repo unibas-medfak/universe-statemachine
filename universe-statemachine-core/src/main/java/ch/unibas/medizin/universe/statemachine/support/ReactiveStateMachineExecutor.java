@@ -44,7 +44,6 @@ import ch.unibas.medizin.universe.statemachine.StateMachineSystemConstants;
 import ch.unibas.medizin.universe.statemachine.state.JoinPseudoState;
 import ch.unibas.medizin.universe.statemachine.state.PseudoStateKind;
 import ch.unibas.medizin.universe.statemachine.state.State;
-import ch.unibas.medizin.universe.statemachine.transition.AbstractTransition;
 import ch.unibas.medizin.universe.statemachine.transition.Transition;
 import ch.unibas.medizin.universe.statemachine.transition.TransitionConflictPolicy;
 import ch.unibas.medizin.universe.statemachine.trigger.DefaultTriggerContext;

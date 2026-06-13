@@ -435,7 +435,7 @@ public class TransitionEventHeaderTests extends AbstractStateMachineTests {
 
 	private static class EventCheckGuard implements Guard<TestStates, TestEvents> {
 
-		boolean ret;
+		final boolean ret;
 		StateContext<TestStates, TestEvents> context;
 
 		public EventCheckGuard(boolean ret) {

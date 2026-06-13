@@ -15,6 +15,7 @@
  */
 package ch.unibas.medizin.universe.statemachine.support;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -82,7 +83,7 @@ public class StateMachineContextUtils {
 	 * @param type the type as of a class
 	 * @return Bean known to a bean factory, null if not found.
 	 */
-	private static <T> T getBeanOfType(BeanFactory beanFactory, String beanName, Class<T> type) {
+	private static <T> @Nullable T getBeanOfType(BeanFactory beanFactory, String beanName, Class<T> type) {
 		Assert.notNull(beanFactory, "BeanFactory must not be null");
 		if (!beanFactory.containsBean(beanName)) {
 			return null;
