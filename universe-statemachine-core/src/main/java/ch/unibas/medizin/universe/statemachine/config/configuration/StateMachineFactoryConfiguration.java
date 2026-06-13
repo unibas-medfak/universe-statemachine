@@ -96,6 +96,7 @@ public class StateMachineFactoryConfiguration<S, E> extends
 				type = ResolvableType.forClassWithGenerics(StateMachineFactory.class, generics);
 			}
 		} catch (Exception e) {
+			// ignored
 		}
 		return type;
 	}

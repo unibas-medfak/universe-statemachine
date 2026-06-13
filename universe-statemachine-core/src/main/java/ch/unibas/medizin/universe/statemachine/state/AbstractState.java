@@ -494,6 +494,7 @@ public abstract class AbstractState<S, E> extends LifecycleObjectSupport impleme
 		});
 	}
 
+	@SuppressWarnings("unused")
 	private Mono<Void> handleCompleteOrEmpty2(StateContext<S, E> context, AtomicInteger completionCount) {
 		return Mono.defer(() -> {
 			if (isSimple() && stateActions.isEmpty()) {

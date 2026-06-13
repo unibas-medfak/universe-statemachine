@@ -185,7 +185,7 @@ public class StateMachineState<S, E> extends AbstractState<S, E> {
 				}
 
 				// disable initial state where needed
-				if (immediateDeepParent != null && immediateDeepParent.isSubmachineState() && (!isInitial(target))) {
+				if (immediateDeepParent != null && immediateDeepParent.isSubmachineState() && !isInitial(target)) {
 
 					((StateMachineState<S, E>) immediateDeepParent).getSubmachine().getStateMachineAccessor()
 							.doWithRegion(function -> function.setInitialEnabled(false));

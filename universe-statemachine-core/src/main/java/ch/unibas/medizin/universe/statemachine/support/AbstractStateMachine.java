@@ -201,6 +201,8 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 	}
 
 	/**
+	 * Sets the internal history state.
+	 *
 	 * @param history to set internal history state.
 	 */
 	public void setHistoryState(PseudoState<S, E> history) {
@@ -208,6 +210,8 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 	}
 
 	/**
+	 * Returns the history state attribute.
+	 *
 	 * @return history state attribute.
 	 */
 	public PseudoState<S, E> getHistoryState() {
@@ -486,7 +490,7 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 		if (s == null) {
 			return !isRunning();
 		} else {
-			return s != null && s.getPseudoState() != null
+			return s.getPseudoState() != null
 					&& s.getPseudoState().getKind() == PseudoStateKind.END;
 		}
 	}
@@ -599,16 +603,14 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 			.map(m -> getStateMachineInterceptors().preEvent(m, this))
 			.flatMapMany(this::acceptEvent)
 			.onErrorResume(error -> Flux.just(StateMachineEventResult.from(this, message, ResultType.DENIED)))
-			.doOnNext(notifyOnDenied());
+			.doOnNext(this::notifyOnDenied);
 	}
 
-	private Consumer<StateMachineEventResult<S, E>> notifyOnDenied() {
-		return r -> {
-			if (r.getResultType() == ResultType.DENIED) {
-				notifyEventNotAccepted(buildStateContext(Stage.EVENT_NOT_ACCEPTED, r.getMessage(), null,
-				getRelayStateMachine(), getState(), null));
-			}
-		};
+	private void notifyOnDenied(StateMachineEventResult<S, E> r) {
+		if (r.getResultType() == ResultType.DENIED) {
+			notifyEventNotAccepted(buildStateContext(Stage.EVENT_NOT_ACCEPTED, r.getMessage(), null,
+			getRelayStateMachine(), getState(), null));
+		}
 	}
 
 	private Flux<StateMachineEventResult<S, E>> acceptEvent(Message<E> message) {
@@ -627,7 +629,7 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 						Flux<StateMachineEventResult<S, E>> ret = Flux.fromIterable(l);
 						if (l.stream().noneMatch(er -> er.getResultType() == ResultType.ACCEPTED)) {
 							Mono<StateMachineEventResult<S, E>> result = Flux.fromIterable(transitions)
-								.filter(transition -> cs != null && transition.getTrigger() != null)
+								.filter(transition -> transition.getTrigger() != null)
 								.filter(transition -> StateMachineUtils.containsAtleastOne(transition.getSource().getIds(), cs.getIds()))
 								.flatMap(transition -> {
 									return Mono.from(transition.getTrigger().evaluate(triggerContext))
@@ -716,7 +718,7 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 				for (State<S, E> ss : s.getStates()) {
 					boolean enumMatch = false;
 					if (state instanceof Enum stateEnum && ss.getId() instanceof Enum ssIdEnum && state.getClass() == ss.getId().getClass()
-							&& ssIdEnum.ordinal() == stateEnum.ordinal()) {
+							&& stateEnum.compareTo(ssIdEnum) == 0) {
 						enumMatch = true;
 					}
 
@@ -778,7 +780,7 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 								boolean enumMatch2 = false;
 								if (state2 instanceof Enum state2Enum && ss.getId() instanceof Enum ssIdEnum2
 										&& state.getClass() == ss.getId().getClass()
-										&& ssIdEnum2.ordinal() == state2Enum.ordinal()) {
+										&& state2Enum.compareTo(ssIdEnum2) == 0) {
 									enumMatch2 = true;
 								}
 
@@ -1305,6 +1307,7 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 		return exitFromState(state, message, transition, stateMachine, null, null);
 	}
 
+	@SuppressWarnings("unused")
 	private Mono<Void> exitFromState(State<S, E> state, Message<E> message, Transition<S, E> transition,
 			StateMachine<S, E> stateMachine, Collection<State<S, E>> sources, Collection<State<S, E>> targets) {
 		if (state == null) {

@@ -17,7 +17,6 @@ package ch.unibas.medizin.universe.statemachine.support;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.expression.MethodFilter;
@@ -49,7 +48,7 @@ public class FixedMethodFilter implements MethodFilter {
 			filteredList.add(this.method);
 			return filteredList;
 		}
-		return Collections.emptyList();
+		return new ArrayList<>();
 	}
 
 }

@@ -123,6 +123,7 @@ public class StateMachineConfiguration<S, E> extends
 				type = ResolvableType.forClassWithGenerics(StateMachine.class, generics);
 			}
 		} catch (Exception e) {
+			// ignored
 		}
 		return type;
 	}
@@ -139,6 +140,7 @@ public class StateMachineConfiguration<S, E> extends
 		private StateMachineMonitor<S, E> stateMachineMonitor;
 		private ClassLoader classLoader;
 
+		@SuppressWarnings("unused")
 		private StateMachineDelegatingFactoryBean(StateMachineConfigBuilder<S, E> builder, Class<StateMachine<S, E>> clazz,
 				String clazzName, Boolean contextEvents) {
 			super(builder, clazz);
@@ -216,6 +218,7 @@ public class StateMachineConfiguration<S, E> extends
 		}
 
 		@Autowired(required = false)
+		@SuppressWarnings("unused")
 		private void setStateMachineMonitor(StateMachineMonitor<S, E> stateMachineMonitor) {
 			this.stateMachineMonitor = stateMachineMonitor;
 		}

@@ -29,6 +29,9 @@ import org.springframework.expression.TypeConverter;
 import org.springframework.util.ClassUtils;
 
 /**
+ * A {@link TypeConverter} implementation backed by a Spring {@link BeanFactory} to support
+ * custom property editors and conversion services.
+ *
  * @author Dave Syer
  * @author Oleg Zhurakousky
  * @author Gary Russell
@@ -38,7 +41,7 @@ import org.springframework.util.ClassUtils;
  */
 public class BeanFactoryTypeConverter implements TypeConverter, BeanFactoryAware {
 
-	private static ConversionService defaultConversionService;
+	private ConversionService defaultConversionService;
 
 	private volatile SimpleTypeConverter delegate = new SimpleTypeConverter();
 
@@ -50,12 +53,8 @@ public class BeanFactoryTypeConverter implements TypeConverter, BeanFactoryAware
 	 * Instantiates a new bean factory type converter.
 	 */
 	public BeanFactoryTypeConverter() {
-		synchronized (BeanFactoryTypeConverter.class) {
-			if (defaultConversionService == null) {
-				defaultConversionService = new DefaultConversionService();
-			}
-		}
-		this.conversionService = defaultConversionService;
+		this.defaultConversionService = new DefaultConversionService();
+		this.conversionService = this.defaultConversionService;
 	}
 
 	public BeanFactoryTypeConverter(ConversionService conversionService) {

@@ -194,6 +194,7 @@ public abstract class StateMachineUtils {
 				return number.longValue();
 			}
 		} catch (Exception e) {
+			// ignored
 		}
 		return null;
 	}

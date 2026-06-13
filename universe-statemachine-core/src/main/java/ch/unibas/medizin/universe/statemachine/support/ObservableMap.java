@@ -177,13 +177,9 @@ public class ObservableMap<K, V> implements Map<K, V> {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
+		if (!(obj instanceof ObservableMap<?, ?> other)) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		ObservableMap<?, ?> other = (ObservableMap<?, ?>) obj;
 		if (delegate == null) {
 			if (other.delegate != null) {
 				return false;

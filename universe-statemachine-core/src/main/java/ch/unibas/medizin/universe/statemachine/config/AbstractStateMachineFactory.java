@@ -21,10 +21,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Stack;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -185,8 +186,8 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 		// find a correct mappings because they use state id's, not actual
 		// states.
 		final Map<S, State<S, E>> stateMap = new HashMap<>();
-		Stack<MachineStackItem<S, E>> regionStack = new Stack<>();
-		Stack<StateData<S, E>> stateStack = new Stack<>();
+		Deque<MachineStackItem<S, E>> regionStack = new ArrayDeque<>();
+		Deque<StateData<S, E>> stateStack = new ArrayDeque<>();
 		Map<Object, StateMachine<S, E>> machineMap = new HashMap<>();
 		List<HolderListItem<S, E>> holderList = new ArrayList<>();
 
@@ -194,11 +195,11 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 		while (iterator.hasNext()) {
 			Node<StateData<S, E>> node = iterator.next();
 			StateData<S, E> stateData = node.getData();
-			StateData<S, E> peek = stateStack.isEmpty() ? null : stateStack.peek();
+			StateData<S, E> peek = stateStack.isEmpty() ? null : stateStack.peekFirst();
 
 			// simply push and continue
 			if (stateStack.isEmpty()) {
-				stateStack.push(stateData);
+				stateStack.addFirst(stateData);
 				continue;
 			}
 
@@ -211,7 +212,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
             }
 
 			if (stateData != null && !stackContainsSameParent) {
-				stateStack.push(stateData);
+				stateStack.addFirst(stateData);
 				continue;
 			}
 
@@ -230,13 +231,13 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 					machine = buildMachine(machineMap, stateMap, holderList, regionStateDatas, transitionsData,
 							resolveBeanFactory(stateMachineModel), contextEvents, defaultExtendedState,
 							stateMachineModel.getTransitionsData(), mId, null, stateMachineModel);
-					regionStack.push(new MachineStackItem<>(machine));
+					regionStack.addFirst(new MachineStackItem<>(machine));
 					machines.add(machine);
 				}
 
 				Collection<Region<S, E>> regions = new ArrayList<>();
 				while (!regionStack.isEmpty()) {
-					MachineStackItem<S, E> pop = regionStack.pop();
+					MachineStackItem<S, E> pop = regionStack.removeFirst();
 					regions.add(pop.machine);
 				}
 				S parent = (S)peek.getParent();
@@ -269,7 +270,9 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 				}
 			}
 
-			stateStack.push(stateData);
+			if (stateData != null) {
+				stateStack.addFirst(stateData);
+			}
 		}
 
 		// setup autostart for top-level machine
@@ -503,14 +506,14 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 		}
 	}
 
-	private static <S, E> Collection<StateData<S, E>> popSameParents(Stack<StateData<S, E>> stack) {
+	private static <S, E> Collection<StateData<S, E>> popSameParents(Deque<StateData<S, E>> stack) {
 		Collection<StateData<S, E>> data = new ArrayList<>();
 		Object parent = null;
 		if (!stack.isEmpty()) {
-			parent = stack.peek().getParent();
+			parent = stack.peekFirst().getParent();
 		}
-		while (!stack.isEmpty() && ObjectUtils.nullSafeEquals(parent, stack.peek().getParent())) {
-			data.add(stack.pop());
+		while (!stack.isEmpty() && ObjectUtils.nullSafeEquals(parent, stack.peekFirst().getParent())) {
+			data.add(stack.removeFirst());
 		}
 		return data;
 	}

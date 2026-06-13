@@ -70,7 +70,7 @@ public class AnnotatedMethodFilter implements MethodFilter {
 				fallbackCandidates.add(method);
 			}
 		}
-		return (!annotatedCandidates.isEmpty()) ? annotatedCandidates : fallbackCandidates;
+		return !annotatedCandidates.isEmpty() ? annotatedCandidates : fallbackCandidates;
 	}
 
 }

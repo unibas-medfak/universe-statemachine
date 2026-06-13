@@ -17,10 +17,10 @@ package ch.unibas.medizin.universe.statemachine.processor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -266,13 +266,13 @@ public class StateMachineAnnotationPostProcessor implements BeanPostProcessor, B
 		String name = baseName;
 		int count = 1;
 		while (beanFactory.containsBean(name)) {
-			name = baseName + "#" + (++count);
+			name = baseName + "#" + ++count;
 		}
 		return name;
 	}
 
 	private List<Annotation> getAnnotationChain(Method method, Class<? extends Annotation> annotationType) {
-		List<Annotation> annotationChain = new LinkedList<>();
+		List<Annotation> annotationChain = new ArrayList<>();
 		Set<Annotation> visited = new HashSet<>();
 		for (MergedAnnotation<Annotation> mergedAnnotation : MergedAnnotations.from(method)) {
 			recursiveFindAnnotation(annotationType, mergedAnnotation.synthesize(), annotationChain, visited);
@@ -292,7 +292,7 @@ public class StateMachineAnnotationPostProcessor implements BeanPostProcessor, B
 		}
 		for (Annotation metaAnn : ann.annotationType().getAnnotations()) {
 			if (!ann.equals(metaAnn) && !visited.contains(metaAnn)
-					&& !(metaAnn.annotationType().getPackage().getName().startsWith("java.lang"))) {
+					&& !metaAnn.annotationType().getPackage().getName().startsWith("java.lang")) {
 				visited.add(metaAnn); // prevent infinite recursion if the same
 										// annotation is found again
 				if (this.recursiveFindAnnotation(annotationType, metaAnn, annotationChain, visited)) {

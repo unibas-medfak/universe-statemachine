@@ -178,6 +178,7 @@ public class DefaultStateMachineService<S, E> implements StateMachineService<S, 
 				try {
 					listener.latch.await();
 				} catch (InterruptedException e) {
+					// ignored
 				}
 			}
 		}
@@ -193,6 +194,7 @@ public class DefaultStateMachineService<S, E> implements StateMachineService<S, 
 				try {
 					listener.latch.await();
 				} catch (InterruptedException e) {
+					// ignored
 				}
 			}
 		}

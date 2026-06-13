@@ -219,13 +219,9 @@ public class DefaultStateMachineContext<S, E> implements StateMachineContext<S, 
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
+		if (!(obj instanceof DefaultStateMachineContext<?, ?> other)) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		DefaultStateMachineContext<?, ?> other = (DefaultStateMachineContext<?, ?>) obj;
 		if (childRefs == null) {
 			if (other.childRefs != null) {
 				return false;

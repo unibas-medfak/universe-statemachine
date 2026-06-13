@@ -133,24 +133,6 @@ public abstract class AbstractPersistingStateMachineInterceptor<S, E, T> extends
 	}
 
 	/**
-	 * Builds the state machine context. Note, for backward compatibility this
-	 * method doesn't pass event or headers into a {@link StateMachineContext}.
-	 * Implementor of this class, if using this method should move over to
-	 * {@link #buildStateMachineContext(StateMachine, StateMachine, State, Message)}.
-	 *
-	 * @param stateMachine the state machine
-	 * @param rootStateMachine the root state machine
-	 * @param state the state
-	 * @return the state machine context
-	 * @deprecated in favour of {@link #buildStateMachineContext(StateMachine, StateMachine, State, Message)}
-	 */
-	@Deprecated
-	protected StateMachineContext<S, E> buildStateMachineContext(StateMachine<S, E> stateMachine,
-			StateMachine<S, E> rootStateMachine, State<S, E> state) {
-		return buildStateMachineContext(stateMachine, rootStateMachine, state, null);
-	}
-
-	/**
 	 * Builds the state machine context.
 	 *
 	 * @param stateMachine the state machine

@@ -19,9 +19,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -82,7 +82,7 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 
 	private final Map<Class<?>, HandlerMethod> handlerMessageMethods;
 
-	private final LinkedList<Map<Class<?>, HandlerMethod>> handlerMethodsList;
+	private final List<Map<Class<?>, HandlerMethod>> handlerMethodsList;
 
 	private final HandlerMethod handlerMethod;
 
@@ -170,7 +170,7 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 			this.handlerMethod = null;
 			this.handlerMethods = handlerMethods;
 			this.handlerMessageMethods = handlerMessageMethods;
-			this.handlerMethodsList = new LinkedList<>();
+			this.handlerMethodsList = new ArrayList<>();
 
 			// TODO Consider to use global option to determine a precedence of
 			// methods
@@ -362,6 +362,7 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 		return targetClass;
 	}
 
+	@SuppressWarnings("unused")
 	private HandlerMethod findHandlerMethodForParameters(ParametersWrapper<S, E> parameters) {
 		if (this.handlerMethod != null) {
 			return this.handlerMethod;

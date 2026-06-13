@@ -86,13 +86,9 @@ public class DefaultExtendedState implements ExtendedState {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
+		if (!(obj instanceof DefaultExtendedState other)) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		DefaultExtendedState other = (DefaultExtendedState) obj;
 		if (variables == null) {
 			if (other.variables != null) {
 				return false;

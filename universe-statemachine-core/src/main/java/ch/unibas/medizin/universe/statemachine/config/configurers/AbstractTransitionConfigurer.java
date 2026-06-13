@@ -76,6 +76,7 @@ public abstract class AbstractTransitionConfigurer<S, E> extends
 	}
 
 	/**
+	 * Returns the trigger count.
 	 *
 	 * @return trigger count
 	 */
@@ -120,6 +121,7 @@ public abstract class AbstractTransitionConfigurer<S, E> extends
 	}
 
 	/**
+	 * Sets how many times the trigger will be called.
 	 *
 	 * @param count to set how many time the trigger will be called.
 	 */

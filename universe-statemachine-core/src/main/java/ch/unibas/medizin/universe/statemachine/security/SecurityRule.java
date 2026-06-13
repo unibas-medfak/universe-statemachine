@@ -49,7 +49,7 @@ public class SecurityRule {
 	 */
 	public static Collection<String> commaDelimitedListToSecurityAttributes(String attributes) {
 		Collection<String> attrs = new HashSet<>();
-		for (String attribute : attributes.split(",")) {
+		for (String attribute : attributes.split(",", -1)) {
 			attribute = attribute.trim();
 			if (!attribute.isEmpty()) {
 				attrs.add(attribute);
