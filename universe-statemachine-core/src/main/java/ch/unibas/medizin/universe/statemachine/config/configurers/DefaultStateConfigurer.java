@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -75,7 +76,7 @@ public class DefaultStateConfigurer<S, E>
 		for (StateData<S, E> s : incomplete.values()) {
 			s.setParent(parent);
 			stateDatas.add(s);
-			if (s.getState() == initialState) {
+			if (Objects.equals(s.getState(), initialState)) {
 				s.setInitial(true);
 				s.setInitialAction(initialAction);
 			}
@@ -95,7 +96,7 @@ public class DefaultStateConfigurer<S, E>
 			} else if (exits.contains(s.getState())) {
 				s.setPseudoStateKind(PseudoStateKind.EXIT);
 			}
-			if (s.getState() == history) {
+			if (Objects.equals(s.getState(), history)) {
 				if (History.SHALLOW == historyType) {
 					s.setPseudoStateKind(PseudoStateKind.HISTORY_SHALLOW);
 				} else if (History.DEEP == historyType) {

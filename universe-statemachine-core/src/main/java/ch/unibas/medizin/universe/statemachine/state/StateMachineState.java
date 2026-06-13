@@ -17,6 +17,7 @@ package ch.unibas.medizin.universe.statemachine.state;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 
 import org.springframework.messaging.Message;
@@ -145,7 +146,7 @@ public class StateMachineState<S, E> extends AbstractState<S, E> {
 			// enable default transition and state
 			Mono<Void> mono;
 			if (getSubmachine().getState() != null && context.getTransition() != null
-					&& context.getTransition().getSource().getId() != getSubmachine().getState().getId()) {
+					&& !Objects.equals(context.getTransition().getSource().getId(), getSubmachine().getState().getId())) {
 				mono = getSubmachine().stopReactively();
 			} else if (context.getTransition() != null && !StateMachineUtils.isSubstate(context.getTransition().getTarget(), context.getTransition()
 					.getSource())) {
@@ -223,7 +224,7 @@ public class StateMachineState<S, E> extends AbstractState<S, E> {
 	private State<S, E> findDeepParent(Collection<State<S, E>> states, State<S, E> state) {
 		for (State<S, E> s : states) {
 			if (s.getStates().contains(state)) {
-				if (s != state) {
+				if (!Objects.equals(s, state)) {
 					return s;
 				}
 			}
@@ -256,7 +257,7 @@ public class StateMachineState<S, E> extends AbstractState<S, E> {
 
 	private boolean isLocal(StateContext<S, E> context) {
 		Transition<S, E> transition = context.getTransition();
-		if (transition != null && TransitionKind.LOCAL == transition.getKind() && this == transition.getTarget()) {
+		if (transition != null && TransitionKind.LOCAL == transition.getKind() && Objects.equals(this, transition.getTarget())) {
 			return true;
 		} else {
 			return false;

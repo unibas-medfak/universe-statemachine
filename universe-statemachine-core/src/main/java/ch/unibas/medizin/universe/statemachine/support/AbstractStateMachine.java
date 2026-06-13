@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -1027,7 +1028,7 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 
 	private Transition<S, E> findTransition(State<S, E> from, State<S, E> to) {
 		for (Transition<S, E> transition : transitions) {
-			if (transition.getSource() == from && transition.getTarget() == to) {
+			if (Objects.equals(transition.getSource(), from) && Objects.equals(transition.getTarget(), to)) {
 				return transition;
 			}
 		}
@@ -1036,7 +1037,7 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 
 	private State<S, E> findStateWithPseudoState(PseudoState<S, E> pseudoState) {
 		for (State<S, E> s : states) {
-			if (s.getPseudoState() == pseudoState) {
+			if (Objects.equals(s.getPseudoState(), pseudoState)) {
 				return s;
 			}
 		}
@@ -1091,7 +1092,7 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 		Function<State<S, E>, State<S, E>> mapFromTargetSub = in -> {
 			if (transition != null) {
 				boolean isTargetSubOf = StateMachineUtils.isSubstate(state, transition.getSource());
-				if (isTargetSubOf && currentState == transition.getTarget()) {
+				if (isTargetSubOf && Objects.equals(currentState, transition.getTarget())) {
 					return transition.getSource();
 				}
 			}
@@ -1140,7 +1141,7 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 		};
 
 		Function<State<S, E>, ? extends Mono<State<S, E>>> handleStop = s -> {
-			if (stateMachine != this && isComplete()) {
+			if (!Objects.equals(stateMachine, this) && isComplete()) {
 				return stopReactively().then(Mono.just(s));
 			}
 			return Mono.just(s);
@@ -1149,14 +1150,14 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 		Function<State<S, E>, ? extends Mono<State<S, E>>> handleSubmachineOrRegions = in -> {
 			return Mono.just(in)
 				.flatMap(s -> {
-					if (currentState == findDeepParent(s)) {
+					if (Objects.equals(currentState, findDeepParent(s))) {
 						boolean isTargetSubOf = transition != null && StateMachineUtils.isSubstate(state, transition.getSource());
 						if (currentState.isSubmachineState()) {
 							StateMachine<S, E> submachine = ((AbstractState<S, E>)currentState).getSubmachine();
 							// need to check complete as submachine may now return non null
-							if (!submachine.isComplete() && submachine.getState() == s) {
+							if (!submachine.isComplete() && Objects.equals(submachine.getState(), s)) {
 								State<S, E> findDeep = findDeepParent(s);
-								if (currentState == findDeep) {
+								if (Objects.equals(currentState, findDeep)) {
 									Mono<State<S, E>> mono = Mono.just(s);
 									if (isTargetSubOf) {
 										mono = mono.flatMap(ss -> entryToState(currentState, message, transition, stateMachine).then(Mono.just(ss)));
@@ -1170,8 +1171,8 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 							Collection<Region<S, E>> regions = ((AbstractState<S, E>)currentState).getRegions();
 							State<S, E> findDeep = findDeepParent(s);
 							for (Region<S, E> region : regions) {
-								if (region.getState() == s) {
-									if (currentState == findDeep) {
+								if (Objects.equals(region.getState(), s)) {
+									if (Objects.equals(currentState, findDeep)) {
 										Mono<State<S, E>> mono = Mono.just(s);
 										if (isTargetSubOf) {
 											mono = mono.flatMap(ss -> entryToState(currentState, message, transition, stateMachine).then(Mono.just(ss)));
@@ -1188,8 +1189,8 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 				})
 				.flatMap(s -> {
 					Mono<State<S, E>> mono = Mono.just(s);
-					boolean shouldTryEntry = findDeepParent(s) != currentState;
-					if (!shouldTryEntry && (transition.getSource() == currentState && StateMachineUtils.isSubstate(currentState, transition.getTarget()))) {
+					boolean shouldTryEntry = !Objects.equals(findDeepParent(s), currentState);
+					if (!shouldTryEntry && (Objects.equals(transition.getSource(), currentState) && StateMachineUtils.isSubstate(currentState, transition.getTarget()))) {
 						shouldTryEntry = true;
 					}
 					currentState = findDeepParent(s);
@@ -1316,25 +1317,25 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 
 		if (transition != null) {
 			State<S, E> findDeep = findDeepParent(transition.getTarget());
-			boolean isTargetSubOfOtherState = findDeep != null && findDeep != currentState;
+			boolean isTargetSubOfOtherState = findDeep != null && !Objects.equals(findDeep, currentState);
 			boolean isSubOfSource = StateMachineUtils.isSubstate(transition.getSource(), currentState);
 			boolean isSubOfTarget = StateMachineUtils.isSubstate(transition.getTarget(), currentState);
 
-			if (transition.getKind() == TransitionKind.LOCAL && StateMachineUtils.isSubstate(transition.getSource(), transition.getTarget()) && transition.getSource() == currentState) {
+			if (transition.getKind() == TransitionKind.LOCAL && StateMachineUtils.isSubstate(transition.getSource(), transition.getTarget()) && Objects.equals(transition.getSource(), currentState)) {
 				return Mono.empty();
-			} else if (transition.getKind() == TransitionKind.LOCAL && StateMachineUtils.isSubstate(transition.getTarget(), transition.getSource()) && transition.getTarget() == currentState) {
+			} else if (transition.getKind() == TransitionKind.LOCAL && StateMachineUtils.isSubstate(transition.getTarget(), transition.getSource()) && Objects.equals(transition.getTarget(), currentState)) {
 				return Mono.empty();
 			}
 
 			// TODO: this and entry below should be done via a separate
 			// voter of some sort which would reveal transition path
 			// we could make a choice on.
-			if (currentState == transition.getSource() && currentState == transition.getTarget()) {
-			} else if (!isSubOfSource && !isSubOfTarget && currentState == transition.getSource()) {
-			} else if (!isSubOfSource && !isSubOfTarget && currentState == transition.getTarget()) {
+			if (Objects.equals(currentState, transition.getSource()) && Objects.equals(currentState, transition.getTarget())) {
+			} else if (!isSubOfSource && !isSubOfTarget && Objects.equals(currentState, transition.getSource())) {
+			} else if (!isSubOfSource && !isSubOfTarget && Objects.equals(currentState, transition.getTarget())) {
 			} else if (isTargetSubOfOtherState) {
 			} else if (!isSubOfSource && !isSubOfTarget && findDeep == null) {
-			} else if (!isSubOfSource && !isSubOfTarget && (transition.getSource() == currentState && StateMachineUtils.isSubstate(currentState, transition.getTarget()))) {
+			} else if (!isSubOfSource && !isSubOfTarget && (Objects.equals(transition.getSource(), currentState) && StateMachineUtils.isSubstate(currentState, transition.getTarget()))) {
 			} else if (StateMachineUtils.isNormalPseudoState(transition.getTarget())) {
 				if (isPseudoStateSubstate(findDeep, targets)) {
 					return Mono.empty();
@@ -1349,7 +1350,7 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 						return Mono.empty();
 					}
 				}
-			} else if (findDeep != null && findDeep != state && findDeep.getStates().contains(state)) {
+			} else if (findDeep != null && !Objects.equals(findDeep, state) && findDeep.getStates().contains(state)) {
 			} else if (!isSubOfSource && !isSubOfTarget) {
 				return Mono.empty();
 			}
@@ -1397,30 +1398,30 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 		if (transition != null) {
 			State<S, E> findDeep1 = findDeepParent(transition.getTarget());
 			State<S, E> findDeep2 = findDeepParent(transition.getSource());
-			boolean isComingFromOtherSubmachine = findDeep1 != null && findDeep2 != null && findDeep2 != currentState;
+			boolean isComingFromOtherSubmachine = findDeep1 != null && findDeep2 != null && !Objects.equals(findDeep2, currentState);
 
 			boolean isSubOfSource = StateMachineUtils.isSubstate(transition.getSource(), currentState);
 			boolean isSubOfTarget = StateMachineUtils.isSubstate(transition.getTarget(), currentState);
 
 			if (transition.getKind() == TransitionKind.LOCAL && StateMachineUtils.isSubstate(transition.getSource(), transition.getTarget())
-					&& transition.getSource() == currentState) {
+					&& Objects.equals(transition.getSource(), currentState)) {
 				return Mono.empty();
 			} else if (transition.getKind() == TransitionKind.LOCAL && StateMachineUtils.isSubstate(transition.getTarget(), transition.getSource())
-					&& transition.getTarget() == currentState) {
+					&& Objects.equals(transition.getTarget(), currentState)) {
 				return Mono.empty();
 			}
 
-			if (currentState == transition.getSource() && currentState == transition.getTarget()) {
-			} else if (!isSubOfSource && !isSubOfTarget && currentState == transition.getTarget()) {
+			if (Objects.equals(currentState, transition.getSource()) && Objects.equals(currentState, transition.getTarget())) {
+			} else if (!isSubOfSource && !isSubOfTarget && Objects.equals(currentState, transition.getTarget())) {
 			} else if (isComingFromOtherSubmachine) {
 			} else if (!isSubOfSource && !isSubOfTarget && findDeep2 == null) {
-			} else if (isSubOfSource && !isSubOfTarget && currentState == transition.getTarget()) {
+			} else if (isSubOfSource && !isSubOfTarget && Objects.equals(currentState, transition.getTarget())) {
 				if (isDirectSubstate(transition.getSource(), transition.getTarget()) && transition.getKind() != TransitionKind.LOCAL
 						&& isInitial(transition.getTarget())) {
 					return Mono.empty();
 				}
 			} else if (!isSubOfSource && !isSubOfTarget
-					&& (transition.getSource() == currentState && StateMachineUtils.isSubstate(currentState, transition.getTarget()))) {
+					&& (Objects.equals(transition.getSource(), currentState) && StateMachineUtils.isSubstate(currentState, transition.getTarget()))) {
 			} else if (!isSubOfSource && !isSubOfTarget) {
 				if (!StateMachineUtils.isTransientPseudoState(transition.getTarget())) {
 					return Mono.empty();

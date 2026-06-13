@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -439,7 +440,7 @@ public abstract class AbstractState<S, E> extends LifecycleObjectSupport impleme
                 @Override
                 public void stateContext(StateContext<S, E> stateContext) {
                     if (stateContext.getStage() == Stage.STATEMACHINE_STOP) {
-                        if (stateContext.getStateMachine() == region && region.isComplete()) {
+                        if (Objects.equals(stateContext.getStateMachine(), region) && region.isComplete()) {
                             completionListeners.remove(this);
                             region.removeStateListener(this);
                             sink.success();

@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Stack;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -818,7 +819,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 				List<JoinStateData<S, E>> joinTargets = new ArrayList<>();
 				Collection<TransitionData<S, E>> transitions = stateMachineTransitions.getTransitions();
 				for (TransitionData<S, E> tt : transitions) {
-					if (tt.getSource() == s) {
+					if (Objects.equals(tt.getSource(), s)) {
 						StateHolder<S, E> holder = new StateHolder<>(stateMap.get(tt.getTarget()));
 						if (holder.getState() == null) {
 							holderList.add(new HolderListItem<>(tt.getTarget(), holder));

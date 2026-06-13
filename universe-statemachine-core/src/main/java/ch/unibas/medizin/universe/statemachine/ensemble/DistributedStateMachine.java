@@ -17,6 +17,7 @@ package ch.unibas.medizin.universe.statemachine.ensemble;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -285,7 +286,7 @@ public class DistributedStateMachine<S, E> extends LifecycleObjectSupport implem
 			if (log.isDebugEnabled()) {
 				log.debug("Event stateMachineJoined stateMachine=[" + stateMachine + "] context=[" + context + "]");
 			}
-			if (stateMachine == DistributedStateMachine.this) {
+			if (Objects.equals(stateMachine, DistributedStateMachine.this)) {
 				delegate.stopReactively().block();
 				setStateMachineError(null);
 				if (context != null) {
@@ -306,7 +307,7 @@ public class DistributedStateMachine<S, E> extends LifecycleObjectSupport implem
 
 		@Override
 		public void stateMachineLeft(StateMachine<S, E> stateMachine, StateMachineContext<S, E> context) {
-			if (stateMachine == DistributedStateMachine.this) {
+			if (Objects.equals(stateMachine, DistributedStateMachine.this)) {
 				log.info("Requesting to stop delegating state machine " + delegate);
 				delegate.stopReactively().block();
 			}

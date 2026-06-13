@@ -72,10 +72,10 @@ public class TransitionVoter<S, E> implements AccessDecisionVoter<Transition<S, 
 				result = ACCESS_DENIED;
 				String attr = attribute.getAttribute();
 				if (attr.startsWith(getTransitionSourcePrefix())
-						&& attr.equals(getTransitionSourcePrefix() + source.toString())) {
+						&& attr.equals(getTransitionSourcePrefix() + source)) {
 					return ACCESS_GRANTED;
 				} else if (attr.startsWith(getTransitionTargetPrefix())
-						&& attr.equals(getTransitionTargetPrefix() + target.toString())) {
+						&& attr.equals(getTransitionTargetPrefix() + target)) {
 					return ACCESS_GRANTED;
 				}
 			}
