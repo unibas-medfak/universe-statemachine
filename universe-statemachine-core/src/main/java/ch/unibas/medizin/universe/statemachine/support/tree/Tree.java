@@ -97,7 +97,7 @@ public class Tree<T> {
 		final T data;
 		final Object id;
 		final Object parent;
-		public DataWrap(T data, Object id, Object parent) {
+		private DataWrap(T data, Object id, Object parent) {
 			this.data = data;
 			this.id = id;
 			this.parent = parent;

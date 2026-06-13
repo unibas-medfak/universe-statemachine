@@ -452,7 +452,7 @@ public class StateMachineHandlerCallHelper<S, E> implements InitializingBean, Be
 		final Annotation annotation;
 		final Annotation metaAnnotation;
 
-		public CacheEntry(StateMachineHandler<? extends Annotation, S, E> handler, Annotation annotation, Annotation metaAnnotation) {
+		private CacheEntry(StateMachineHandler<? extends Annotation, S, E> handler, Annotation annotation, Annotation metaAnnotation) {
 			this.handler = handler;
 			this.annotation = annotation;
 			this.metaAnnotation = metaAnnotation;

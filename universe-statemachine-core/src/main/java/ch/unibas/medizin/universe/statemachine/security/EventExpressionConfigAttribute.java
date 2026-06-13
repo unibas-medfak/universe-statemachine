@@ -45,6 +45,7 @@ class EventExpressionConfigAttribute implements ConfigAttribute {
 		return authorizeExpression;
 	}
 
+	@Override
 	public String getAttribute() {
 		return null;
 	}

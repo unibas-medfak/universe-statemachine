@@ -113,7 +113,7 @@ public class JoinPseudoState<S, E> extends AbstractPseudoState<S, E> {
 		private final List<List<State<S, E>>> track;
 		private volatile boolean notified = false;
 
-		public JoinTracker() {
+		private JoinTracker() {
 			this.track = new ArrayList<>(joins.size());
 			for (List<State<S, E>> list : joins) {
 				this.track.add(new ArrayList<>(list));
@@ -164,7 +164,7 @@ public class JoinPseudoState<S, E> extends AbstractPseudoState<S, E> {
 			}
 		}
 
-		public boolean isNotified() {
+		private boolean isNotified() {
 			return notified;
 		}
 	}

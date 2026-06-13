@@ -500,7 +500,7 @@ public class ReactiveStateMachineExecutor<S, E> extends LifecycleObjectSupport i
 		final StateMachineExecutorCallback callback;
 		final StateMachineExecutorCallback triggerCallback;
 
-		public TriggerQueueItem(Trigger<S, E> trigger, Message<E> message, StateMachineExecutorCallback callback, StateMachineExecutorCallback triggerCallback) {
+		private TriggerQueueItem(Trigger<S, E> trigger, Message<E> message, StateMachineExecutorCallback callback, StateMachineExecutorCallback triggerCallback) {
 			this.trigger = trigger;
 			this.message = message;
 			this.callback = callback;

@@ -139,7 +139,7 @@ public class StateMachineConfiguration<S, E> extends
 		private StateMachineMonitor<S, E> stateMachineMonitor;
 		private ClassLoader classLoader;
 
-		public StateMachineDelegatingFactoryBean(StateMachineConfigBuilder<S, E> builder, Class<StateMachine<S, E>> clazz,
+		private StateMachineDelegatingFactoryBean(StateMachineConfigBuilder<S, E> builder, Class<StateMachine<S, E>> clazz,
 				String clazzName, Boolean contextEvents) {
 			super(builder, clazz);
 			this.clazzName = clazzName;
@@ -216,7 +216,7 @@ public class StateMachineConfiguration<S, E> extends
 		}
 
 		@Autowired(required = false)
-		public void setStateMachineMonitor(StateMachineMonitor<S, E> stateMachineMonitor) {
+		private void setStateMachineMonitor(StateMachineMonitor<S, E> stateMachineMonitor) {
 			this.stateMachineMonitor = stateMachineMonitor;
 		}
 	}

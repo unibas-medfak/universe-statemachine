@@ -514,7 +514,7 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 		 *
 		 * @return true, if is initializing
 		 */
-		public boolean isInitializing() {
+		private boolean isInitializing() {
 			return INITIALIZING_MAINS.order == order;
 		}
 
@@ -523,7 +523,7 @@ public abstract class AbstractConfiguredAnnotationBuilder<O,I,B extends Annotati
 		 *
 		 * @return true, if configured
 		 */
-		public boolean isConfigured() {
+		private boolean isConfigured() {
 			return order >= CONFIGURING_MAINS.order;
 		}
 	}

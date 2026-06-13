@@ -118,7 +118,7 @@ public class StateMachineFactoryConfiguration<S, E> extends
 		private ClassLoader classLoader;
 
 		@SuppressWarnings("unused")
-		public StateMachineFactoryDelegatingFactoryBean(StateMachineConfigBuilder<S, E> builder, String clazzName, Boolean contextEvents) {
+		private StateMachineFactoryDelegatingFactoryBean(StateMachineConfigBuilder<S, E> builder, String clazzName, Boolean contextEvents) {
 			this.builder = builder;
 			this.clazzName = clazzName;
 			this.contextEvents = contextEvents;

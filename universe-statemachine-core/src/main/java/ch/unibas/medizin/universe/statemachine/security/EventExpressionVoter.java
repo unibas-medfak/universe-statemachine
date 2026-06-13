@@ -39,6 +39,7 @@ import java.util.Collection;
 public class EventExpressionVoter<T> implements AccessDecisionVoter<Message<T>> {
 	private SecurityExpressionHandler<Message<T>> expressionHandler = new DefaultEventSecurityExpressionHandler<>();
 
+	@Override
 	public int vote(Authentication authentication, Message<T> message,
 			Collection<ConfigAttribute> attributes) {
 		assert authentication != null;
@@ -68,10 +69,12 @@ public class EventExpressionVoter<T> implements AccessDecisionVoter<Message<T>> 
 		return null;
 	}
 
+	@Override
 	public boolean supports(ConfigAttribute attribute) {
 		return attribute instanceof EventExpressionConfigAttribute;
 	}
 
+	@Override
 	public boolean supports(Class<?> clazz) {
 		boolean foo = Message.class.isAssignableFrom(clazz);
 		return foo;

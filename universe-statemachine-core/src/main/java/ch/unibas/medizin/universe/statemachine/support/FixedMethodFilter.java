@@ -42,6 +42,7 @@ public class FixedMethodFilter implements MethodFilter {
 		this.method = method;
 	}
 
+	@Override
 	public List<Method> filter(List<Method> methods) {
 		if (methods != null && methods.contains(this.method)) {
 			List<Method> filteredList = new ArrayList<>(1);

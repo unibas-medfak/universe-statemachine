@@ -366,7 +366,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 
 		private final StateMachineInterceptor<S, E> interceptor;
 
-		public RegionPersistingInterceptorAdapter(StateMachineInterceptor<S, E> interceptor) {
+		private RegionPersistingInterceptorAdapter(StateMachineInterceptor<S, E> interceptor) {
 			this.interceptor = interceptor;
 		}
 
@@ -520,7 +520,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 
 		final StateMachine<S, E> machine;
 
-		public MachineStackItem(StateMachine<S, E> machine) {
+		private MachineStackItem(StateMachine<S, E> machine) {
 			this.machine = machine;
 		}
 
@@ -964,7 +964,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 		final S key;
 		final StateHolder<S, E> value;
 
-		public HolderListItem(S key, StateHolder<S, E> value) {
+		private HolderListItem(S key, StateHolder<S, E> value) {
 			this.key = key;
 			this.value = value;
 		}

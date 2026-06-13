@@ -197,7 +197,7 @@ public class StateMachineBuilder {
 		public void configure(StateMachineTransitionConfigurer<S, E> transitions) throws Exception {
 		}
 
-		protected final StateMachineModelBuilder<S, E> getStateMachineModelBuilder() throws Exception {
+		private StateMachineModelBuilder<S, E> getStateMachineModelBuilder() throws Exception {
 			if (modelBuilder != null) {
 				return modelBuilder;
 			}
@@ -206,7 +206,7 @@ public class StateMachineBuilder {
 			return modelBuilder;
 		}
 
-		protected final StateMachineTransitionBuilder<S, E> getStateMachineTransitionBuilder() throws Exception {
+		private StateMachineTransitionBuilder<S, E> getStateMachineTransitionBuilder() throws Exception {
 			if (transitionBuilder != null) {
 				return transitionBuilder;
 			}
@@ -214,7 +214,7 @@ public class StateMachineBuilder {
 			return transitionBuilder;
 		}
 
-		protected final StateMachineStateBuilder<S, E> getStateMachineStateBuilder() throws Exception {
+		private StateMachineStateBuilder<S, E> getStateMachineStateBuilder() throws Exception {
 			if (stateBuilder != null) {
 				return stateBuilder;
 			}
@@ -222,7 +222,7 @@ public class StateMachineBuilder {
 			return stateBuilder;
 		}
 
-		protected final StateMachineConfigurationBuilder<S, E> getStateMachineConfigurationBuilder() throws Exception {
+		private StateMachineConfigurationBuilder<S, E> getStateMachineConfigurationBuilder() throws Exception {
 			if (configurationBuilder != null) {
 				return configurationBuilder;
 			}
