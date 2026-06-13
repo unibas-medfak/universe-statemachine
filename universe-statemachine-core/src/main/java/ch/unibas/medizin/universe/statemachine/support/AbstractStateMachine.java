@@ -715,8 +715,8 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 			for (State<S, E> s : getStates()) {
 				for (State<S, E> ss : s.getStates()) {
 					boolean enumMatch = false;
-					if (state instanceof Enum && ss.getId() instanceof Enum && state.getClass() == ss.getId().getClass()
-							&& ((Enum) ss.getId()).ordinal() == ((Enum) state).ordinal()) {
+					if (state instanceof Enum stateEnum && ss.getId() instanceof Enum ssIdEnum && state.getClass() == ss.getId().getClass()
+							&& ssIdEnum.ordinal() == stateEnum.ordinal()) {
 						enumMatch = true;
 					}
 
@@ -776,9 +776,9 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 							for (final StateMachineContext<S, E> child : stateMachineContext.getChilds()) {
 								S state2 = child.getState();
 								boolean enumMatch2 = false;
-								if (state2 instanceof Enum && ss.getId() instanceof Enum
+								if (state2 instanceof Enum state2Enum && ss.getId() instanceof Enum ssIdEnum2
 										&& state.getClass() == ss.getId().getClass()
-										&& ((Enum) ss.getId()).ordinal() == ((Enum) state2).ordinal()) {
+										&& ssIdEnum2.ordinal() == state2Enum.ordinal()) {
 									enumMatch2 = true;
 								}
 

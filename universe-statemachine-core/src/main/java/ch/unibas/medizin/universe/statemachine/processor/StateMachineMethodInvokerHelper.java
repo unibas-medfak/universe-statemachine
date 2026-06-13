@@ -187,8 +187,8 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 
 	private void setDisplayString(Object targetObject, Object targetMethod) {
 		StringBuilder sb = new StringBuilder(targetObject.getClass().getName());
-		if (targetMethod instanceof Method) {
-			sb.append("." + ((Method) targetMethod).getName());
+		if (targetMethod instanceof Method method) {
+			sb.append("." + method.getName());
 		} else if (targetMethod instanceof String) {
 			sb.append("." + targetMethod);
 		}
@@ -198,12 +198,12 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 	private void prepareEvaluationContext(StandardEvaluationContext context, Object method,
 			Class<? extends Annotation> annotationType) throws Exception {
 		Class<?> targetType = AopUtils.getTargetClass(this.targetObject);
-		if (method instanceof Method) {
-			context.registerMethodFilter(targetType, new FixedMethodFilter((Method) method));
+		if (method instanceof Method javaMethod) {
+			context.registerMethodFilter(targetType, new FixedMethodFilter(javaMethod));
 			if (expectedType != null) {
 				Assert.state(
 						context.getTypeConverter().canConvert(
-								TypeDescriptor.valueOf(((Method) method).getReturnType()),
+								TypeDescriptor.valueOf(javaMethod.getReturnType()),
 								TypeDescriptor.valueOf(expectedType)), "Cannot convert to expected type ("
 								+ expectedType + ") from " + method);
 			}

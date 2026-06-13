@@ -44,8 +44,8 @@ public class DefaultResourceConfigurer<O,I,B extends AnnotationBuilder<O>>
 	@Override
 	public void configure(B builder) throws Exception {
 		if (!configureResources(builder, resources)) {
-			if (builder instanceof ResourceConfigurerAware) {
-				((ResourceConfigurerAware)builder).configureResources(resources);
+			if (builder instanceof ResourceConfigurerAware resourceConfigurerAware) {
+				resourceConfigurerAware.configureResources(resources);
 			}
 		}
 	}

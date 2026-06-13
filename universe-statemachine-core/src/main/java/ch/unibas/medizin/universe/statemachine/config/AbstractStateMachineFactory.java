@@ -433,10 +433,10 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 	}
 
 	private StateMachine<S, E> delegateAutoStartup(StateMachine<S, E> delegate) {
-		if (handleAutostartup && delegate instanceof SmartLifecycle && ((SmartLifecycle) delegate).isAutoStartup()) {
+		if (handleAutostartup && delegate instanceof SmartLifecycle smartLifecycle && smartLifecycle.isAutoStartup()) {
 			AutostartListener<S, E> autostartListener = new AutostartListener<>();
 			delegate.addStateListener(autostartListener);
-			((SmartLifecycle)delegate).start();
+			smartLifecycle.start();
 			try {
 				autostartListener.latch.await(30, TimeUnit.SECONDS);
 			} catch (Exception e) {

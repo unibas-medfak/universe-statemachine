@@ -81,8 +81,8 @@ public class StateMachineFactoryConfiguration<S, E> extends
 
 		// try to add more info about generics
 		ResolvableType type = resolveFactoryObjectType(enableStateMachineEnclosingClass);
-		if (type != null && beanDefinition instanceof RootBeanDefinition) {
-			((RootBeanDefinition)beanDefinition).setTargetType(type);
+		if (type != null && beanDefinition instanceof RootBeanDefinition rootBeanDefinition) {
+			rootBeanDefinition.setTargetType(type);
 		}
 
 		return beanDefinition;

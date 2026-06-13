@@ -74,8 +74,8 @@ public abstract class LifecycleObjectSupport
 				log.debug("afterPropertiesSet() is already called, not calling onInit()");
 			}
 		} catch (Exception e) {
-			if (e instanceof RuntimeException) {
-				throw (RuntimeException) e;
+			if (e instanceof RuntimeException runtimeException) {
+				throw runtimeException;
 			}
 			throw new BeanInitializationException("failed to initialize", e);
 		}

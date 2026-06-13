@@ -179,24 +179,24 @@ public class StateMachineAnnotationPostProcessor implements BeanPostProcessor, B
                     if (result instanceof StateMachineHandler) {
                         String endpointBeanName = generateBeanName(beanName, method, annotation.annotationType());
 
-                        if (result instanceof BeanNameAware) {
-                            ((BeanNameAware) result).setBeanName(endpointBeanName);
+                        if (result instanceof BeanNameAware beanNameAware) {
+                            beanNameAware.setBeanName(endpointBeanName);
                         }
                         beanFactory.registerSingleton(endpointBeanName, result);
-                        if (result instanceof BeanFactoryAware) {
-                            ((BeanFactoryAware) result).setBeanFactory(beanFactory);
+                        if (result instanceof BeanFactoryAware beanFactoryAware) {
+                            beanFactoryAware.setBeanFactory(beanFactory);
                         }
-                        if (result instanceof InitializingBean) {
+                        if (result instanceof InitializingBean initializingBean) {
                             try {
-                                ((InitializingBean) result).afterPropertiesSet();
+                                initializingBean.afterPropertiesSet();
                             } catch (Exception e) {
                                 throw new BeanInitializationException("failed to initialize annotated component", e);
                             }
                         }
-                        if (result instanceof Lifecycle) {
-                            lifecycles.add((Lifecycle) result);
-                            if (result instanceof SmartLifecycle && ((SmartLifecycle) result).isAutoStartup()) {
-                                ((SmartLifecycle) result).start();
+                        if (result instanceof Lifecycle lifecycle) {
+                            lifecycles.add(lifecycle);
+                            if (result instanceof SmartLifecycle smartLifecycle && smartLifecycle.isAutoStartup()) {
+                                smartLifecycle.start();
                             }
                         }
                         if (result instanceof ApplicationListener) {

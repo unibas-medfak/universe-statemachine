@@ -62,8 +62,8 @@ public class EventExpressionVoter<T> implements AccessDecisionVoter<Message<T>> 
 	private EventExpressionConfigAttribute findConfigAttribute(
 			Collection<ConfigAttribute> attributes) {
 		for (ConfigAttribute attribute : attributes) {
-			if (attribute instanceof EventExpressionConfigAttribute) {
-				return (EventExpressionConfigAttribute) attribute;
+			if (attribute instanceof EventExpressionConfigAttribute eventExpressionConfigAttribute) {
+				return eventExpressionConfigAttribute;
 			}
 		}
 		return null;

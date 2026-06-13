@@ -57,8 +57,8 @@ public class TransitionExpressionVoter implements AccessDecisionVoter<Transition
 
 	private TransitionExpressionConfigAttribute findConfigAttribute(Collection<ConfigAttribute> attributes) {
 		for (ConfigAttribute attribute : attributes) {
-			if (attribute instanceof TransitionExpressionConfigAttribute) {
-				return (TransitionExpressionConfigAttribute) attribute;
+			if (attribute instanceof TransitionExpressionConfigAttribute transitionExpressionConfigAttribute) {
+				return transitionExpressionConfigAttribute;
 			}
 		}
 		return null;
