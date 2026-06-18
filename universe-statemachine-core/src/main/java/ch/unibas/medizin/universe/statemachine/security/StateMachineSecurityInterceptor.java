@@ -16,87 +16,74 @@
 package ch.unibas.medizin.universe.statemachine.security;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.SpelCompilerMode;
 import org.springframework.expression.spel.SpelParserConfiguration;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.messaging.Message;
-import org.springframework.security.access.AccessDecisionManager;
-import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.access.SecurityConfig;
-import org.springframework.security.access.vote.AbstractAccessDecisionManager;
-import org.springframework.security.access.vote.AffirmativeBased;
-import org.springframework.security.access.vote.ConsensusBased;
-import org.springframework.security.access.vote.RoleVoter;
-import org.springframework.security.access.vote.UnanimousBased;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.expression.ExpressionUtils;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.authorization.AuthorizationManagers;
+import org.springframework.security.authorization.AuthorizationResult;
+import org.springframework.security.authorization.AuthorityAuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import ch.unibas.medizin.universe.statemachine.StateContext;
 import ch.unibas.medizin.universe.statemachine.StateMachine;
 import ch.unibas.medizin.universe.statemachine.support.StateMachineInterceptor;
 import ch.unibas.medizin.universe.statemachine.support.StateMachineInterceptorAdapter;
 import ch.unibas.medizin.universe.statemachine.transition.Transition;
-import org.springframework.util.StringUtils;
 
 /**
  * {@link StateMachineInterceptor} which can be registered into a {@link StateMachine}
- * order to intercept a various security related checks.
- *
- * @author Janne Valkealahti
+ * in order to intercept various security-related checks.
  *
  * @param <S> the type of state
  * @param <E> the type of event
  */
 public class StateMachineSecurityInterceptor<S, E> extends StateMachineInterceptorAdapter<S, E> {
 
-	private AccessDecisionManager transitionAccessDecisionManager;
-	private AccessDecisionManager eventAccessDecisionManager;
-	private final ExpressionParser expressionParser = new SpelExpressionParser(new SpelParserConfiguration(SpelCompilerMode.OFF, null));
+	private AuthorizationManager<Object> transitionAuthorizationManager;
+	private AuthorizationManager<Object> eventAuthorizationManager;
 	private SecurityRule eventSecurityRule;
 
-	/**
-	 * Instantiates a new state machine security interceptor.
-	 */
+	private final ExpressionParser expressionParser = new SpelExpressionParser(
+			new SpelParserConfiguration(SpelCompilerMode.OFF, null));
+
 	public StateMachineSecurityInterceptor() {
 		this(null, null);
 	}
 
-	/**
-	 * Instantiates a new state machine security interceptor with
-	 * a custom {@link AccessDecisionManager} for both transitions
-	 * and events.
-	 *
-	 * @param transitionAccessDecisionManager the transition access decision manager
-	 * @param eventAccessDecisionManager the event access decision manager
-	 */
-	public StateMachineSecurityInterceptor(AccessDecisionManager transitionAccessDecisionManager, AccessDecisionManager eventAccessDecisionManager) {
-		this(transitionAccessDecisionManager, eventAccessDecisionManager, null);
+	public StateMachineSecurityInterceptor(AuthorizationManager<Object> transitionAuthorizationManager,
+			AuthorizationManager<Object> eventAuthorizationManager) {
+		this(transitionAuthorizationManager, eventAuthorizationManager, null);
 	}
 
-	/**
-	 * Instantiates a new state machine security interceptor with
-	 * a custom {@link AccessDecisionManager} for both transitions
-	 * and events and a {@link SecurityRule} for events;
-	 *
-	 * @param transitionAccessDecisionManager the transition access decision manager
-	 * @param eventAccessDecisionManager the event access decision manager
-	 * @param eventSecurityRule the event security rule
-	 */
-	public StateMachineSecurityInterceptor(AccessDecisionManager transitionAccessDecisionManager,
-			AccessDecisionManager eventAccessDecisionManager, SecurityRule eventSecurityRule) {
-		this.transitionAccessDecisionManager = transitionAccessDecisionManager;
-		this.eventAccessDecisionManager = eventAccessDecisionManager;
+	public StateMachineSecurityInterceptor(AuthorizationManager<Object> transitionAuthorizationManager,
+			AuthorizationManager<Object> eventAuthorizationManager, SecurityRule eventSecurityRule) {
+		this.transitionAuthorizationManager = transitionAuthorizationManager;
+		this.eventAuthorizationManager = eventAuthorizationManager;
 		this.eventSecurityRule = eventSecurityRule;
 	}
 
 	@Override
 	public Message<E> preEvent(Message<E> message, StateMachine<S, E> stateMachine) {
 		if (eventSecurityRule != null) {
-			decide(eventSecurityRule, message);
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			AuthorizationManager<Object> manager = eventAuthorizationManager != null
+					? eventAuthorizationManager
+					: buildEventManager(eventSecurityRule);
+			AuthorizationResult result = manager.authorize(() -> auth, message);
+			if (result != null && !result.isGranted()) {
+				throw new AccessDeniedException("Access is denied for event");
+			}
 		}
 		return super.preEvent(message, stateMachine);
 	}
@@ -106,134 +93,124 @@ public class StateMachineSecurityInterceptor<S, E> extends StateMachineIntercept
 		Transition<S, E> transition = stateContext.getTransition();
 		SecurityRule rule = transition.getSecurityRule();
 		if (rule != null) {
-			decide(rule, transition);
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			AuthorizationManager<Object> manager = transitionAuthorizationManager != null
+					? transitionAuthorizationManager
+					: buildTransitionManager(rule);
+			AuthorizationResult result = manager.authorize(() -> auth, transition);
+			if (result != null && !result.isGranted()) {
+				throw new AccessDeniedException("Access is denied for transition");
+			}
 		}
 		return super.preTransition(stateContext);
 	}
 
-	/**
-	 * Sets the event access decision manager.
-	 *
-	 * @param eventAccessDecisionManager the new event access decision manager
-	 */
-	public void setEventAccessDecisionManager(AccessDecisionManager eventAccessDecisionManager) {
-		this.eventAccessDecisionManager = eventAccessDecisionManager;
+	public void setEventAuthorizationManager(AuthorizationManager<Object> eventAuthorizationManager) {
+		this.eventAuthorizationManager = eventAuthorizationManager;
 	}
 
-	/**
-	 * Sets the transition access decision manager.
-	 *
-	 * @param transitionAccessDecisionManager the new transition access decision manager
-	 */
-	public void setTransitionAccessDecisionManager(AccessDecisionManager transitionAccessDecisionManager) {
-		this.transitionAccessDecisionManager = transitionAccessDecisionManager;
+	public void setTransitionAuthorizationManager(AuthorizationManager<Object> transitionAuthorizationManager) {
+		this.transitionAuthorizationManager = transitionAuthorizationManager;
 	}
 
-	/**
-	 * Sets the event security rule.
-	 *
-	 * @param eventSecurityRule the new event security rule
-	 */
 	public void setEventSecurityRule(SecurityRule eventSecurityRule) {
 		this.eventSecurityRule = eventSecurityRule;
 	}
 
-	private void decide(SecurityRule rule, Message<E> object) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Collection<ConfigAttribute> configAttributes = getEentConfigAttributes(rule);
-		if (eventAccessDecisionManager != null) {
-			decide(eventAccessDecisionManager, authentication, object, configAttributes);
-		} else {
-			decide(createDefaultEventManager(rule), authentication, object, configAttributes);
-		}
-	}
+	@SuppressWarnings("unchecked")
+	private AuthorizationManager<Object> buildEventManager(SecurityRule rule) {
+		List<AuthorizationManager<Object>> managers = new ArrayList<>();
 
-	private void decide(SecurityRule rule, Transition<S, E> object) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Collection<ConfigAttribute> configAttributes = getTransitionConfigAttributes(rule);
-		if (transitionAccessDecisionManager != null) {
-			decide(transitionAccessDecisionManager, authentication, object, configAttributes);
-		} else {
-			decide(createDefaultTransitionManager(rule), authentication, object, configAttributes);
-		}
-	}
-
-	private Collection<ConfigAttribute> getTransitionConfigAttributes(SecurityRule rule) {
-		List<ConfigAttribute> configAttributes = new ArrayList<>();
 		if (rule.getAttributes() != null) {
-			for (String attribute : rule.getAttributes()) {
-				configAttributes.add(new SecurityConfig(attribute));
+			for (String attr : rule.getAttributes()) {
+				if (attr.startsWith("EVENT_")) {
+					String eventName = attr.substring("EVENT_".length());
+					managers.add((authSupplier, obj) -> {
+						Message<E> msg = (Message<E>) obj;
+						return new AuthorizationDecision(eventName.equals(String.valueOf(msg.getPayload())));
+					});
+				} else {
+					managers.add(AuthorityAuthorizationManager.<Object>hasAuthority(attr)::authorize);
+				}
 			}
 		}
+
 		if (StringUtils.hasText(rule.getExpression())) {
-			configAttributes.add(new TransitionExpressionConfigAttribute(expressionParser.parseExpression(rule.getExpression())));
+			Expression expr = expressionParser.parseExpression(rule.getExpression());
+			DefaultEventSecurityExpressionHandler<E> handler = new DefaultEventSecurityExpressionHandler<>();
+			managers.add((authSupplier, obj) -> {
+				Message<E> msg = (Message<E>) obj;
+				EvaluationContext ctx = handler.createEvaluationContext(authSupplier.get(), msg);
+				return new AuthorizationDecision(ExpressionUtils.evaluateAsBoolean(expr, ctx));
+			});
 		}
-		return configAttributes;
+
+		return compose(managers, rule.getComparisonType());
 	}
 
-	private Collection<ConfigAttribute> getEentConfigAttributes(SecurityRule rule) {
-		List<ConfigAttribute> configAttributes = new ArrayList<>();
+	@SuppressWarnings("unchecked")
+	private AuthorizationManager<Object> buildTransitionManager(SecurityRule rule) {
+		List<AuthorizationManager<Object>> managers = new ArrayList<>();
+
 		if (rule.getAttributes() != null) {
-			for (String attribute : rule.getAttributes()) {
-				configAttributes.add(new SecurityConfig(attribute));
+			for (String attr : rule.getAttributes()) {
+				if (attr.startsWith("TRANSITION_SOURCE_")) {
+					String source = attr.substring("TRANSITION_SOURCE_".length());
+					managers.add((authSupplier, obj) -> {
+						Transition<S, E> tr = (Transition<S, E>) obj;
+						return new AuthorizationDecision(source.equals(String.valueOf(tr.getSource().getId())));
+					});
+				} else if (attr.startsWith("TRANSITION_TARGET_")) {
+					String target = attr.substring("TRANSITION_TARGET_".length());
+					managers.add((authSupplier, obj) -> {
+						Transition<S, E> tr = (Transition<S, E>) obj;
+						return new AuthorizationDecision(target.equals(String.valueOf(tr.getTarget().getId())));
+					});
+				} else {
+					managers.add(AuthorityAuthorizationManager.<Object>hasAuthority(attr)::authorize);
+				}
 			}
 		}
+
 		if (StringUtils.hasText(rule.getExpression())) {
-			configAttributes.add(new EventExpressionConfigAttribute(expressionParser.parseExpression(rule.getExpression())));
+			Expression expr = expressionParser.parseExpression(rule.getExpression());
+			DefaultTransitionSecurityExpressionHandler handler = new DefaultTransitionSecurityExpressionHandler();
+			managers.add((authSupplier, obj) -> {
+				Transition<?, ?> tr = (Transition<?, ?>) obj;
+				EvaluationContext ctx = handler.createEvaluationContext(authSupplier.get(), tr);
+				return new AuthorizationDecision(ExpressionUtils.evaluateAsBoolean(expr, ctx));
+			});
 		}
-		return configAttributes;
+
+		return compose(managers, rule.getComparisonType());
 	}
 
-	private void decide(AccessDecisionManager manager, Authentication authentication, Transition<S, E> object,
-			Collection<ConfigAttribute> configAttributes) {
-		if (manager.supports(object.getClass())) {
-			manager.decide(authentication, object, configAttributes);
+	@SuppressWarnings("unchecked")
+	private static <T> AuthorizationManager<T> compose(List<AuthorizationManager<T>> managers,
+			SecurityRule.ComparisonType type) {
+		if (managers.isEmpty()) {
+			return (authSupplier, obj) -> new AuthorizationDecision(false);
 		}
-	}
-
-	private void decide(AccessDecisionManager manager, Authentication authentication, Message<E> object,
-			Collection<ConfigAttribute> configAttributes) {
-		if (manager.supports(object.getClass())) {
-			manager.decide(authentication, object, configAttributes);
-		}
-	}
-
-	private AbstractAccessDecisionManager createDefaultTransitionManager(SecurityRule rule) {
-		List<AccessDecisionVoter<?>> voters = new ArrayList<>();
-		voters.add(new TransitionExpressionVoter());
-		voters.add(new TransitionVoter<>());
-		voters.add(new RoleVoter());
-		if (rule.getComparisonType() == SecurityRule.ComparisonType.ANY) {
-			return new AffirmativeBased(voters);
-		} else if (rule.getComparisonType() == SecurityRule.ComparisonType.ALL) {
-			return new UnanimousBased(voters);
-		} else if (rule.getComparisonType() == SecurityRule.ComparisonType.MAJORITY) {
-			return new ConsensusBased(voters);
-		} else {
-			throw new IllegalStateException("Unknown SecurityRule match type: " + rule.getComparisonType());
-		}
-	}
-
-	private AbstractAccessDecisionManager createDefaultEventManager(SecurityRule rule) {
-		List<AccessDecisionVoter<?>> voters = new ArrayList<>();
-		voters.add(new EventExpressionVoter<>());
-		voters.add(new EventVoter<>());
-		voters.add(new RoleVoter());
-		if (rule.getComparisonType() == SecurityRule.ComparisonType.ANY) {
-			return new AffirmativeBased(voters);
-		} else if (rule.getComparisonType() == SecurityRule.ComparisonType.ALL) {
-			return new UnanimousBased(voters);
-		} else if (rule.getComparisonType() == SecurityRule.ComparisonType.MAJORITY) {
-			return new ConsensusBased(voters);
-		} else {
-			throw new IllegalStateException("Unknown SecurityRule match type: " + rule.getComparisonType());
-		}
+		AuthorizationManager<T>[] arr = managers.toArray(new AuthorizationManager[0]);
+		return switch (type) {
+			case ANY -> AuthorizationManagers.anyOf(arr);
+			case ALL -> AuthorizationManagers.allOf(arr);
+			case MAJORITY -> (authSupplier, obj) -> {
+				int grant = 0, deny = 0;
+				for (AuthorizationManager<T> m : managers) {
+					AuthorizationResult r = m.authorize(authSupplier, obj);
+					if (r != null && r.isGranted()) grant++;
+					else if (r != null) deny++;
+				}
+				return new AuthorizationDecision(grant > deny);
+			};
+		};
 	}
 
 	@Override
 	public String toString() {
-		return "StateMachineSecurityInterceptor [transitionAccessDecisionManager=" + transitionAccessDecisionManager
-				+ ", eventAccessDecisionManager=" + eventAccessDecisionManager + ", eventSecurityRule=" + eventSecurityRule + "]";
+		return "StateMachineSecurityInterceptor [transitionAuthorizationManager=" + transitionAuthorizationManager
+				+ ", eventAuthorizationManager=" + eventAuthorizationManager
+				+ ", eventSecurityRule=" + eventSecurityRule + "]";
 	}
-
 }

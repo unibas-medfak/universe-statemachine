@@ -15,7 +15,7 @@
  */
 package ch.unibas.medizin.universe.statemachine.config.configurers;
 
-import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.authorization.AuthorizationManager;
 import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineConfigurationBuilder;
 import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.common.annotation.AnnotationConfigurerAdapter;
@@ -26,8 +26,6 @@ import ch.unibas.medizin.universe.statemachine.security.SecurityRule.ComparisonT
 /**
  * Default implementation of a {@link SecurityConfigurer}.
  *
- * @author Janne Valkealahti
- *
  * @param <S> the type of state
  * @param <E> the type of event
  */
@@ -36,8 +34,8 @@ public class DefaultSecurityConfigurer<S, E>
 		implements SecurityConfigurer<S, E> {
 
 	private boolean enabled = true;
-	private AccessDecisionManager transitionAccessDecisionManager;
-	private AccessDecisionManager eventAccessDecisionManager;
+	private AuthorizationManager<Object> transitionAuthorizationManager;
+	private AuthorizationManager<Object> eventAuthorizationManager;
 	private SecurityRule eventSecurityRule;
 	private SecurityRule transitionSecurityRule;
 
@@ -45,8 +43,8 @@ public class DefaultSecurityConfigurer<S, E>
 	public void configure(StateMachineConfigurationBuilder<S, E> builder) throws Exception {
 		if (enabled) {
 			builder.setSecurityEnabled(true);
-			builder.setTransitionSecurityAccessDecisionManager(transitionAccessDecisionManager);
-			builder.setEventSecurityAccessDecisionManager(eventAccessDecisionManager);
+			builder.setTransitionAuthorizationManager(transitionAuthorizationManager);
+			builder.setEventAuthorizationManager(eventAuthorizationManager);
 			builder.setEventSecurityRule(eventSecurityRule);
 			builder.setTransitionSecurityRule(transitionSecurityRule);
 		}
@@ -59,14 +57,14 @@ public class DefaultSecurityConfigurer<S, E>
 	}
 
 	@Override
-	public SecurityConfigurer<S, E> transitionAccessDecisionManager(AccessDecisionManager accessDecisionManager) {
-		this.transitionAccessDecisionManager = accessDecisionManager;
+	public SecurityConfigurer<S, E> transitionAuthorizationManager(AuthorizationManager<Object> authorizationManager) {
+		this.transitionAuthorizationManager = authorizationManager;
 		return this;
 	}
 
 	@Override
-	public SecurityConfigurer<S, E> eventAccessDecisionManager(AccessDecisionManager accessDecisionManager) {
-		this.eventAccessDecisionManager = accessDecisionManager;
+	public SecurityConfigurer<S, E> eventAuthorizationManager(AuthorizationManager<Object> authorizationManager) {
+		this.eventAuthorizationManager = authorizationManager;
 		return this;
 	}
 
@@ -105,5 +103,4 @@ public class DefaultSecurityConfigurer<S, E>
 		transitionSecurityRule.setExpression(expression);
 		return this;
 	}
-
 }

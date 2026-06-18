@@ -130,8 +130,8 @@ public class DocsConfigurationSampleTests3 {
 				config
 					.withSecurity()
 						.enabled(true)
-						.transitionAccessDecisionManager(null)
-						.eventAccessDecisionManager(null);
+						.transitionAuthorizationManager(null)
+						.eventAuthorizationManager(null);
 			}
 		}
 // end::snippetD[]

@@ -17,18 +17,15 @@ package ch.unibas.medizin.universe.statemachine.security;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Collection;
 import java.util.List;
 
 import ch.unibas.medizin.universe.statemachine.security.StateMachineSecurityInterceptor;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDecisionManager;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.authorization.AuthorizationResult;
 import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests;
 import ch.unibas.medizin.universe.statemachine.ObjectStateMachine;
 import ch.unibas.medizin.universe.statemachine.StateMachineSystemConstants;
@@ -71,7 +68,7 @@ public class SecurityConfigTests extends AbstractStateMachineTests {
 		assertThat(interceptors).isNotNull();
 		assertThat(interceptors).hasSize(1);
 		assertThat(interceptors.getFirst()).isInstanceOf(StateMachineSecurityInterceptor.class);
-		Object adm = TestUtils.readField("transitionAccessDecisionManager", interceptors.getFirst());
+		Object adm = TestUtils.readField("transitionAuthorizationManager", interceptors.getFirst());
 		assertThat(adm).isNull();
 	}
 
@@ -105,7 +102,7 @@ public class SecurityConfigTests extends AbstractStateMachineTests {
 		List<StateMachineInterceptor<?, ?>> interceptors = TestUtils.readField("interceptors", ilist);
 		assertThat(interceptors).hasSize(1);
 		assertThat(interceptors.getFirst()).isInstanceOf(StateMachineSecurityInterceptor.class);
-		Object adm = TestUtils.readField("transitionAccessDecisionManager", interceptors.getFirst());
+		Object adm = TestUtils.readField("transitionAuthorizationManager", interceptors.getFirst());
 		assertThat(adm).isNull();
 	}
 
@@ -140,9 +137,9 @@ public class SecurityConfigTests extends AbstractStateMachineTests {
 		assertThat(interceptors).isNotNull();
 		assertThat(interceptors).hasSize(1);
 		assertThat(interceptors.getFirst()).isInstanceOf(StateMachineSecurityInterceptor.class);
-		Object adm = TestUtils.readField("transitionAccessDecisionManager", interceptors.getFirst());
+		Object adm = TestUtils.readField("transitionAuthorizationManager", interceptors.getFirst());
 		assertThat(adm).isNotNull();
-		assertThat(adm).isInstanceOf(MockAccessDecisionManager.class);
+		assertThat(adm).isInstanceOf(MockAuthorizationManager.class);
 	}
 
 	@Test
@@ -324,8 +321,8 @@ public class SecurityConfigTests extends AbstractStateMachineTests {
 				throws Exception {
 			config
 				.withSecurity()
-					.eventAccessDecisionManager(new MockAccessDecisionManager())
-					.transitionAccessDecisionManager(new MockAccessDecisionManager());
+					.eventAuthorizationManager(new MockAuthorizationManager())
+					.transitionAuthorizationManager(new MockAuthorizationManager());
 		}
 
 		@Override
@@ -454,21 +451,11 @@ public class SecurityConfigTests extends AbstractStateMachineTests {
 
 	}
 
-	private static class MockAccessDecisionManager implements AccessDecisionManager {
+	private static class MockAuthorizationManager implements AuthorizationManager<Object> {
 
 		@Override
-		public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)
-				throws AccessDeniedException, InsufficientAuthenticationException {
-		}
-
-		@Override
-		public boolean supports(ConfigAttribute attribute) {
-			return false;
-		}
-
-		@Override
-		public boolean supports(Class<?> clazz) {
-			return false;
+		public AuthorizationResult authorize(java.util.function.Supplier<? extends org.springframework.security.core.Authentication> authentication, Object object) {
+			return new AuthorizationDecision(true);
 		}
 	}
 

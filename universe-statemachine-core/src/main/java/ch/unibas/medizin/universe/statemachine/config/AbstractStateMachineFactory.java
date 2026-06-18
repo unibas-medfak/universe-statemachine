@@ -323,8 +323,8 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 		// TODO: should error out if sec is enabled but spring-security is not in cp
 		if (stateMachineModel.getConfigurationData().isSecurityEnabled()) {
 			final StateMachineSecurityInterceptor<S, E> securityInterceptor = new StateMachineSecurityInterceptor<>(
-                    stateMachineModel.getConfigurationData().getTransitionSecurityAccessDecisionManager(),
-                    stateMachineModel.getConfigurationData().getEventSecurityAccessDecisionManager(),
+                    stateMachineModel.getConfigurationData().getTransitionAuthorizationManager(),
+                    stateMachineModel.getConfigurationData().getEventAuthorizationManager(),
                     stateMachineModel.getConfigurationData().getEventSecurityRule());
 			log.info("Adding security interceptor " + securityInterceptor);
 			fmachine.getStateMachineAccessor()

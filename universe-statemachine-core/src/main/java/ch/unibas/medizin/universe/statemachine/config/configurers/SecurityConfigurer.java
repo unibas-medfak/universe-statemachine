@@ -15,7 +15,7 @@
  */
 package ch.unibas.medizin.universe.statemachine.config.configurers;
 
-import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.authorization.AuthorizationManager;
 import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.common.annotation.AnnotationConfigurerBuilder;
 import ch.unibas.medizin.universe.statemachine.security.SecurityRule.ComparisonType;
@@ -23,71 +23,23 @@ import ch.unibas.medizin.universe.statemachine.security.SecurityRule.ComparisonT
 /**
  * Base {@code ConfigConfigurer} interface for configuring generic config.
  *
- * @author Janne Valkealahti
- *
  * @param <S> the type of state
  * @param <E> the type of event
  */
 public interface SecurityConfigurer<S, E> extends
 		AnnotationConfigurerBuilder<StateMachineConfigurationConfigurer<S, E>> {
 
-	/**
-	 * Specify if security is enabled. On default security is enabled
-	 * if configurer is used.
-	 *
-	 * @param enabled the enable flag
-	 * @return configurer for chaining
-	 */
 	SecurityConfigurer<S, E> enabled(boolean enabled);
 
-	/**
-	 * Specify a custom {@link AccessDecisionManager} for transitions.
-	 *
-	 * @param accessDecisionManager the access decision manager
-	 * @return configurer for chaining
-	 */
-	SecurityConfigurer<S, E> transitionAccessDecisionManager(AccessDecisionManager accessDecisionManager);
+	SecurityConfigurer<S, E> transitionAuthorizationManager(AuthorizationManager<Object> authorizationManager);
 
-	/**
-	 * Specify a custom {@link AccessDecisionManager} for events.
-	 *
-	 * @param accessDecisionManager the access decision manager
-	 * @return configurer for chaining
-	 */
-	SecurityConfigurer<S, E> eventAccessDecisionManager(AccessDecisionManager accessDecisionManager);
+	SecurityConfigurer<S, E> eventAuthorizationManager(AuthorizationManager<Object> authorizationManager);
 
-	/**
-	 * Specify a security attributes for events.
-	 *
-	 * @param attributes the security attributes
-	 * @param match the match type
-	 * @return configurer for chaining
-	 */
 	SecurityConfigurer<S, E> event(String attributes, ComparisonType match);
 
-	/**
-	 * Specify a security attributes for events.
-	 *
-	 * @param expression the the security expression
-	 * @return configurer for chaining
-	 */
 	SecurityConfigurer<S, E> event(String expression);
 
-	/**
-	 * Specify a security attributes for transitions.
-	 *
-	 * @param attributes the security attributes
-	 * @param match the match type
-	 * @return configurer for chaining
-	 */
 	SecurityConfigurer<S, E> transition(String attributes, ComparisonType match);
 
-	/**
-	 * Specify a security attributes for transitions.
-	 *
-	 * @param expression the the security expression
-	 * @return configurer for chaining
-	 */
 	SecurityConfigurer<S, E> transition(String expression);
-
 }

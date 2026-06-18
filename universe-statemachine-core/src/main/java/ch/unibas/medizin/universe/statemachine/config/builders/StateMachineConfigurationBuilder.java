@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.authorization.AuthorizationManager;
 import ch.unibas.medizin.universe.statemachine.action.StateDoActionPolicy;
 import ch.unibas.medizin.universe.statemachine.config.common.annotation.AbstractConfiguredAnnotationBuilder;
 import ch.unibas.medizin.universe.statemachine.config.common.annotation.AnnotationBuilder;
@@ -72,8 +72,8 @@ public class StateMachineConfigurationBuilder<S, E>
 	private boolean securityEnabled = false;
 	private boolean verifierEnabled = true;
 	private StateMachineModelVerifier<S, E> verifier;
-	private AccessDecisionManager transitionSecurityAccessDecisionManager;
-	private AccessDecisionManager eventSecurityAccessDecisionManager;
+	private AuthorizationManager<Object> transitionAuthorizationManager;
+	private AuthorizationManager<Object> eventAuthorizationManager;
 	private SecurityRule eventSecurityRule;
 	private SecurityRule transitionSecurityRule;
 	private StateMachineMonitor<S, E> stateMachineMonitor;
@@ -147,7 +147,7 @@ public class StateMachineConfigurationBuilder<S, E>
 			}
 		}
 		return new ConfigurationData<>(beanFactory, autoStart, ensemble, listeners, securityEnabled,
-                transitionSecurityAccessDecisionManager, eventSecurityAccessDecisionManager, eventSecurityRule,
+                transitionAuthorizationManager, eventAuthorizationManager, eventSecurityRule,
                 transitionSecurityRule, verifierEnabled, verifier, machineId, stateMachineMonitor, interceptorsCopy,
                 transitionConflictPolicy, stateDoActionPolicy, stateDoActionPolicyTimeout, regionExecutionPolicy);
 	}
@@ -225,22 +225,12 @@ public class StateMachineConfigurationBuilder<S, E>
 		this.stateMachineMonitor = stateMachineMonitor;
 	}
 
-	/**
-	 * Sets the security transition access decision manager.
-	 *
-	 * @param transitionSecurityAccessDecisionManager the new security transition access decision manager
-	 */
-	public void setTransitionSecurityAccessDecisionManager(AccessDecisionManager transitionSecurityAccessDecisionManager) {
-		this.transitionSecurityAccessDecisionManager = transitionSecurityAccessDecisionManager;
+	public void setTransitionAuthorizationManager(AuthorizationManager<Object> transitionAuthorizationManager) {
+		this.transitionAuthorizationManager = transitionAuthorizationManager;
 	}
 
-	/**
-	 * Sets the security event access decision manager.
-	 *
-	 * @param eventSecurityAccessDecisionManager the new security event access decision manager
-	 */
-	public void setEventSecurityAccessDecisionManager(AccessDecisionManager eventSecurityAccessDecisionManager) {
-		this.eventSecurityAccessDecisionManager = eventSecurityAccessDecisionManager;
+	public void setEventAuthorizationManager(AuthorizationManager<Object> eventAuthorizationManager) {
+		this.eventAuthorizationManager = eventAuthorizationManager;
 	}
 
 	/**

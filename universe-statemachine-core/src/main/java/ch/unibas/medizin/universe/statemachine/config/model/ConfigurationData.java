@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.authorization.AuthorizationManager;
 import ch.unibas.medizin.universe.statemachine.action.StateDoActionPolicy;
 import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineConfigurationBuilder;
 import ch.unibas.medizin.universe.statemachine.config.model.verifier.DefaultStateMachineModelVerifier;
@@ -53,8 +53,8 @@ public class ConfigurationData<S, E> {
 	private final boolean securityEnabled;
 	private final boolean verifierEnabled;
 	private final StateMachineModelVerifier<S, E> verifier;
-	private final AccessDecisionManager transitionSecurityAccessDecisionManager;
-	private final AccessDecisionManager eventSecurityAccessDecisionManager;
+	private final AuthorizationManager<Object> transitionAuthorizationManager;
+	private final AuthorizationManager<Object> eventAuthorizationManager;
 	private final SecurityRule eventSecurityRule;
 	private final SecurityRule transitionSecurityRule;
 	private final StateMachineMonitor<S, E> stateMachineMonitor;
@@ -65,7 +65,8 @@ public class ConfigurationData<S, E> {
 	 * Instantiates a new state machine configuration config data.
 	 */
 	public ConfigurationData() {
-		this(null, false, null, new ArrayList<>(), false, null, null, null, null, true,
+		this(null, false, null, new ArrayList<>(), false, (AuthorizationManager<Object>) null,
+                (AuthorizationManager<Object>) null, null, null, true,
                 new DefaultStateMachineModelVerifier<>(), null, null, null);
 	}
 
@@ -89,13 +90,13 @@ public class ConfigurationData<S, E> {
 	 */
 	public ConfigurationData(BeanFactory beanFactory, boolean autoStart, StateMachineEnsemble<S, E> ensemble,
 			List<StateMachineListener<S, E>> listeners, boolean securityEnabled,
-			AccessDecisionManager transitionSecurityAccessDecisionManager,
-			AccessDecisionManager eventSecurityAccessDecisionManager, SecurityRule eventSecurityRule,
+			AuthorizationManager<Object> transitionAuthorizationManager,
+			AuthorizationManager<Object> eventAuthorizationManager, SecurityRule eventSecurityRule,
 			SecurityRule transitionSecurityRule, boolean verifierEnabled, StateMachineModelVerifier<S, E> verifier,
 			String machineId, StateMachineMonitor<S, E> stateMachineMonitor,
 			List<StateMachineInterceptor<S, E>> interceptors) {
-		this(beanFactory, autoStart, ensemble, listeners, securityEnabled, transitionSecurityAccessDecisionManager,
-				eventSecurityAccessDecisionManager, eventSecurityRule, transitionSecurityRule, verifierEnabled,
+		this(beanFactory, autoStart, ensemble, listeners, securityEnabled, transitionAuthorizationManager,
+				eventAuthorizationManager, eventSecurityRule, transitionSecurityRule, verifierEnabled,
 				verifier, machineId, stateMachineMonitor, interceptors, null, null, null, null);
 	}
 
@@ -123,8 +124,8 @@ public class ConfigurationData<S, E> {
 	 */
 	public ConfigurationData(BeanFactory beanFactory, boolean autoStart, StateMachineEnsemble<S, E> ensemble,
 			List<StateMachineListener<S, E>> listeners, boolean securityEnabled,
-			AccessDecisionManager transitionSecurityAccessDecisionManager,
-			AccessDecisionManager eventSecurityAccessDecisionManager, SecurityRule eventSecurityRule,
+			AuthorizationManager<Object> transitionAuthorizationManager,
+			AuthorizationManager<Object> eventAuthorizationManager, SecurityRule eventSecurityRule,
 			SecurityRule transitionSecurityRule, boolean verifierEnabled, StateMachineModelVerifier<S, E> verifier,
 			String machineId, StateMachineMonitor<S, E> stateMachineMonitor,
 			List<StateMachineInterceptor<S, E>> interceptors, TransitionConflictPolicy transitionConflightPolicy,
@@ -135,8 +136,8 @@ public class ConfigurationData<S, E> {
 		this.ensemble = ensemble;
 		this.listeners = listeners;
 		this.securityEnabled = securityEnabled;
-		this.transitionSecurityAccessDecisionManager = transitionSecurityAccessDecisionManager;
-		this.eventSecurityAccessDecisionManager = eventSecurityAccessDecisionManager;
+		this.transitionAuthorizationManager = transitionAuthorizationManager;
+		this.eventAuthorizationManager = eventAuthorizationManager;
 		this.eventSecurityRule = eventSecurityRule;
 		this.transitionSecurityRule = transitionSecurityRule;
 		this.verifierEnabled = verifierEnabled;
@@ -226,22 +227,12 @@ public class ConfigurationData<S, E> {
 		return stateMachineMonitor;
 	}
 
-	/**
-	 * Gets the transition security access decision manager.
-	 *
-	 * @return the security access decision manager
-	 */
-	public AccessDecisionManager getTransitionSecurityAccessDecisionManager() {
-		return transitionSecurityAccessDecisionManager;
+	public AuthorizationManager<Object> getTransitionAuthorizationManager() {
+		return transitionAuthorizationManager;
 	}
 
-	/**
-	 * Gets the event security access decision manager.
-	 *
-	 * @return the event security access decision manager
-	 */
-	public AccessDecisionManager getEventSecurityAccessDecisionManager() {
-		return eventSecurityAccessDecisionManager;
+	public AuthorizationManager<Object> getEventAuthorizationManager() {
+		return eventAuthorizationManager;
 	}
 
 	/**
