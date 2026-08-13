@@ -432,22 +432,8 @@ public abstract class AbstractStateMachine<S, E> extends StateMachineObjectSuppo
 			initialEnabled = null;
 			log.debug("Stop complete " + this);
 		})
-		.then(stateMachineExecutor.stopReactively())
-		;
-
-		// TODO: REACTOR, doing this other way around will dispose triggerDisposable in
-		//       ReactiveStateMachineExecutor and we get cancel before runnable is ran.
-
-//		return stateMachineExecutor.stopReactively().then(Mono.fromRunnable(() -> {
-//			notifyStateMachineStopped(buildStateContext(Stage.STATEMACHINE_STOP, null, null, this));
-//			// stash current state before we null it so that
-//			// we can still return where we 'were' when machine is stopped
-//			lastState = currentState;
-//			currentState = null;
-//			initialEnabled = null;
-//			log.debug("Stop complete " + this);
-//		}));
-	}
+		.then(stateMachineExecutor.stopReactively());
+    }
 
 	@Override
 	protected void doDestroy() {

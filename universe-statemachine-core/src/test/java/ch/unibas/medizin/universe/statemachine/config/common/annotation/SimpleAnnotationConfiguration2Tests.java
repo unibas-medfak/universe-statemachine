@@ -73,12 +73,6 @@ public class SimpleAnnotationConfiguration2Tests {
 		fileNames[1] = fileName2.equals("simpleResourceA2") ? fileName2 : fileName1;
 		assertThat(fileNames[0]).isEqualTo("simpleResourceA1");
 		assertThat(fileNames[1]).isEqualTo("simpleResourceA2");
-
-//		assertTrue(ctx.containsBean("simpleConfigData"));
-//		assertTrue(ctx.containsBean("simpleConfigBeanB"));
-//		SimpleTestConfigBeanB beanB = ctx.getBean("simpleConfigBeanB", SimpleTestConfigBeanB.class);
-//		assertThat(beanB.dataB).isEqualTo("simpleDataB");
-//		assertThat(beanB.dataBB).isEqualTo("simpleDataBB");
 	}
 
 	@Configuration

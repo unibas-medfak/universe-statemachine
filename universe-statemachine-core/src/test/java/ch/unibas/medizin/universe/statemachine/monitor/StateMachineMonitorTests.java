@@ -65,12 +65,7 @@ public class StateMachineMonitorTests extends AbstractStateMachineTests {
 		assertThat(saction.latch.await(2, TimeUnit.SECONDS)).isTrue();
 		assertThat(monitor.latch.await(2, TimeUnit.SECONDS)).isTrue();
 		assertThat(monitor.actions).hasSize(4);
-		// TODO: REACTOR yeah we wrap action internally so can't match like this anymore
-		// Action<String, String> taction = context.getBean("taction", Action.class);
-		// Action<String, String> enaction = context.getBean("enaction", Action.class);
-		// Action<String, String> exaction = context.getBean("exaction", Action.class);
-		// assertThat(monitor.actions.keySet()).containsOnly(taction, enaction, exaction, saction);
-		monitor.reset();
+        monitor.reset();
 		doSendEventAndConsumeAll(machine, "E2");
 		assertThat(machine.getState().getIds()).containsExactly("S1");
 	}
