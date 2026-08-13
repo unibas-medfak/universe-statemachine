@@ -47,14 +47,12 @@ import ch.unibas.medizin.universe.statemachine.config.configurers.JoinTransition
 import ch.unibas.medizin.universe.statemachine.config.configurers.JunctionTransitionConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.configurers.LocalTransitionConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.model.ChoiceData;
-import ch.unibas.medizin.universe.statemachine.config.model.ConfigurationData;
 import ch.unibas.medizin.universe.statemachine.config.model.EntryData;
 import ch.unibas.medizin.universe.statemachine.config.model.ExitData;
 import ch.unibas.medizin.universe.statemachine.config.model.HistoryData;
 import ch.unibas.medizin.universe.statemachine.config.model.JunctionData;
 import ch.unibas.medizin.universe.statemachine.config.model.TransitionData;
 import ch.unibas.medizin.universe.statemachine.config.model.TransitionsData;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule;
 import ch.unibas.medizin.universe.statemachine.transition.TransitionKind;
 
 import reactor.core.publisher.Mono;
@@ -175,20 +173,13 @@ public class StateMachineTransitionBuilder<S, E>
 	 * @param actions the actions
 	 * @param guard the guard
 	 * @param kind the kind
-	 * @param securityRule the security rule
 	 * @param name the name
 	 */
 	public void addTransition(S source, S target, S state, E event, Long period, Integer count,
 			Collection<Function<StateContext<S, E>, Mono<Void>>> actions,
-			Function<StateContext<S, E>, Mono<Boolean>> guard, TransitionKind kind, SecurityRule securityRule,
+			Function<StateContext<S, E>, Mono<Boolean>> guard, TransitionKind kind,
 			String name) {
-		// if rule not given, get it from global
-		if (securityRule == null) {
-			@SuppressWarnings("unchecked")
-			ConfigurationData<S, E> config = getSharedObject(ConfigurationData.class);
-			securityRule = config.getTransitionSecurityRule();
-		}
-		transitionData.add(new TransitionData<>(source, target, state, event, period, count, actions, guard, kind, securityRule, name));
+		transitionData.add(new TransitionData<>(source, target, state, event, period, count, actions, guard, kind, name));
 	}
 
 	/**

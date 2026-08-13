@@ -126,20 +126,20 @@ public class ReactiveLifecycleManager implements StateMachineReactiveLifecycle {
 
 		private final AtomicReference<LifecycleState> ref;
 
-		public AtomicEnum(final LifecycleState initialValue) {
+		private AtomicEnum(final LifecycleState initialValue) {
 			this.ref = new AtomicReference<>(initialValue);
 		}
 
-		public void set(final LifecycleState newValue) {
+		private void set(final LifecycleState newValue) {
 			log.debug("Lifecycle to " + newValue + " in " + ReactiveLifecycleManager.this);
 			this.ref.set(newValue);
 		}
 
-		public LifecycleState get() {
+		private LifecycleState get() {
 			return this.ref.get();
 		}
 
-		public boolean compareAndSet(final LifecycleState expect, final LifecycleState update) {
+		private boolean compareAndSet(final LifecycleState expect, final LifecycleState update) {
 			boolean set = this.ref.compareAndSet(expect, update);
 			if (set) {
 				log.debug("Lifecycle from " + expect + " to " + update + " in " + ReactiveLifecycleManager.this);

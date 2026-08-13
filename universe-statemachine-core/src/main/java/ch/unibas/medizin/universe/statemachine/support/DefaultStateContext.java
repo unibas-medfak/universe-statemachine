@@ -128,8 +128,8 @@ public class DefaultStateContext<S, E> implements StateContext<S, E> {
 
 	@Override
 	public Object getMessageHeader(Object header) {
-		if (header instanceof String) {
-			return messageHeaders.get((String)header);
+		if (header instanceof String headerString) {
+			return messageHeaders.get(headerString);
 		} else if (header instanceof Enum<?>) {
 			return messageHeaders.get(header.toString());
 		}

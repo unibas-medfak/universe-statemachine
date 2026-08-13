@@ -60,7 +60,7 @@ public class DistributedLeaderAction<S, E> implements Action<S, E> {
 	public void execute(StateContext<S, E> context) {
 		StateMachine<S, E> left = context.getStateMachine();
 		StateMachine<S, E> right = ensemble.getLeader();
-		boolean leader = (left != null & right != null) && ObjectUtils.nullSafeEquals(left.getUuid(), right.getUuid());
+		boolean leader = (left != null && right != null) && ObjectUtils.nullSafeEquals(left.getUuid(), right.getUuid());
 		if (log.isDebugEnabled()) {
 			log.debug("Distibuted action leader status is " + leader);
 		}

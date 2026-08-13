@@ -15,8 +15,6 @@
  */
 package ch.unibas.medizin.universe.statemachine.boot.actuate;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,7 +55,7 @@ public class InMemoryStateMachineTraceRepository implements StateMachineTraceRep
 	@Override
 	public List<StateMachineTrace> findAll() {
 		synchronized (this.traces) {
-			return Collections.unmodifiableList(new ArrayList<>(this.traces));
+			return List.copyOf(this.traces);
 		}
 	}
 

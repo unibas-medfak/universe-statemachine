@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.security.access.AccessDecisionManager;
 import ch.unibas.medizin.universe.statemachine.action.StateDoActionPolicy;
 import ch.unibas.medizin.universe.statemachine.config.common.annotation.AbstractConfiguredAnnotationBuilder;
 import ch.unibas.medizin.universe.statemachine.config.common.annotation.AnnotationBuilder;
@@ -29,12 +28,10 @@ import ch.unibas.medizin.universe.statemachine.config.configurers.DefaultConfigu
 import ch.unibas.medizin.universe.statemachine.config.configurers.DefaultDistributedStateMachineConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.configurers.DefaultMonitoringConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.configurers.DefaultPersistenceConfigurer;
-import ch.unibas.medizin.universe.statemachine.config.configurers.DefaultSecurityConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.configurers.DefaultVerifierConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.configurers.DistributedStateMachineConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.configurers.MonitoringConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.configurers.PersistenceConfigurer;
-import ch.unibas.medizin.universe.statemachine.config.configurers.SecurityConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.configurers.VerifierConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.model.ConfigurationData;
 import ch.unibas.medizin.universe.statemachine.config.model.StatesData;
@@ -44,7 +41,6 @@ import ch.unibas.medizin.universe.statemachine.listener.StateMachineListener;
 import ch.unibas.medizin.universe.statemachine.monitor.StateMachineMonitor;
 import ch.unibas.medizin.universe.statemachine.persist.StateMachineRuntimePersister;
 import ch.unibas.medizin.universe.statemachine.region.RegionExecutionPolicy;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule;
 import ch.unibas.medizin.universe.statemachine.support.StateMachineInterceptor;
 import ch.unibas.medizin.universe.statemachine.transition.TransitionConflictPolicy;
 
@@ -69,13 +65,8 @@ public class StateMachineConfigurationBuilder<S, E>
 	private RegionExecutionPolicy regionExecutionPolicy;
 	private StateMachineEnsemble<S, E> ensemble;
 	private final List<StateMachineListener<S, E>> listeners = new ArrayList<>();
-	private boolean securityEnabled = false;
 	private boolean verifierEnabled = true;
 	private StateMachineModelVerifier<S, E> verifier;
-	private AccessDecisionManager transitionSecurityAccessDecisionManager;
-	private AccessDecisionManager eventSecurityAccessDecisionManager;
-	private SecurityRule eventSecurityRule;
-	private SecurityRule transitionSecurityRule;
 	private StateMachineMonitor<S, E> stateMachineMonitor;
 	private final List<StateMachineInterceptor<S, E>> interceptors = new ArrayList<>();
 	private StateMachineRuntimePersister<S, E, ?> persister;
@@ -118,11 +109,6 @@ public class StateMachineConfigurationBuilder<S, E>
 	}
 
 	@Override
-	public SecurityConfigurer<S, E> withSecurity() throws Exception {
-		return apply(new DefaultSecurityConfigurer<>());
-	}
-
-	@Override
 	public VerifierConfigurer<S, E> withVerifier() throws Exception {
 		return apply(new DefaultVerifierConfigurer<>());
 	}
@@ -146,9 +132,8 @@ public class StateMachineConfigurationBuilder<S, E>
 				interceptorsCopy.add(interceptor);
 			}
 		}
-		return new ConfigurationData<>(beanFactory, autoStart, ensemble, listeners, securityEnabled,
-                transitionSecurityAccessDecisionManager, eventSecurityAccessDecisionManager, eventSecurityRule,
-                transitionSecurityRule, verifierEnabled, verifier, machineId, stateMachineMonitor, interceptorsCopy,
+		return new ConfigurationData<>(beanFactory, autoStart, ensemble, listeners,
+                verifierEnabled, verifier, machineId, stateMachineMonitor, interceptorsCopy,
                 transitionConflictPolicy, stateDoActionPolicy, stateDoActionPolicyTimeout, regionExecutionPolicy);
 	}
 
@@ -199,15 +184,6 @@ public class StateMachineConfigurationBuilder<S, E>
 	}
 
 	/**
-	 * Sets the security enabled.
-	 *
-	 * @param securityEnabled the new security enabled
-	 */
-	public void setSecurityEnabled(boolean securityEnabled) {
-		this.securityEnabled = securityEnabled;
-	}
-
-	/**
 	 * Sets the verifier enabled.
 	 *
 	 * @param verifierEnabled the new verifier enabled
@@ -223,42 +199,6 @@ public class StateMachineConfigurationBuilder<S, E>
 	 */
 	public void setStateMachineMonitor(StateMachineMonitor<S, E> stateMachineMonitor) {
 		this.stateMachineMonitor = stateMachineMonitor;
-	}
-
-	/**
-	 * Sets the security transition access decision manager.
-	 *
-	 * @param transitionSecurityAccessDecisionManager the new security transition access decision manager
-	 */
-	public void setTransitionSecurityAccessDecisionManager(AccessDecisionManager transitionSecurityAccessDecisionManager) {
-		this.transitionSecurityAccessDecisionManager = transitionSecurityAccessDecisionManager;
-	}
-
-	/**
-	 * Sets the security event access decision manager.
-	 *
-	 * @param eventSecurityAccessDecisionManager the new security event access decision manager
-	 */
-	public void setEventSecurityAccessDecisionManager(AccessDecisionManager eventSecurityAccessDecisionManager) {
-		this.eventSecurityAccessDecisionManager = eventSecurityAccessDecisionManager;
-	}
-
-	/**
-	 * Sets the event security rule.
-	 *
-	 * @param eventSecurityRule the new event security rule
-	 */
-	public void setEventSecurityRule(SecurityRule eventSecurityRule) {
-		this.eventSecurityRule = eventSecurityRule;
-	}
-
-	/**
-	 * Sets the transition security rule.
-	 *
-	 * @param transitionSecurityRule the new event security rule
-	 */
-	public void setTransitionSecurityRule(SecurityRule transitionSecurityRule) {
-		this.transitionSecurityRule = transitionSecurityRule;
 	}
 
 	/**

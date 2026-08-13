@@ -1,6 +1,4 @@
-.gradle
 bin
-build
 .settings
 .classpath
 .project
@@ -21,4 +19,5 @@ classes
 .attach_pid*
 nexus
 .jfrog
-.gradle-home/
+build/
+.gradle/

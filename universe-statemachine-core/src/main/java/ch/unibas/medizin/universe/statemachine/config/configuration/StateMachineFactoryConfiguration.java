@@ -81,8 +81,8 @@ public class StateMachineFactoryConfiguration<S, E> extends
 
 		// try to add more info about generics
 		ResolvableType type = resolveFactoryObjectType(enableStateMachineEnclosingClass);
-		if (type != null && beanDefinition instanceof RootBeanDefinition) {
-			((RootBeanDefinition)beanDefinition).setTargetType(type);
+		if (type != null && beanDefinition instanceof RootBeanDefinition rootBeanDefinition) {
+			rootBeanDefinition.setTargetType(type);
 		}
 
 		return beanDefinition;
@@ -96,6 +96,7 @@ public class StateMachineFactoryConfiguration<S, E> extends
 				type = ResolvableType.forClassWithGenerics(StateMachineFactory.class, generics);
 			}
 		} catch (Exception e) {
+			// ignored
 		}
 		return type;
 	}
@@ -118,7 +119,7 @@ public class StateMachineFactoryConfiguration<S, E> extends
 		private ClassLoader classLoader;
 
 		@SuppressWarnings("unused")
-		public StateMachineFactoryDelegatingFactoryBean(StateMachineConfigBuilder<S, E> builder, String clazzName, Boolean contextEvents) {
+		private StateMachineFactoryDelegatingFactoryBean(StateMachineConfigBuilder<S, E> builder, String clazzName, Boolean contextEvents) {
 			this.builder = builder;
 			this.clazzName = clazzName;
 			this.contextEvents = contextEvents;

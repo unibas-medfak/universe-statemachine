@@ -29,7 +29,6 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
@@ -44,7 +43,6 @@ import ch.unibas.medizin.universe.statemachine.StateMachineSystemConstants;
 import ch.unibas.medizin.universe.statemachine.state.JoinPseudoState;
 import ch.unibas.medizin.universe.statemachine.state.PseudoStateKind;
 import ch.unibas.medizin.universe.statemachine.state.State;
-import ch.unibas.medizin.universe.statemachine.transition.AbstractTransition;
 import ch.unibas.medizin.universe.statemachine.transition.Transition;
 import ch.unibas.medizin.universe.statemachine.transition.TransitionConflictPolicy;
 import ch.unibas.medizin.universe.statemachine.trigger.DefaultTriggerContext;
@@ -128,8 +126,6 @@ public class ReactiveStateMachineExecutor<S, E> extends LifecycleObjectSupport i
 			}
 
 			if (!initialHandled.getAndSet(true)) {
-				ArrayList<Transition<S, E>> trans = new ArrayList<>();
-				trans.add(initialTransition);
 				// TODO: should we merge if initial event is actually used?
 				if (initialEvent != null) {
 					mono = mono.then(handleInitialTrans(initialTransition, initialEvent));
@@ -291,19 +287,12 @@ public class ReactiveStateMachineExecutor<S, E> extends LifecycleObjectSupport i
 				ret = handleTriggerTrans(trans, queuedMessage).then();
 			}
 
-			List<Transition<S, E>> transWithGuards = new ArrayList<>();
-			for (Transition<S, E> t : triggerlessTransitions) {
-				if (t.getGuard() != null) {
-					transWithGuards.add(t);
-				}
-			}
-
 			if (ret == null) {
 				ret = Mono.empty();
 			}
 			return ret;
 		})
-		.onErrorResume(resumeTriggerErrorToContext())
+		.onErrorResume(this::resumeTriggerErrorToContext)
 		.and(Mono.deferContextual(Mono::just)
 			.doOnNext(ctx -> {
 				if (queueItem.callback != null) {
@@ -391,7 +380,7 @@ public class ReactiveStateMachineExecutor<S, E> extends LifecycleObjectSupport i
 					}
 					joinSyncTransitions.add(t);
 					boolean removed = joinSyncStates.remove(t.getSource());
-					boolean joincomplete = removed & joinSyncStates.isEmpty();
+					boolean joincomplete = removed && joinSyncStates.isEmpty();
 					if (joincomplete) {
 						return Flux.fromIterable(joinSyncTransitions)
 							.flatMap(tt -> {
@@ -484,8 +473,8 @@ public class ReactiveStateMachineExecutor<S, E> extends LifecycleObjectSupport i
 			.then();
 	}
 
-	private static Function<? super Throwable, Mono<Void>> resumeTriggerErrorToContext() {
-		return t -> Mono.deferContextual(Mono::just)
+	private Mono<Void> resumeTriggerErrorToContext(Throwable t) {
+		return Mono.deferContextual(Mono::just)
 			.doOnNext(ctx -> {
 				Optional<ExecutorExceptionHolder> holder = ctx.getOrEmpty(REACTOR_CONTEXT_TRIGGER_ERRORS);
 				holder.ifPresent(h -> {
@@ -501,7 +490,7 @@ public class ReactiveStateMachineExecutor<S, E> extends LifecycleObjectSupport i
 		final StateMachineExecutorCallback callback;
 		final StateMachineExecutorCallback triggerCallback;
 
-		public TriggerQueueItem(Trigger<S, E> trigger, Message<E> message, StateMachineExecutorCallback callback, StateMachineExecutorCallback triggerCallback) {
+		private TriggerQueueItem(Trigger<S, E> trigger, Message<E> message, StateMachineExecutorCallback callback, StateMachineExecutorCallback triggerCallback) {
 			this.trigger = trigger;
 			this.message = message;
 			this.callback = callback;

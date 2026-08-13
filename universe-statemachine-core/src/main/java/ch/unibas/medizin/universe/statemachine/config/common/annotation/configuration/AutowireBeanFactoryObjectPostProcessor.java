@@ -58,11 +58,11 @@ final class AutowireBeanFactoryObjectPostProcessor implements ObjectPostProcesso
 	@Override
 	public <T> T postProcess(T object) {
 		T result = (T) autowireBeanFactory.initializeBean(object, null);
-		if(result instanceof DisposableBean) {
-			disposableBeans.add((DisposableBean) result);
+		if(result instanceof DisposableBean disposableBean) {
+			disposableBeans.add(disposableBean);
 		}
-		if(result instanceof Lifecycle) {
-			lifecycleBeans.add((Lifecycle) result);
+		if(result instanceof Lifecycle lifecycle) {
+			lifecycleBeans.add(lifecycle);
 		}
 		return result;
 	}

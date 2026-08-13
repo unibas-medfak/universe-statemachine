@@ -19,7 +19,6 @@ import ch.unibas.medizin.universe.statemachine.config.configurers.ConfigurationC
 import ch.unibas.medizin.universe.statemachine.config.configurers.DistributedStateMachineConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.configurers.MonitoringConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.configurers.PersistenceConfigurer;
-import ch.unibas.medizin.universe.statemachine.config.configurers.SecurityConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.configurers.VerifierConfigurer;
 
 /**
@@ -47,14 +46,6 @@ public interface StateMachineConfigurationConfigurer<S, E> {
 	 * @throws Exception if configuration error happens
 	 */
 	DistributedStateMachineConfigurer<S, E> withDistributed() throws Exception;
-
-	/**
-	 * Gets a configurer for securing state machine.
-	 *
-	 * @return {@link SecurityConfigurer} for chaining
-	 * @throws Exception if configuration error happens
-	 */
-	SecurityConfigurer<S, E> withSecurity() throws Exception;
 
 	/**
 	 * Gets a configurer for state machine model verifier.

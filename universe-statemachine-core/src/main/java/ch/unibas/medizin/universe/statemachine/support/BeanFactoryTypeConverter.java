@@ -29,6 +29,9 @@ import org.springframework.expression.TypeConverter;
 import org.springframework.util.ClassUtils;
 
 /**
+ * A {@link TypeConverter} implementation backed by a Spring {@link BeanFactory} to support
+ * custom property editors and conversion services.
+ *
  * @author Dave Syer
  * @author Oleg Zhurakousky
  * @author Gary Russell
@@ -38,7 +41,7 @@ import org.springframework.util.ClassUtils;
  */
 public class BeanFactoryTypeConverter implements TypeConverter, BeanFactoryAware {
 
-	private static ConversionService defaultConversionService;
+	private ConversionService defaultConversionService;
 
 	private volatile SimpleTypeConverter delegate = new SimpleTypeConverter();
 
@@ -50,12 +53,8 @@ public class BeanFactoryTypeConverter implements TypeConverter, BeanFactoryAware
 	 * Instantiates a new bean factory type converter.
 	 */
 	public BeanFactoryTypeConverter() {
-		synchronized (BeanFactoryTypeConverter.class) {
-			if (defaultConversionService == null) {
-				defaultConversionService = new DefaultConversionService();
-			}
-		}
-		this.conversionService = defaultConversionService;
+		this.defaultConversionService = new DefaultConversionService();
+		this.conversionService = this.defaultConversionService;
 	}
 
 	public BeanFactoryTypeConverter(ConversionService conversionService) {
@@ -66,11 +65,12 @@ public class BeanFactoryTypeConverter implements TypeConverter, BeanFactoryAware
 		this.conversionService = conversionService;
 	}
 
+	@Override
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-		if (beanFactory instanceof ConfigurableBeanFactory) {
-			Object typeConverter = ((ConfigurableBeanFactory) beanFactory).getTypeConverter();
-			if (typeConverter instanceof SimpleTypeConverter) {
-				delegate = (SimpleTypeConverter) typeConverter;
+		if (beanFactory instanceof ConfigurableBeanFactory configurableBeanFactory) {
+			Object typeConverter = configurableBeanFactory.getTypeConverter();
+			if (typeConverter instanceof SimpleTypeConverter simpleTypeConverter) {
+				delegate = simpleTypeConverter;
 			}
 		}
 	}
@@ -89,6 +89,7 @@ public class BeanFactoryTypeConverter implements TypeConverter, BeanFactoryAware
 		return delegate.findCustomEditor(targetType, null) != null || this.getDefaultEditor(targetType) != null;
 	}
 
+	@Override
 	public boolean canConvert(TypeDescriptor sourceTypeDescriptor, TypeDescriptor targetTypeDescriptor) {
 		if (conversionService.canConvert(sourceTypeDescriptor, targetTypeDescriptor)) {
 			return true;
@@ -100,6 +101,7 @@ public class BeanFactoryTypeConverter implements TypeConverter, BeanFactoryAware
 		return canConvert(sourceType, targetType);
 	}
 
+	@Override
 	public Object convertValue(Object value, TypeDescriptor sourceType, TypeDescriptor targetType) {
 		// Echoes
 		// org.springframework.expression.common.ExpressionUtils.convertTypedValue()

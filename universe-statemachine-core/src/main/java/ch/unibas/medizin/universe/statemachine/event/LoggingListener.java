@@ -15,6 +15,8 @@
  */
 package ch.unibas.medizin.universe.statemachine.event;
 
+import java.util.Locale;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationListener;
@@ -54,7 +56,7 @@ public class LoggingListener implements ApplicationListener<StateMachineEvent> {
 	 */
 	public LoggingListener(String level) {
 		try {
-			this.level = Level.valueOf(level.toUpperCase());
+			this.level = Level.valueOf(level.toUpperCase(Locale.ROOT));
 		}
 		catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException("Invalid log level '" + level
@@ -66,36 +68,36 @@ public class LoggingListener implements ApplicationListener<StateMachineEvent> {
 	@Override
 	public void onApplicationEvent(StateMachineEvent event) {
 		switch (this.level) {
-		case FATAL:
-			if (log.isFatalEnabled()) {
-				log.fatal(event);
+			case FATAL -> {
+				if (log.isFatalEnabled()) {
+					log.fatal(event);
+				}
 			}
-			break;
-		case ERROR:
-			if (log.isErrorEnabled()) {
-				log.error(event);
+			case ERROR -> {
+				if (log.isErrorEnabled()) {
+					log.error(event);
+				}
 			}
-			break;
-		case WARN:
-			if (log.isWarnEnabled()) {
-				log.warn(event);
+			case WARN -> {
+				if (log.isWarnEnabled()) {
+					log.warn(event);
+				}
 			}
-			break;
-		case INFO:
-			if (log.isInfoEnabled()) {
-				log.info(event);
+			case INFO -> {
+				if (log.isInfoEnabled()) {
+					log.info(event);
+				}
 			}
-			break;
-		case DEBUG:
-			if (log.isDebugEnabled()) {
-				log.debug(event);
+			case DEBUG -> {
+				if (log.isDebugEnabled()) {
+					log.debug(event);
+				}
 			}
-			break;
-		case TRACE:
-			if (log.isTraceEnabled()) {
-				log.trace(event);
+			case TRACE -> {
+				if (log.isTraceEnabled()) {
+					log.trace(event);
+				}
 			}
-			break;
 		}
 	}
 

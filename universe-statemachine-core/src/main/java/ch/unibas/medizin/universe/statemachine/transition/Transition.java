@@ -20,7 +20,6 @@ import java.util.function.Function;
 
 import ch.unibas.medizin.universe.statemachine.StateContext;
 import ch.unibas.medizin.universe.statemachine.action.ActionListener;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule;
 import ch.unibas.medizin.universe.statemachine.state.State;
 import ch.unibas.medizin.universe.statemachine.trigger.Trigger;
 
@@ -94,13 +93,6 @@ public interface Transition<S, E> {
 	 * @return the transition kind
 	 */
 	TransitionKind getKind();
-
-	/**
-	 * Gets the security rule.
-	 *
-	 * @return the security rule
-	 */
-	SecurityRule getSecurityRule();
 
 	/**
 	 * Gets the name.

@@ -102,8 +102,8 @@ public class StateMachineConfiguration<S, E> extends
 
 		// try to add more info about generics
 		ResolvableType type = resolveFactoryObjectType(enableStateMachineEnclosingClass);
-		if (type != null && beanDefinition instanceof RootBeanDefinition) {
-			((RootBeanDefinition)beanDefinition).setTargetType(type);
+		if (type != null && beanDefinition instanceof RootBeanDefinition rootBeanDefinition) {
+			rootBeanDefinition.setTargetType(type);
 		}
 		return beanDefinition;
 	}
@@ -123,6 +123,7 @@ public class StateMachineConfiguration<S, E> extends
 				type = ResolvableType.forClassWithGenerics(StateMachine.class, generics);
 			}
 		} catch (Exception e) {
+			// ignored
 		}
 		return type;
 	}
@@ -139,7 +140,8 @@ public class StateMachineConfiguration<S, E> extends
 		private StateMachineMonitor<S, E> stateMachineMonitor;
 		private ClassLoader classLoader;
 
-		public StateMachineDelegatingFactoryBean(StateMachineConfigBuilder<S, E> builder, Class<StateMachine<S, E>> clazz,
+		@SuppressWarnings("unused")
+		private StateMachineDelegatingFactoryBean(StateMachineConfigBuilder<S, E> builder, Class<StateMachine<S, E>> clazz,
 				String clazzName, Boolean contextEvents) {
 			super(builder, clazz);
 			this.clazzName = clazzName;
@@ -216,7 +218,8 @@ public class StateMachineConfiguration<S, E> extends
 		}
 
 		@Autowired(required = false)
-		public void setStateMachineMonitor(StateMachineMonitor<S, E> stateMachineMonitor) {
+		@SuppressWarnings("unused")
+		private void setStateMachineMonitor(StateMachineMonitor<S, E> stateMachineMonitor) {
 			this.stateMachineMonitor = stateMachineMonitor;
 		}
 	}

@@ -23,17 +23,7 @@ run on Spring Boot 4 and Java 21.
 
 ## Getting started
 
-Add the starter to a Spring Boot application.
-
-Gradle:
-
-```groovy
-dependencies {
-    implementation 'ch.unibas.medizin.universe.statemachine:universe-statemachine-starter'
-}
-```
-
-Maven:
+Add the starter to a Spring Boot application:
 
 ```xml
 <dependency>
@@ -100,10 +90,10 @@ void doSignals() {
 
 ## Building
 
-The project builds with the Gradle wrapper:
+The project builds with the Maven wrapper (Maven 4):
 
 ```bash
-./gradlew build
+./mvnw clean verify
 ```
 
 ## License

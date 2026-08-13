@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.function.Function;
 
 import ch.unibas.medizin.universe.statemachine.StateContext;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule;
 import ch.unibas.medizin.universe.statemachine.state.State;
 import ch.unibas.medizin.universe.statemachine.trigger.Trigger;
 
@@ -52,29 +51,11 @@ public class AbstractLocalTransition<S, E> extends AbstractTransition<S, E> {
 	 * @param event the event
 	 * @param guard the guard
 	 * @param trigger the trigger
-	 * @param securityRule the security rule
-	 */
-	public AbstractLocalTransition(State<S, E> source, State<S, E> target,
-			Collection<Function<StateContext<S, E>, Mono<Void>>> actions, E event,
-			Function<StateContext<S, E>, Mono<Boolean>> guard, Trigger<S, E> trigger, SecurityRule securityRule) {
-		super(source, target, actions, event, TransitionKind.LOCAL, guard, trigger, securityRule, null);
-	}
-
-	/**
-	 * Instantiates a new abstract local transition.
-	 *
-	 * @param source the source
-	 * @param target the target
-	 * @param actions the actions
-	 * @param event the event
-	 * @param guard the guard
-	 * @param trigger the trigger
-	 * @param securityRule the security rule
 	 * @param name the name
 	 */
 	public AbstractLocalTransition(State<S, E> source, State<S, E> target,
 			Collection<Function<StateContext<S, E>, Mono<Void>>> actions, E event,
-			Function<StateContext<S, E>, Mono<Boolean>> guard, Trigger<S, E> trigger, SecurityRule securityRule, String name) {
-		super(source, target, actions, event, TransitionKind.LOCAL, guard, trigger, securityRule, name);
+			Function<StateContext<S, E>, Mono<Boolean>> guard, Trigger<S, E> trigger, String name) {
+		super(source, target, actions, event, TransitionKind.LOCAL, guard, trigger, name);
 	}
 }

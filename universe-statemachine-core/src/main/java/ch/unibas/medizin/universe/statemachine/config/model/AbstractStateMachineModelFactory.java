@@ -129,6 +129,7 @@ public abstract class AbstractStateMachineModelFactory<S, E>
 	 * @param id the id
 	 * @return the action
 	 */
+	@Override
 	public Action<S, E> resolveAction(String id) {
 		Action<S, E> a = internalResolver.resolveAction(id);
 		if (a == null && stateMachineComponentResolver != null) {
@@ -146,6 +147,7 @@ public abstract class AbstractStateMachineModelFactory<S, E>
 	 * @param id the id
 	 * @return the guard
 	 */
+	@Override
 	public Guard<S, E> resolveGuard(String id) {
 		Guard<S, E> a = internalResolver.resolveGuard(id);
 		if (a == null && stateMachineComponentResolver != null) {

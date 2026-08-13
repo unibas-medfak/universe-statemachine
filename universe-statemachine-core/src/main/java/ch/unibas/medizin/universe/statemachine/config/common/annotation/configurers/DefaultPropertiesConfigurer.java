@@ -85,8 +85,8 @@ public class DefaultPropertiesConfigurer<O,I,B extends AnnotationBuilder<O>>
 	@Override
 	public void configure(B builder) throws Exception {
 		if (!configureProperties(builder, properties)) {
-			if (builder instanceof PropertiesConfigurerAware) {
-				((PropertiesConfigurerAware)builder).configureProperties(properties);
+			if (builder instanceof PropertiesConfigurerAware propertiesConfigurerAware) {
+				propertiesConfigurerAware.configureProperties(properties);
 			}
 		}
 	}

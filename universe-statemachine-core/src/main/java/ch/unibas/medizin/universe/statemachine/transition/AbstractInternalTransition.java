@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.function.Function;
 
 import ch.unibas.medizin.universe.statemachine.StateContext;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule;
 import ch.unibas.medizin.universe.statemachine.state.State;
 import ch.unibas.medizin.universe.statemachine.trigger.Trigger;
 
@@ -49,28 +48,10 @@ public class AbstractInternalTransition<S, E> extends AbstractTransition<S, E> {
 	 * @param event the event
 	 * @param guard the guard
 	 * @param trigger the trigger
-	 * @param securityRule the security rule
-	 */
-	public AbstractInternalTransition(State<S, E> source, Collection<Function<StateContext<S, E>, Mono<Void>>> actions,
-			E event, Function<StateContext<S, E>, Mono<Boolean>> guard, Trigger<S, E> trigger,
-			SecurityRule securityRule) {
-		super(source, source, actions, event, TransitionKind.INTERNAL, guard, trigger, securityRule, null);
-	}
-
-	/**
-	 * Instantiates a new abstract internal transition.
-	 *
-	 * @param source the source
-	 * @param actions the actions
-	 * @param event the event
-	 * @param guard the guard
-	 * @param trigger the trigger
-	 * @param securityRule the security rule
 	 * @param name the name
 	 */
 	public AbstractInternalTransition(State<S, E> source, Collection<Function<StateContext<S, E>, Mono<Void>>> actions,
-			E event, Function<StateContext<S, E>, Mono<Boolean>> guard, Trigger<S, E> trigger,
-			SecurityRule securityRule, String name) {
-		super(source, source, actions, event, TransitionKind.INTERNAL, guard, trigger, securityRule, name);
+			E event, Function<StateContext<S, E>, Mono<Boolean>> guard, Trigger<S, E> trigger, String name) {
+		super(source, source, actions, event, TransitionKind.INTERNAL, guard, trigger, name);
 	}
 }

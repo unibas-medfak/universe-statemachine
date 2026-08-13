@@ -76,10 +76,6 @@ public class StateMachineHandlerCallHelper<S, E> implements InitializingBean, Be
 		if (beanFactory == null) {
 			return;
 		}
-		if (!(beanFactory instanceof ListableBeanFactory)) {
-			log.info("Beanfactory is not instance of ListableBeanFactory, was " + beanFactory + " thus Disabling handlers.");
-			return;
-		}
 		if (beanFactory.containsBean(StateMachineHandlerApplicationListener.BEAN_NAME)) {
 			this.stateMachineHandlerApplicationListener = beanFactory.getBean(StateMachineHandlerApplicationListener.BEAN_NAME,
 					StateMachineHandlerApplicationListener.class);
@@ -452,7 +448,7 @@ public class StateMachineHandlerCallHelper<S, E> implements InitializingBean, Be
 		final Annotation annotation;
 		final Annotation metaAnnotation;
 
-		public CacheEntry(StateMachineHandler<? extends Annotation, S, E> handler, Annotation annotation, Annotation metaAnnotation) {
+		private CacheEntry(StateMachineHandler<? extends Annotation, S, E> handler, Annotation annotation, Annotation metaAnnotation) {
 			this.handler = handler;
 			this.annotation = annotation;
 			this.metaAnnotation = metaAnnotation;

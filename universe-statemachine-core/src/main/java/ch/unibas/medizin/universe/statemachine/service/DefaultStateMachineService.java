@@ -178,6 +178,7 @@ public class DefaultStateMachineService<S, E> implements StateMachineService<S, 
 				try {
 					listener.latch.await();
 				} catch (InterruptedException e) {
+					// ignored
 				}
 			}
 		}
@@ -193,6 +194,7 @@ public class DefaultStateMachineService<S, E> implements StateMachineService<S, 
 				try {
 					listener.latch.await();
 				} catch (InterruptedException e) {
+					// ignored
 				}
 			}
 		}
@@ -204,7 +206,7 @@ public class DefaultStateMachineService<S, E> implements StateMachineService<S, 
 		final CountDownLatch latch = new CountDownLatch(1);
 		final StateMachine<S, E> stateMachine;
 
-		public StartListener(StateMachine<S, E> stateMachine) {
+		private StartListener(StateMachine<S, E> stateMachine) {
 			this.stateMachine = stateMachine;
 		}
 
@@ -220,7 +222,7 @@ public class DefaultStateMachineService<S, E> implements StateMachineService<S, 
 		final CountDownLatch latch = new CountDownLatch(1);
 		final StateMachine<S, E> stateMachine;
 
-		public StopListener(StateMachine<S, E> stateMachine) {
+		private StopListener(StateMachine<S, E> stateMachine) {
 			this.stateMachine = stateMachine;
 		}
 

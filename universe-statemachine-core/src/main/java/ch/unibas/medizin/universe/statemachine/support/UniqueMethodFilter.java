@@ -39,6 +39,7 @@ public class UniqueMethodFilter implements MethodFilter {
 		}
 	}
 
+	@Override
 	public boolean matches(Method method) {
 		return this.uniqueMethods.contains(method);
 	}

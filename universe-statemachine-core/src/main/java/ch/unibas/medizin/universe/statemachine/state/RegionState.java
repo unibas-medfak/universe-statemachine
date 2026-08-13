@@ -128,7 +128,7 @@ public class RegionState<S, E> extends AbstractState<S, E> {
 				State<S, E> state = r.getState();
 				if (state != null) {
 					if (state.getDeferredEvents().contains(event.getPayload())) {
-						defer = defer & true;
+						defer = defer && true;
 					} else {
 						defer = false;
 					}

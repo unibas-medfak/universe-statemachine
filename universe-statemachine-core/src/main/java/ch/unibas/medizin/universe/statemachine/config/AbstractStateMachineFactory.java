@@ -21,9 +21,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
-import java.util.Stack;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -59,7 +61,6 @@ import ch.unibas.medizin.universe.statemachine.listener.StateMachineListener;
 import ch.unibas.medizin.universe.statemachine.listener.StateMachineListenerAdapter;
 import ch.unibas.medizin.universe.statemachine.monitor.StateMachineMonitor;
 import ch.unibas.medizin.universe.statemachine.region.Region;
-import ch.unibas.medizin.universe.statemachine.security.StateMachineSecurityInterceptor;
 import ch.unibas.medizin.universe.statemachine.state.AbstractState;
 import ch.unibas.medizin.universe.statemachine.state.ChoicePseudoState;
 import ch.unibas.medizin.universe.statemachine.state.ChoicePseudoState.ChoiceStateData;
@@ -184,8 +185,8 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 		// find a correct mappings because they use state id's, not actual
 		// states.
 		final Map<S, State<S, E>> stateMap = new HashMap<>();
-		Stack<MachineStackItem<S, E>> regionStack = new Stack<>();
-		Stack<StateData<S, E>> stateStack = new Stack<>();
+		Deque<MachineStackItem<S, E>> regionStack = new ArrayDeque<>();
+		Deque<StateData<S, E>> stateStack = new ArrayDeque<>();
 		Map<Object, StateMachine<S, E>> machineMap = new HashMap<>();
 		List<HolderListItem<S, E>> holderList = new ArrayList<>();
 
@@ -193,11 +194,11 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 		while (iterator.hasNext()) {
 			Node<StateData<S, E>> node = iterator.next();
 			StateData<S, E> stateData = node.getData();
-			StateData<S, E> peek = stateStack.isEmpty() ? null : stateStack.peek();
+			StateData<S, E> peek = stateStack.isEmpty() ? null : stateStack.peekFirst();
 
 			// simply push and continue
 			if (stateStack.isEmpty()) {
-				stateStack.push(stateData);
+				stateStack.addFirst(stateData);
 				continue;
 			}
 
@@ -210,7 +211,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
             }
 
 			if (stateData != null && !stackContainsSameParent) {
-				stateStack.push(stateData);
+				stateStack.addFirst(stateData);
 				continue;
 			}
 
@@ -229,13 +230,13 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 					machine = buildMachine(machineMap, stateMap, holderList, regionStateDatas, transitionsData,
 							resolveBeanFactory(stateMachineModel), contextEvents, defaultExtendedState,
 							stateMachineModel.getTransitionsData(), mId, null, stateMachineModel);
-					regionStack.push(new MachineStackItem<>(machine));
+					regionStack.addFirst(new MachineStackItem<>(machine));
 					machines.add(machine);
 				}
 
 				Collection<Region<S, E>> regions = new ArrayList<>();
 				while (!regionStack.isEmpty()) {
-					MachineStackItem<S, E> pop = regionStack.pop();
+					MachineStackItem<S, E> pop = regionStack.removeFirst();
 					regions.add(pop.machine);
 				}
 				S parent = (S)peek.getParent();
@@ -268,7 +269,9 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 				}
 			}
 
-			stateStack.push(stateData);
+			if (stateData != null) {
+				stateStack.addFirst(stateData);
+			}
 		}
 
 		// setup autostart for top-level machine
@@ -316,17 +319,6 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 		}
 
 
-		// TODO: should error out if sec is enabled but spring-security is not in cp
-		if (stateMachineModel.getConfigurationData().isSecurityEnabled()) {
-			final StateMachineSecurityInterceptor<S, E> securityInterceptor = new StateMachineSecurityInterceptor<>(
-                    stateMachineModel.getConfigurationData().getTransitionSecurityAccessDecisionManager(),
-                    stateMachineModel.getConfigurationData().getEventSecurityAccessDecisionManager(),
-                    stateMachineModel.getConfigurationData().getEventSecurityRule());
-			log.info("Adding security interceptor " + securityInterceptor);
-			fmachine.getStateMachineAccessor()
-					.doWithAllRegions(function -> function.addStateMachineInterceptor(securityInterceptor));
-		}
-
 		// setup distributed state machine if needed.
 		// we wrap previously build machine with a distributed
 		// state machine and set it to use given ensemble.
@@ -365,7 +357,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 
 		private final StateMachineInterceptor<S, E> interceptor;
 
-		public RegionPersistingInterceptorAdapter(StateMachineInterceptor<S, E> interceptor) {
+		private RegionPersistingInterceptorAdapter(StateMachineInterceptor<S, E> interceptor) {
 			this.interceptor = interceptor;
 		}
 
@@ -432,10 +424,10 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 	}
 
 	private StateMachine<S, E> delegateAutoStartup(StateMachine<S, E> delegate) {
-		if (handleAutostartup && delegate instanceof SmartLifecycle && ((SmartLifecycle) delegate).isAutoStartup()) {
+		if (handleAutostartup && delegate instanceof SmartLifecycle smartLifecycle && smartLifecycle.isAutoStartup()) {
 			AutostartListener<S, E> autostartListener = new AutostartListener<>();
 			delegate.addStateListener(autostartListener);
-			((SmartLifecycle)delegate).start();
+			smartLifecycle.start();
 			try {
 				autostartListener.latch.await(30, TimeUnit.SECONDS);
 			} catch (Exception e) {
@@ -502,14 +494,14 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 		}
 	}
 
-	private static <S, E> Collection<StateData<S, E>> popSameParents(Stack<StateData<S, E>> stack) {
+	private static <S, E> Collection<StateData<S, E>> popSameParents(Deque<StateData<S, E>> stack) {
 		Collection<StateData<S, E>> data = new ArrayList<>();
 		Object parent = null;
 		if (!stack.isEmpty()) {
-			parent = stack.peek().getParent();
+			parent = stack.peekFirst().getParent();
 		}
-		while (!stack.isEmpty() && ObjectUtils.nullSafeEquals(parent, stack.peek().getParent())) {
-			data.add(stack.pop());
+		while (!stack.isEmpty() && ObjectUtils.nullSafeEquals(parent, stack.peekFirst().getParent())) {
+			data.add(stack.removeFirst());
 		}
 		return data;
 	}
@@ -519,7 +511,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 
 		final StateMachine<S, E> machine;
 
-		public MachineStackItem(StateMachine<S, E> machine) {
+		private MachineStackItem(StateMachine<S, E> machine) {
 			this.machine = machine;
 		}
 
@@ -818,7 +810,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 				List<JoinStateData<S, E>> joinTargets = new ArrayList<>();
 				Collection<TransitionData<S, E>> transitions = stateMachineTransitions.getTransitions();
 				for (TransitionData<S, E> tt : transitions) {
-					if (tt.getSource() == s) {
+					if (Objects.equals(tt.getSource(), s)) {
 						StateHolder<S, E> holder = new StateHolder<>(stateMap.get(tt.getTarget()));
 						if (holder.getState() == null) {
 							holderList.add(new HolderListItem<>(tt.getTarget(), holder));
@@ -862,7 +854,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 				}
 				DefaultExternalTransition<S, E> transition = new DefaultExternalTransition<>(stateMap.get(source),
                         stateMap.get(target), transitionData.getActions(), event, transitionData.getGuard(), trigger,
-                        transitionData.getSecurityRule(), transitionData.getName());
+                        transitionData.getName());
 				transitions.add(transition);
 
 			} else if (transitionData.getKind() == TransitionKind.LOCAL) {
@@ -872,12 +864,12 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 				}
 				DefaultLocalTransition<S, E> transition = new DefaultLocalTransition<>(stateMap.get(source),
                         stateMap.get(target), transitionData.getActions(), event, transitionData.getGuard(), trigger,
-                        transitionData.getSecurityRule(), transitionData.getName());
+                        transitionData.getName());
 				transitions.add(transition);
 			} else if (transitionData.getKind() == TransitionKind.INTERNAL) {
 				DefaultInternalTransition<S, E> transition = new DefaultInternalTransition<>(stateMap.get(source),
                         transitionData.getActions(), event, transitionData.getGuard(), trigger,
-                        transitionData.getSecurityRule(), transitionData.getName());
+                        transitionData.getName());
 				transitions.add(transition);
 			}
 		}
@@ -891,7 +883,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 						if (source != null && !source.isOrthogonal()) {
 							State<S, E> target = stateMap.get(entry.getKey());
 							DefaultExternalTransition<S, E> transition = new DefaultExternalTransition<>(
-                                    source, target, null, null, null, null, null);
+                                    source, target, null, null, null, null);
 							transitions.add(transition);
 						}
 					}
@@ -963,7 +955,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 		final S key;
 		final StateHolder<S, E> value;
 
-		public HolderListItem(S key, StateHolder<S, E> value) {
+		private HolderListItem(S key, StateHolder<S, E> value) {
 			this.key = key;
 			this.value = value;
 		}

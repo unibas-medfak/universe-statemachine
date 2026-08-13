@@ -19,9 +19,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -82,7 +82,7 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 
 	private final Map<Class<?>, HandlerMethod> handlerMessageMethods;
 
-	private final LinkedList<Map<Class<?>, HandlerMethod>> handlerMethodsList;
+	private final List<Map<Class<?>, HandlerMethod>> handlerMethodsList;
 
 	private final HandlerMethod handlerMethod;
 
@@ -170,7 +170,7 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 			this.handlerMethod = null;
 			this.handlerMethods = handlerMethods;
 			this.handlerMessageMethods = handlerMessageMethods;
-			this.handlerMethodsList = new LinkedList<>();
+			this.handlerMethodsList = new ArrayList<>();
 
 			// TODO Consider to use global option to determine a precedence of
 			// methods
@@ -187,8 +187,8 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 
 	private void setDisplayString(Object targetObject, Object targetMethod) {
 		StringBuilder sb = new StringBuilder(targetObject.getClass().getName());
-		if (targetMethod instanceof Method) {
-			sb.append("." + ((Method) targetMethod).getName());
+		if (targetMethod instanceof Method method) {
+			sb.append("." + method.getName());
 		} else if (targetMethod instanceof String) {
 			sb.append("." + targetMethod);
 		}
@@ -198,12 +198,12 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 	private void prepareEvaluationContext(StandardEvaluationContext context, Object method,
 			Class<? extends Annotation> annotationType) throws Exception {
 		Class<?> targetType = AopUtils.getTargetClass(this.targetObject);
-		if (method instanceof Method) {
-			context.registerMethodFilter(targetType, new FixedMethodFilter((Method) method));
+		if (method instanceof Method javaMethod) {
+			context.registerMethodFilter(targetType, new FixedMethodFilter(javaMethod));
 			if (expectedType != null) {
 				Assert.state(
 						context.getTypeConverter().canConvert(
-								TypeDescriptor.valueOf(((Method) method).getReturnType()),
+								TypeDescriptor.valueOf(javaMethod.getReturnType()),
 								TypeDescriptor.valueOf(expectedType)), "Cannot convert to expected type ("
 								+ expectedType + ") from " + method);
 			}
@@ -362,6 +362,7 @@ public class StateMachineMethodInvokerHelper<T, S, E> extends AbstractExpression
 		return targetClass;
 	}
 
+	@SuppressWarnings("unused")
 	private HandlerMethod findHandlerMethodForParameters(ParametersWrapper<S, E> parameters) {
 		if (this.handlerMethod != null) {
 			return this.handlerMethod;

@@ -23,7 +23,7 @@ import ch.unibas.medizin.universe.statemachine.config.common.annotation.Abstract
 import ch.unibas.medizin.universe.statemachine.config.common.annotation.AnnotationConfigurer;
 
 /**
- * @{@link Configuration} which is imported from @{@ EnableSimpleTest}.
+ * {@link Configuration} which is imported from {@link EnableSimpleTest}.
  *
  * @author Janne Valkealahti
  *

@@ -17,6 +17,7 @@ package ch.unibas.medizin.universe.statemachine.config.common.annotation.complex
 
 import java.util.List;
 
+import ch.unibas.medizin.universe.statemachine.config.common.annotation.simple.EnableSimpleTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +27,7 @@ import ch.unibas.medizin.universe.statemachine.config.common.annotation.Annotati
 import ch.unibas.medizin.universe.statemachine.config.common.annotation.simple.SimpleTestConfig;
 
 /**
- * @{@link Configuration} which is imported from @{@ EnableSimpleTest}.
+ * {@link Configuration} which is imported from {@link EnableSimpleTest}.
  *
  * @author Janne Valkealahti
  *

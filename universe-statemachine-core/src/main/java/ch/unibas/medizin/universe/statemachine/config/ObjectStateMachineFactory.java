@@ -20,7 +20,6 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.messaging.Message;
 import ch.unibas.medizin.universe.statemachine.ExtendedState;
 import ch.unibas.medizin.universe.statemachine.ObjectStateMachine;
@@ -86,15 +85,13 @@ public class ObjectStateMachineFactory<S, E> extends AbstractStateMachineFactory
 		if (beanFactory != null) {
 			machine.setBeanFactory(beanFactory);
 		}
-		if (machine instanceof BeanNameAware) {
-			//When using StateMachineFactory.getStateMachine() to generate state machine,
-			//which means name and id are null
-			//in that case set name to the default `stateMachine`
-			if ((machineId == null || machineId.isEmpty()) && (beanName == null || beanName.isEmpty())) {
-				beanName = StateMachineSystemConstants.DEFAULT_ID_STATEMACHINE;
-			}
-			machine.setBeanName(beanName);
+		//When using StateMachineFactory.getStateMachine() to generate state machine,
+		//which means name and id are null
+		//in that case set name to the default `stateMachine`
+		if ((machineId == null || machineId.isEmpty()) && (beanName == null || beanName.isEmpty())) {
+			beanName = StateMachineSystemConstants.DEFAULT_ID_STATEMACHINE;
 		}
+		machine.setBeanName(beanName);
 		return machine;
 	}
 
