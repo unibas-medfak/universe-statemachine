@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.function.Function;
 
 import ch.unibas.medizin.universe.statemachine.StateContext;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule;
 import ch.unibas.medizin.universe.statemachine.transition.TransitionKind;
 
 import reactor.core.publisher.Mono;
@@ -40,7 +39,6 @@ public class TransitionData<S, E> {
 	private final Collection<Function<StateContext<S, E>, Mono<Void>>> actions;
 	private final Function<StateContext<S, E>, Mono<Boolean>> guard;
 	private final TransitionKind kind;
-	private final SecurityRule securityRule;
 	private final String name;
 
 	/**
@@ -51,7 +49,7 @@ public class TransitionData<S, E> {
 	 * @param event the event
 	 */
 	public TransitionData(S source, S target, E event) {
-		this(source, target, null, event, null, null, null, null, TransitionKind.EXTERNAL, null, null);
+		this(source, target, null, event, null, null, null, null, TransitionKind.EXTERNAL, null);
 	}
 
 	/**
@@ -66,7 +64,7 @@ public class TransitionData<S, E> {
 	 */
 	public TransitionData(S source, S target, E event, Collection<Function<StateContext<S, E>, Mono<Void>>> actions,
 			Function<StateContext<S, E>, Mono<Boolean>> guard, TransitionKind kind) {
-		this(source, target, null, event, null, null, actions, guard, kind, null, null);
+		this(source, target, null, event, null, null, actions, guard, kind, null);
 	}
 
 	/**
@@ -82,7 +80,7 @@ public class TransitionData<S, E> {
 	 */
 	public TransitionData(S source, S target, E event, Collection<Function<StateContext<S, E>, Mono<Void>>> actions,
 			Function<StateContext<S, E>, Mono<Boolean>> guard, TransitionKind kind, String name) {
-		this(source, target, null, event, null, null, actions, guard, kind, null, name);
+		this(source, target, null, event, null, null, actions, guard, kind, name);
 	}
 
 	/**
@@ -99,7 +97,7 @@ public class TransitionData<S, E> {
 	public TransitionData(S source, S target, Long period, Integer count,
 			Collection<Function<StateContext<S, E>, Mono<Void>>> actions,
 			Function<StateContext<S, E>, Mono<Boolean>> guard, TransitionKind kind) {
-		this(source, target, null, null, period, count, actions, guard, kind, null, null);
+		this(source, target, null, null, period, count, actions, guard, kind, null);
 	}
 
 	/**
@@ -117,7 +115,7 @@ public class TransitionData<S, E> {
 	public TransitionData(S source, S target, Long period, Integer count,
 			Collection<Function<StateContext<S, E>, Mono<Void>>> actions,
 			Function<StateContext<S, E>, Mono<Boolean>> guard, TransitionKind kind, String name) {
-		this(source, target, null, null, period, count, actions, guard, kind, null, name);
+		this(source, target, null, null, period, count, actions, guard, kind, name);
 	}
 
 	/**
@@ -132,12 +130,11 @@ public class TransitionData<S, E> {
 	 * @param actions the actions
 	 * @param guard the guard
 	 * @param kind the kind
-	 * @param securityRule the security rule
 	 * @param name the name
 	 */
 	public TransitionData(S source, S target, S state, E event, Long period, Integer count,
 			Collection<Function<StateContext<S, E>, Mono<Void>>> actions,
-			Function<StateContext<S, E>, Mono<Boolean>> guard, TransitionKind kind, SecurityRule securityRule, String name) {
+			Function<StateContext<S, E>, Mono<Boolean>> guard, TransitionKind kind, String name) {
 		this.source = source;
 		this.target = target;
 		this.state = state;
@@ -147,7 +144,6 @@ public class TransitionData<S, E> {
 		this.actions = actions;
 		this.guard = guard;
 		this.kind = kind;
-		this.securityRule = securityRule;
 		this.name = (name == null) ? "" : name;
 	}
 
@@ -230,15 +226,6 @@ public class TransitionData<S, E> {
 	 */
 	public TransitionKind getKind() {
 		return kind;
-	}
-
-	/**
-	 * Gets the security rule.
-	 *
-	 * @return the security rule
-	 */
-	public SecurityRule getSecurityRule() {
-		return securityRule;
 	}
 
 	/**

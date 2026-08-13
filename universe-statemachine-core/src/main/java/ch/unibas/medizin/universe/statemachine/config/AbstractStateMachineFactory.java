@@ -61,7 +61,6 @@ import ch.unibas.medizin.universe.statemachine.listener.StateMachineListener;
 import ch.unibas.medizin.universe.statemachine.listener.StateMachineListenerAdapter;
 import ch.unibas.medizin.universe.statemachine.monitor.StateMachineMonitor;
 import ch.unibas.medizin.universe.statemachine.region.Region;
-import ch.unibas.medizin.universe.statemachine.security.StateMachineSecurityInterceptor;
 import ch.unibas.medizin.universe.statemachine.state.AbstractState;
 import ch.unibas.medizin.universe.statemachine.state.ChoicePseudoState;
 import ch.unibas.medizin.universe.statemachine.state.ChoicePseudoState.ChoiceStateData;
@@ -319,17 +318,6 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 			((LifecycleObjectSupport)m).afterPropertiesSet();
 		}
 
-
-		// TODO: should error out if sec is enabled but spring-security is not in cp
-		if (stateMachineModel.getConfigurationData().isSecurityEnabled()) {
-			final StateMachineSecurityInterceptor<S, E> securityInterceptor = new StateMachineSecurityInterceptor<>(
-                    stateMachineModel.getConfigurationData().getTransitionAuthorizationManager(),
-                    stateMachineModel.getConfigurationData().getEventAuthorizationManager(),
-                    stateMachineModel.getConfigurationData().getEventSecurityRule());
-			log.info("Adding security interceptor " + securityInterceptor);
-			fmachine.getStateMachineAccessor()
-					.doWithAllRegions(function -> function.addStateMachineInterceptor(securityInterceptor));
-		}
 
 		// setup distributed state machine if needed.
 		// we wrap previously build machine with a distributed
@@ -866,7 +854,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 				}
 				DefaultExternalTransition<S, E> transition = new DefaultExternalTransition<>(stateMap.get(source),
                         stateMap.get(target), transitionData.getActions(), event, transitionData.getGuard(), trigger,
-                        transitionData.getSecurityRule(), transitionData.getName());
+                        transitionData.getName());
 				transitions.add(transition);
 
 			} else if (transitionData.getKind() == TransitionKind.LOCAL) {
@@ -876,12 +864,12 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 				}
 				DefaultLocalTransition<S, E> transition = new DefaultLocalTransition<>(stateMap.get(source),
                         stateMap.get(target), transitionData.getActions(), event, transitionData.getGuard(), trigger,
-                        transitionData.getSecurityRule(), transitionData.getName());
+                        transitionData.getName());
 				transitions.add(transition);
 			} else if (transitionData.getKind() == TransitionKind.INTERNAL) {
 				DefaultInternalTransition<S, E> transition = new DefaultInternalTransition<>(stateMap.get(source),
                         transitionData.getActions(), event, transitionData.getGuard(), trigger,
-                        transitionData.getSecurityRule(), transitionData.getName());
+                        transitionData.getName());
 				transitions.add(transition);
 			}
 		}
@@ -895,7 +883,7 @@ public abstract class AbstractStateMachineFactory<S, E> extends LifecycleObjectS
 						if (source != null && !source.isOrthogonal()) {
 							State<S, E> target = stateMap.get(entry.getKey());
 							DefaultExternalTransition<S, E> transition = new DefaultExternalTransition<>(
-                                    source, target, null, null, null, null, null);
+                                    source, target, null, null, null, null);
 							transitions.add(transition);
 						}
 					}

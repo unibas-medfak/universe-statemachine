@@ -22,7 +22,6 @@ import ch.unibas.medizin.universe.statemachine.action.Action;
 import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineTransitionConfigurer;
 import ch.unibas.medizin.universe.statemachine.config.common.annotation.AnnotationConfigurerBuilder;
 import ch.unibas.medizin.universe.statemachine.guard.Guard;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule.ComparisonType;
 import ch.unibas.medizin.universe.statemachine.transition.Transition;
 
 import reactor.core.publisher.Mono;
@@ -120,23 +119,6 @@ public interface TransitionConfigurer<T, S, E> extends
 	 * @return configurer for chaining
 	 */
 	T guardExpression(String expression);
-
-	/**
-	 * Specify a security attributes for this {@link Transition}.
-	 *
-	 * @param attributes the security attributes
-	 * @param match the match type
-	 * @return configurer for chaining
-	 */
-	T secured(String attributes, ComparisonType match);
-
-	/**
-	 * Specify a security expression for this {@link Transition}.
-	 *
-	 * @param expression the security expression
-	 * @return configurer for chaining
-	 */
-	T secured(String expression);
 
 	/**
 	 * Specify a name for this {@link Transition}.

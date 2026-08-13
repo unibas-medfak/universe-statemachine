@@ -40,13 +40,6 @@
 			<artifactId>jspecify</artifactId>
 		</dependency>
 
-		<!-- optional 'org.springframework.security:spring-security-core' -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<optional>true</optional>
-		</dependency>
-
 		<!-- compileOnly 'com.google.code.findbugs:jsr305' -->
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
@@ -94,16 +87,6 @@
 		<dependency>
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

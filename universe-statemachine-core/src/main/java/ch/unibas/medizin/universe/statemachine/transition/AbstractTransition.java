@@ -23,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import ch.unibas.medizin.universe.statemachine.StateContext;
 import ch.unibas.medizin.universe.statemachine.action.ActionListener;
 import ch.unibas.medizin.universe.statemachine.action.CompositeActionListener;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule;
 import ch.unibas.medizin.universe.statemachine.state.State;
 import ch.unibas.medizin.universe.statemachine.trigger.Trigger;
 import org.springframework.util.Assert;
@@ -48,7 +47,6 @@ public abstract class AbstractTransition<S, E> implements Transition<S, E> {
 	private final TransitionKind kind;
 	private final Function<StateContext<S, E>, Mono<Boolean>> guard;
 	private final Trigger<S, E> trigger;
-	private final SecurityRule securityRule;
 	private final String name;
 	private CompositeActionListener<S, E> actionListener;
 
@@ -66,7 +64,7 @@ public abstract class AbstractTransition<S, E> implements Transition<S, E> {
 	public AbstractTransition(State<S, E> source, State<S, E> target,
 			Collection<Function<StateContext<S, E>, Mono<Void>>> actions, E event, TransitionKind kind,
 			Function<StateContext<S, E>, Mono<Boolean>> guard, Trigger<S, E> trigger) {
-		this(source, target, actions, event, kind, guard, trigger, null, null);
+		this(source, target, actions, event, kind, guard, trigger, null);
 	}
 
 	/**
@@ -79,11 +77,11 @@ public abstract class AbstractTransition<S, E> implements Transition<S, E> {
 	 * @param kind the kind
 	 * @param guard the guard
 	 * @param trigger the trigger
-	 * @param securityRule the security rule
+	 * @param name the name
 	 */
 	public AbstractTransition(State<S, E> source, State<S, E> target,
 			Collection<Function<StateContext<S, E>, Mono<Void>>> actions, E event, TransitionKind kind,
-			Function<StateContext<S, E>, Mono<Boolean>> guard, Trigger<S, E> trigger, SecurityRule securityRule, String name) {
+			Function<StateContext<S, E>, Mono<Boolean>> guard, Trigger<S, E> trigger, String name) {
 		Assert.notNull(kind, "Transition type must be set");
 		this.source = source;
 		this.target = target;
@@ -91,7 +89,6 @@ public abstract class AbstractTransition<S, E> implements Transition<S, E> {
 		this.kind = kind;
 		this.guard = guard;
 		this.trigger = trigger;
-		this.securityRule = securityRule;
 		this.name = (name == null) ? "" : name;
 	}
 
@@ -125,11 +122,6 @@ public abstract class AbstractTransition<S, E> implements Transition<S, E> {
 	@Override
 	public TransitionKind getKind() {
 		return kind;
-	}
-
-	@Override
-	public SecurityRule getSecurityRule() {
-		return securityRule;
 	}
 
 	@Override

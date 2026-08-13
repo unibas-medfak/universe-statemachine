@@ -28,8 +28,6 @@ import ch.unibas.medizin.universe.statemachine.config.common.annotation.Annotati
 import ch.unibas.medizin.universe.statemachine.config.model.TransitionsData;
 import ch.unibas.medizin.universe.statemachine.guard.Guard;
 import ch.unibas.medizin.universe.statemachine.guard.Guards;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule.ComparisonType;
 
 import reactor.core.publisher.Mono;
 
@@ -52,7 +50,6 @@ public abstract class AbstractTransitionConfigurer<S, E> extends
 	private Integer count;
 	private final Collection<Function<StateContext<S, E>, Mono<Void>>> actions = new ArrayList<>();
 	private Function<StateContext<S, E>, Mono<Boolean>> guard;
-	private SecurityRule securityRule;
 	private String name;
 
 	protected S getSource() {
@@ -90,10 +87,6 @@ public abstract class AbstractTransitionConfigurer<S, E> extends
 
 	protected Function<StateContext<S, E>, Mono<Boolean>> getGuard() {
 		return guard;
-	}
-
-	protected SecurityRule getSecurityRule() {
-		return securityRule;
 	}
 
 	protected String getName() {
@@ -147,20 +140,6 @@ public abstract class AbstractTransitionConfigurer<S, E> extends
 
 	protected void setGuardFunction(Function<StateContext<S, E>, Mono<Boolean>> guard) {
 		this.guard = guard;
-	}
-
-	protected void setSecurityRule(String attributes, ComparisonType match) {
-		if (securityRule == null) {
-			securityRule = new SecurityRule();
-		}
-		securityRule.setAttributes(SecurityRule.commaDelimitedListToSecurityAttributes(attributes));
-	}
-
-	protected void setSecurityRule(String expression) {
-		if (securityRule == null) {
-			securityRule = new SecurityRule();
-		}
-		securityRule.setExpression(expression);
 	}
 
 	protected void setName(String name) {

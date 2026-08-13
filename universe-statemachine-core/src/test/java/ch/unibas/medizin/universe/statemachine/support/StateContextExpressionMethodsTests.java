@@ -42,7 +42,6 @@ import ch.unibas.medizin.universe.statemachine.StateMachineEventResult;
 import ch.unibas.medizin.universe.statemachine.access.StateMachineAccessor;
 import ch.unibas.medizin.universe.statemachine.action.ActionListener;
 import ch.unibas.medizin.universe.statemachine.listener.StateMachineListener;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule;
 import ch.unibas.medizin.universe.statemachine.state.EnumState;
 import ch.unibas.medizin.universe.statemachine.state.State;
 import ch.unibas.medizin.universe.statemachine.transition.Transition;
@@ -143,11 +142,6 @@ public class StateContextExpressionMethodsTests {
 
 		@Override
 		public TransitionKind getKind() {
-			return null;
-		}
-
-		@Override
-		public SecurityRule getSecurityRule() {
 			return null;
 		}
 

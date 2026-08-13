@@ -28,14 +28,12 @@ import java.util.Map;
 import ch.unibas.medizin.universe.statemachine.config.model.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.security.authorization.AuthorizationManager;
 import ch.unibas.medizin.universe.statemachine.StateMachine;
 import ch.unibas.medizin.universe.statemachine.config.ObjectStateMachineFactory;
 import ch.unibas.medizin.universe.statemachine.config.model.verifier.DefaultStateMachineModelVerifier;
 import ch.unibas.medizin.universe.statemachine.config.model.verifier.StateMachineModelVerifier;
 import ch.unibas.medizin.universe.statemachine.ensemble.StateMachineEnsemble;
 import ch.unibas.medizin.universe.statemachine.listener.StateMachineListener;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule;
 import ch.unibas.medizin.universe.statemachine.transition.TransitionKind;
 
 public class StateMachineModelTests {
@@ -46,17 +44,11 @@ public class StateMachineModelTests {
 		boolean autoStart = false;
 		StateMachineEnsemble<String, String> ensemble = null;
 		List<StateMachineListener<String, String>> listeners = new ArrayList<>();
-		boolean securityEnabled = false;
-		AuthorizationManager<Object> transitionSecurityAccessDecisionManager = null;
-		AuthorizationManager<Object> eventSecurityAccessDecisionManager = null;
-		SecurityRule eventSecurityRule = null;
-		SecurityRule transitionSecurityRule = null;
 		boolean verifierEnabled = true;
 		StateMachineModelVerifier<String, String> verifier = new DefaultStateMachineModelVerifier<>();
 
 		ConfigurationData<String, String> configurationData = new ConfigurationData<>(beanFactory, autoStart, ensemble,
-				listeners, securityEnabled, transitionSecurityAccessDecisionManager, eventSecurityAccessDecisionManager,
-				eventSecurityRule, transitionSecurityRule, verifierEnabled, verifier, null, null, null);
+				listeners, verifierEnabled, verifier, null, null, null);
 
 		Collection<StateData<String, String>> stateData = new ArrayList<>();
 		StateData<String, String> stateData1 = new StateData<>(null, null, "S1", null, null, null);
@@ -68,7 +60,7 @@ public class StateMachineModelTests {
 
 
 		Collection<TransitionData<String, String>> transitions = new ArrayList<>();
-		TransitionData<String, String> transitionData1 = new TransitionData<>("S1", "S2", null, "E1", null, null, null, null, TransitionKind.EXTERNAL, null, "");
+		TransitionData<String, String> transitionData1 = new TransitionData<>("S1", "S2", null, "E1", null, null, null, null, TransitionKind.EXTERNAL, "");
 		transitions.add(transitionData1);
 		Map<String, List<ChoiceData<String, String>>> choices = new HashMap<>();
 		Map<String, List<JunctionData<String, String>>> junctions = new HashMap<>();

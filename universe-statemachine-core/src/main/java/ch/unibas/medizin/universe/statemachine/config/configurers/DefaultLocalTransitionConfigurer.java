@@ -25,7 +25,6 @@ import ch.unibas.medizin.universe.statemachine.action.Action;
 import ch.unibas.medizin.universe.statemachine.config.builders.StateMachineTransitionBuilder;
 import ch.unibas.medizin.universe.statemachine.guard.Guard;
 import ch.unibas.medizin.universe.statemachine.guard.SpelExpressionGuard;
-import ch.unibas.medizin.universe.statemachine.security.SecurityRule.ComparisonType;
 import ch.unibas.medizin.universe.statemachine.transition.TransitionKind;
 
 import reactor.core.publisher.Mono;
@@ -43,7 +42,7 @@ public class DefaultLocalTransitionConfigurer<S, E> extends AbstractTransitionCo
 	@Override
 	public void configure(StateMachineTransitionBuilder<S, E> builder) throws Exception {
 		builder.addTransition(getSource(), getTarget(), getState(), getEvent(), getPeriod(), getCount(), getActions(), getGuard(), TransitionKind.LOCAL,
-				getSecurityRule(), getName());
+				getName());
 	}
 
 	@Override
@@ -111,18 +110,6 @@ public class DefaultLocalTransitionConfigurer<S, E> extends AbstractTransitionCo
 		SpelExpressionParser parser = new SpelExpressionParser(
 				new SpelParserConfiguration(SpelCompilerMode.MIXED, null));
 		setGuard(new SpelExpressionGuard<>(parser.parseExpression(expression)));
-		return this;
-	}
-
-	@Override
-	public LocalTransitionConfigurer<S, E> secured(String attributes, ComparisonType match) {
-		setSecurityRule(attributes, match);
-		return this;
-	}
-
-	@Override
-	public LocalTransitionConfigurer<S, E> secured(String expression) {
-		setSecurityRule(expression);
 		return this;
 	}
 
