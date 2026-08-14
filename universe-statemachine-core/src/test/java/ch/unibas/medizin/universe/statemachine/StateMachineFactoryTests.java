@@ -24,7 +24,6 @@ import java.util.EnumSet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import ch.unibas.medizin.universe.statemachine.StateMachine;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

@@ -22,7 +22,6 @@ import static org.hamcrest.CoreMatchers.is;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ch.unibas.medizin.universe.statemachine.state.ObjectState;
 import org.junit.jupiter.api.Test;
 import ch.unibas.medizin.universe.statemachine.StateContext;
 import ch.unibas.medizin.universe.statemachine.action.ReactiveAction;

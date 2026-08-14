@@ -22,9 +22,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ch.unibas.medizin.universe.statemachine.state.JoinPseudoState;
-import ch.unibas.medizin.universe.statemachine.state.ObjectState;
-import ch.unibas.medizin.universe.statemachine.state.State;
 import org.junit.jupiter.api.Test;
 import ch.unibas.medizin.universe.statemachine.TestUtils;
 

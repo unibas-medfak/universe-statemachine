@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
 
-import ch.unibas.medizin.universe.statemachine.ObjectStateMachine;
-import ch.unibas.medizin.universe.statemachine.StateContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;

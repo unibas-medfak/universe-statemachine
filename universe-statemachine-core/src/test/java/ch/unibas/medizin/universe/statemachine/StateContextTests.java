@@ -25,8 +25,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import ch.unibas.medizin.universe.statemachine.StateContext;
-import ch.unibas.medizin.universe.statemachine.StateMachine;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;

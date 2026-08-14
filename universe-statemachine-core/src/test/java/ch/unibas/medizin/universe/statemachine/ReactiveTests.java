@@ -23,10 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import ch.unibas.medizin.universe.statemachine.ObjectStateMachine;
-import ch.unibas.medizin.universe.statemachine.StateMachine;
-import ch.unibas.medizin.universe.statemachine.StateMachineEventResult;
-import ch.unibas.medizin.universe.statemachine.StateMachineSystemConstants;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

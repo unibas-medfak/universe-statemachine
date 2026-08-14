@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import ch.unibas.medizin.universe.statemachine.support.TransitionComparator;
 import org.junit.jupiter.api.Test;
 import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests.TestEvents;
 import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests.TestStates;

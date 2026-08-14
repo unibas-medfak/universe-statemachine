@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.unibas.medizin.universe.statemachine.config.model.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.BeanFactory;
 import ch.unibas.medizin.universe.statemachine.StateMachine;

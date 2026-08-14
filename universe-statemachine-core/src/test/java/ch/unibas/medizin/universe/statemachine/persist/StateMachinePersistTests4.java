@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import ch.unibas.medizin.universe.statemachine.persist.DefaultStateMachinePersister;
-import ch.unibas.medizin.universe.statemachine.persist.StateMachinePersister;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;

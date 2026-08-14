@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
-import ch.unibas.medizin.universe.statemachine.support.ReactiveLifecycleManager;
 import org.junit.jupiter.api.Test;
 import ch.unibas.medizin.universe.statemachine.support.ReactiveLifecycleManager.LifecycleState;
 

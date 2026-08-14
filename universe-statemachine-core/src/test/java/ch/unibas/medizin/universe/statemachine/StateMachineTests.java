@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import ch.unibas.medizin.universe.statemachine.StateContext;
-import ch.unibas.medizin.universe.statemachine.StateMachine;
-import ch.unibas.medizin.universe.statemachine.StateMachineSystemConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;

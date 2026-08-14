@@ -26,9 +26,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ch.unibas.medizin.universe.statemachine.trigger.TimerTrigger;
-import ch.unibas.medizin.universe.statemachine.trigger.Trigger;
-import ch.unibas.medizin.universe.statemachine.trigger.TriggerListener;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;

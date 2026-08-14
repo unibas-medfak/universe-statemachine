@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ch.unibas.medizin.universe.statemachine.StateContext;
-import ch.unibas.medizin.universe.statemachine.StateMachine;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.AfterEach;

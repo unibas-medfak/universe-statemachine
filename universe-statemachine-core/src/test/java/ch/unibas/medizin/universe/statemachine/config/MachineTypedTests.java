@@ -17,10 +17,6 @@ package ch.unibas.medizin.universe.statemachine.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.unibas.medizin.universe.statemachine.config.EnableStateMachine;
-import ch.unibas.medizin.universe.statemachine.config.EnableStateMachineFactory;
-import ch.unibas.medizin.universe.statemachine.config.EnumStateMachineConfigurerAdapter;
-import ch.unibas.medizin.universe.statemachine.config.StateMachineFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

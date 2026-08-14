@@ -23,9 +23,6 @@ import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import ch.unibas.medizin.universe.statemachine.ObjectStateMachine;
-import ch.unibas.medizin.universe.statemachine.StateContext;
-import ch.unibas.medizin.universe.statemachine.StateMachineSystemConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;

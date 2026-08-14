@@ -20,7 +20,6 @@ import java.util.Set;
 
 import ch.unibas.medizin.universe.statemachine.StateMachine;
 import ch.unibas.medizin.universe.statemachine.StateMachineContext;
-import ch.unibas.medizin.universe.statemachine.ensemble.StateMachineEnsembleObjectSupport;
 
 public class InMemoryStateMachineEnsemble<S, E> extends StateMachineEnsembleObjectSupport<S, E> {
 

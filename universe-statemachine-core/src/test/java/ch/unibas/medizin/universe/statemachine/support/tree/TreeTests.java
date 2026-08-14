@@ -15,8 +15,6 @@
  */
 package ch.unibas.medizin.universe.statemachine.support.tree;
 
-import ch.unibas.medizin.universe.statemachine.support.tree.Tree;
-import ch.unibas.medizin.universe.statemachine.support.tree.TreeTraverser;
 import org.junit.jupiter.api.Test;
 import ch.unibas.medizin.universe.statemachine.support.tree.Tree.Node;
 

@@ -17,8 +17,6 @@ package ch.unibas.medizin.universe.statemachine.ensemble;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.unibas.medizin.universe.statemachine.ensemble.DistributedStateMachine;
-import ch.unibas.medizin.universe.statemachine.ensemble.StateMachineEnsemble;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;

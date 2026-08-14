@@ -15,8 +15,6 @@
  */
 package ch.unibas.medizin.universe.statemachine.annotation;
 
-import ch.unibas.medizin.universe.statemachine.annotation.OnTransition;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

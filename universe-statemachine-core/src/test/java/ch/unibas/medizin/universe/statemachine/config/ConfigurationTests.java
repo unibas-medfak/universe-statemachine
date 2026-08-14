@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
-import ch.unibas.medizin.universe.statemachine.config.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.BeanFactory;

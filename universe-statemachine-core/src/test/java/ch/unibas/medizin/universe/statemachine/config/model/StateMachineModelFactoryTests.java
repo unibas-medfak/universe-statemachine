@@ -27,7 +27,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
-import ch.unibas.medizin.universe.statemachine.config.model.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;

@@ -22,10 +22,6 @@ import static ch.unibas.medizin.universe.statemachine.TestUtils.doStartAndAssert
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import ch.unibas.medizin.universe.statemachine.config.ObjectStateMachineFactory;
-import ch.unibas.medizin.universe.statemachine.config.StateMachineBuilder;
-import ch.unibas.medizin.universe.statemachine.config.StateMachineConfig;
-import ch.unibas.medizin.universe.statemachine.config.StateMachineConfigurerAdapter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.support.StaticListableBeanFactory;
 import org.springframework.context.SmartLifecycle;

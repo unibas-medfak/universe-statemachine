@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 import java.util.Collection;
 
-import ch.unibas.medizin.universe.statemachine.config.configurers.DefaultStateConfigurer;
 import org.junit.jupiter.api.Test;
 import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests.TestEntryAction;
 import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests.TestEvents;

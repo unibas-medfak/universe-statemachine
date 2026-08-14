@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.EnumSet;
 import java.util.concurrent.CountDownLatch;
 
-import ch.unibas.medizin.universe.statemachine.processor.StateMachineHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;

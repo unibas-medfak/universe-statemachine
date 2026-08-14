@@ -22,8 +22,6 @@ import static ch.unibas.medizin.universe.statemachine.TestUtils.resolveFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.unibas.medizin.universe.statemachine.persist.DefaultStateMachinePersister;
-import ch.unibas.medizin.universe.statemachine.persist.StateMachinePersister;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;

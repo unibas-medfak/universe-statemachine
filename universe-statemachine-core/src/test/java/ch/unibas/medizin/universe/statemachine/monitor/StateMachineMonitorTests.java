@@ -26,8 +26,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import ch.unibas.medizin.universe.statemachine.monitor.AbstractStateMachineMonitor;
-import ch.unibas.medizin.universe.statemachine.monitor.StateMachineMonitor;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;

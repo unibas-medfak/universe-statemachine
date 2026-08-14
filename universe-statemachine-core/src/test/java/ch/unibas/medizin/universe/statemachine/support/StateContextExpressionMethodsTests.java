@@ -25,9 +25,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-import ch.unibas.medizin.universe.statemachine.support.DefaultExtendedState;
-import ch.unibas.medizin.universe.statemachine.support.DefaultStateContext;
-import ch.unibas.medizin.universe.statemachine.support.StateContextExpressionMethods;
 import org.junit.jupiter.api.Test;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;

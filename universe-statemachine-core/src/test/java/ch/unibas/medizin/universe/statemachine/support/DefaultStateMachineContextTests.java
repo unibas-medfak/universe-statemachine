@@ -17,8 +17,6 @@ package ch.unibas.medizin.universe.statemachine.support;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.unibas.medizin.universe.statemachine.support.DefaultExtendedState;
-import ch.unibas.medizin.universe.statemachine.support.DefaultStateMachineContext;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

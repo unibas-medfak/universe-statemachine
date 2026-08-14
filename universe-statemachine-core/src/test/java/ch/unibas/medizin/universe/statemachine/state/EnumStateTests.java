@@ -17,8 +17,6 @@ package ch.unibas.medizin.universe.statemachine.state;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.unibas.medizin.universe.statemachine.state.EnumState;
-import ch.unibas.medizin.universe.statemachine.state.State;
 import org.junit.jupiter.api.Test;
 import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests.TestEvents;
 import ch.unibas.medizin.universe.statemachine.AbstractStateMachineTests.TestStates;

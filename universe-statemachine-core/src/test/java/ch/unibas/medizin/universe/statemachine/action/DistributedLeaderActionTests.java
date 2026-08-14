@@ -22,8 +22,6 @@ import static ch.unibas.medizin.universe.statemachine.TestUtils.resolveFactory;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import ch.unibas.medizin.universe.statemachine.action.Action;
-import ch.unibas.medizin.universe.statemachine.action.DistributedLeaderAction;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;

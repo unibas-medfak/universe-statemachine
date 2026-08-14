@@ -17,10 +17,6 @@ package ch.unibas.medizin.universe.statemachine.listener;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.unibas.medizin.universe.statemachine.listener.CompositeStateMachineListener;
-import ch.unibas.medizin.universe.statemachine.listener.OrderedComposite;
-import ch.unibas.medizin.universe.statemachine.listener.StateMachineListener;
-import ch.unibas.medizin.universe.statemachine.listener.StateMachineListenerAdapter;
 import org.junit.jupiter.api.Test;
 import ch.unibas.medizin.universe.statemachine.TestUtils;
 

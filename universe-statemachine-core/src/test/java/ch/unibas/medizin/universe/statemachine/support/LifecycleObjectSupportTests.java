@@ -17,7 +17,6 @@ package ch.unibas.medizin.universe.statemachine.support;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.unibas.medizin.universe.statemachine.support.LifecycleObjectSupport;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 

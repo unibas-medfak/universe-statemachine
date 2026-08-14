@@ -23,7 +23,6 @@ import static ch.unibas.medizin.universe.statemachine.TestUtils.resolveMachine;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
-import ch.unibas.medizin.universe.statemachine.transition.TransitionConflictPolicy;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;

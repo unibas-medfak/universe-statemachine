@@ -21,7 +21,6 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.unibas.medizin.universe.statemachine.guard.SpelExpressionGuard;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;

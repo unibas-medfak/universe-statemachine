@@ -21,8 +21,6 @@ import static ch.unibas.medizin.universe.statemachine.TestUtils.doStartAndAssert
 
 import java.util.HashMap;
 
-import ch.unibas.medizin.universe.statemachine.persist.DefaultStateMachinePersister;
-import ch.unibas.medizin.universe.statemachine.persist.StateMachinePersister;
 import org.junit.jupiter.api.Test;
 import ch.unibas.medizin.universe.statemachine.StateMachine;
 import ch.unibas.medizin.universe.statemachine.StateMachineContext;

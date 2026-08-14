@@ -19,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Map;
 
-import ch.unibas.medizin.universe.statemachine.service.DefaultStateMachineService;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.Lifecycle;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

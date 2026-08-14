@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import ch.unibas.medizin.universe.statemachine.access.StateMachineAccess;
-import ch.unibas.medizin.universe.statemachine.access.StateMachineAccessor;
 import org.junit.jupiter.api.Test;
 import org.springframework.messaging.Message;
 import ch.unibas.medizin.universe.statemachine.ExtendedState;

@@ -21,8 +21,6 @@ import static org.mockito.Mockito.mock;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import ch.unibas.medizin.universe.statemachine.processor.StateMachineHandler;
-import ch.unibas.medizin.universe.statemachine.processor.StateMachineRuntime;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.messaging.Message;

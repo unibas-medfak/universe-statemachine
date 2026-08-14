@@ -28,10 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import ch.unibas.medizin.universe.statemachine.ExtendedState;
-import ch.unibas.medizin.universe.statemachine.StateContext;
-import ch.unibas.medizin.universe.statemachine.StateMachine;
-import ch.unibas.medizin.universe.statemachine.StateMachineContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
