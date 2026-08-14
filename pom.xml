@@ -180,6 +180,10 @@
 		     fast. Activate with `-Prelease`. -->
 		<profile>
 			<id>release</id>
+			<properties>
+				<!-- Publishing goes through the Central Portal, not deploy:deploy. -->
+				<maven.deploy.skip>true</maven.deploy.skip>
+			</properties>
 			<build>
 				<plugins>
 					<!-- Replaces maven-deploy-plugin: uploads the bundle to the Central
@@ -195,6 +199,18 @@
 							     the Central Portal. Set to true to release automatically. -->
 							<autoPublish>false</autoPublish>
 						</configuration>
+						<!-- Bound by hand: under Maven 4 the plugin's extension suppresses
+						     deploy:deploy but does not bind publish, so `deploy` would
+						     otherwise succeed without uploading anything. -->
+						<executions>
+							<execution>
+								<id>publish-to-central</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>publish</goal>
+								</goals>
+							</execution>
+						</executions>
 					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
