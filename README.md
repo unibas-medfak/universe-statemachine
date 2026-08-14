@@ -96,6 +96,12 @@ The project builds with the Maven wrapper (Maven 4):
 ./mvnw clean verify
 ```
 
+Publish to Maven Central:
+
+```bash
+./mvnw -Prelease deploy
+```
+
 ## License
 
 Universe Statemachine is Open Source software released under the
