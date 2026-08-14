@@ -47,7 +47,6 @@
 	</issueManagement>
 
 	<subprojects>
-		<subproject>universe-statemachine-platform</subproject>
 		<subproject>universe-statemachine-core</subproject>
 		<subproject>universe-statemachine-autoconfigure</subproject>
 		<subproject>universe-statemachine-starter</subproject>
@@ -55,7 +54,7 @@
 
 	<properties>
 		<!-- Single source of truth for the project version (CI-friendly). -->
-		<revision>0.0.2</revision>
+		<revision>1.0.0</revision>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -176,20 +175,6 @@
 		</pluginManagement>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>spring-milestones</id>
-			<url>https://repo.spring.io/milestone</url>
-			<snapshots><enabled>false</enabled></snapshots>
-		</repository>
-		<repository>
-			<id>spring-snapshots</id>
-			<url>https://repo.spring.io/snapshot</url>
-			<releases><enabled>false</enabled></releases>
-			<snapshots><enabled>true</enabled></snapshots>
-		</repository>
-	</repositories>
-
 	<profiles>
 		<!-- Publishing concerns kept out of the default build so `mvn verify` stays
 		     fast. Activate with `-Prelease`. -->
@@ -197,6 +182,20 @@
 			<id>release</id>
 			<build>
 				<plugins>
+					<!-- Replaces maven-deploy-plugin: uploads the bundle to the Central
+					     Portal. Credentials come from the `central` server in settings.xml. -->
+					<plugin>
+						<groupId>org.sonatype.central</groupId>
+						<artifactId>central-publishing-maven-plugin</artifactId>
+						<version>0.11.0</version>
+						<extensions>true</extensions>
+						<configuration>
+							<publishingServerId>central</publishingServerId>
+							<!-- Upload and validate only; publishing is confirmed by hand in
+							     the Central Portal. Set to true to release automatically. -->
+							<autoPublish>false</autoPublish>
+						</configuration>
+					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
@@ -225,11 +224,17 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
+						<version>3.2.8</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
 								<phase>verify</phase>
-								<goals><goal>sign</goal></goals>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+								<configuration>
+									<keyname>1411A464E5F9C9C5</keyname>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>

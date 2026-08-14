@@ -10,7 +10,6 @@ run on Spring Boot 4 and Java 21.
 
 | Module | Description |
 | --- | --- |
-| `universe-statemachine-platform` | Dependency management (BOM) for the project. |
 | `universe-statemachine-core` | The core, reactive state machine API and implementation. |
 | `universe-statemachine-autoconfigure` | Spring Boot auto-configuration and actuator integration. |
 | `universe-statemachine-starter` | Spring Boot starter that pulls in core and auto-configuration. |
@@ -29,6 +28,7 @@ Add the starter to a Spring Boot application:
 <dependency>
     <groupId>ch.unibas.medizin.universe.statemachine</groupId>
     <artifactId>universe-statemachine-starter</artifactId>
+    <version>1.0.0</version>
 </dependency>
 ```
 
