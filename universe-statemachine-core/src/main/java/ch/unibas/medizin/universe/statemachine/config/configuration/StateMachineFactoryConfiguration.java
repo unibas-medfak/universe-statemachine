@@ -57,8 +57,6 @@ import org.springframework.util.ClassUtils;
 public class StateMachineFactoryConfiguration<S, E> extends
 		AbstractImportingAnnotationConfiguration<StateMachineConfigBuilder<S, E>, StateMachineConfig<S, E>> {
 
-	private final StateMachineConfigBuilder<S, E> builder = new StateMachineConfigBuilder<>();
-
 	@Override
 	protected BeanDefinition buildBeanDefinition(AnnotationMetadata importingClassMetadata,
 			Class<? extends Annotation> namedAnnotation) throws Exception {
@@ -73,7 +71,6 @@ public class StateMachineFactoryConfiguration<S, E> extends
 		AnnotationAttributes attributes = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(
 				EnableStateMachineFactory.class.getName(), false));
 		Boolean contextEvents = attributes.getBoolean("contextEvents");
-		beanDefinitionBuilder.addConstructorArgValue(builder);
 		beanDefinitionBuilder.addConstructorArgValue(importingClassMetadata.getClassName());
 		beanDefinitionBuilder.addConstructorArgValue(contextEvents);
 
@@ -111,7 +108,9 @@ public class StateMachineFactoryConfiguration<S, E> extends
 	private static class StateMachineFactoryDelegatingFactoryBean<S, E> implements
 			FactoryBean<StateMachineFactory<S, E>>, BeanFactoryAware, InitializingBean, BeanClassLoaderAware {
 
-		private final StateMachineConfigBuilder<S, E> builder;
+		// created here, not passed as constructor argument: a live builder instance
+		// in the bean definition cannot be serialized by Spring AOT
+		private final StateMachineConfigBuilder<S, E> builder = new StateMachineConfigBuilder<>();
 		private BeanFactory beanFactory;
 		private StateMachineFactory<S, E> stateMachineFactory;
 		private final String clazzName;
@@ -119,8 +118,7 @@ public class StateMachineFactoryConfiguration<S, E> extends
 		private ClassLoader classLoader;
 
 		@SuppressWarnings("unused")
-		private StateMachineFactoryDelegatingFactoryBean(StateMachineConfigBuilder<S, E> builder, String clazzName, Boolean contextEvents) {
-			this.builder = builder;
+		private StateMachineFactoryDelegatingFactoryBean(String clazzName, Boolean contextEvents) {
 			this.clazzName = clazzName;
 			this.contextEvents = contextEvents;
 		}
