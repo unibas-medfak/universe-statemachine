@@ -28,7 +28,7 @@ Add the starter to a Spring Boot application:
 <dependency>
     <groupId>ch.unibas.medizin.universe.statemachine</groupId>
     <artifactId>universe-statemachine-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
