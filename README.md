@@ -4,7 +4,7 @@ Universe Statemachine provides a common infrastructure to work with state
 machine concepts in Spring applications. It is a fork of
 [Spring Statemachine](https://spring.io/projects/spring-statemachine),
 repackaged under `ch.unibas.medizin.universe.statemachine` and modernized to
-run on Spring Boot 4 and Java 21.
+run on Spring Boot 4.2 and Java 25.
 
 ## Modules
 
@@ -16,8 +16,8 @@ run on Spring Boot 4 and Java 21.
 
 ## Requirements
 
-- Java 21
-- Spring Boot 4.1
+- Java 25
+- Spring Boot 4.2
 - Project Reactor (the state machine API is reactive)
 
 ## Getting started
