@@ -63,7 +63,7 @@
 		<!-- Dependency versions. -->
 		<spring-boot.version>4.2.0</spring-boot.version>
 		<awaitility.version>4.3.0</awaitility.version>
-		<blockhound.version>1.0.18.RELEASE</blockhound.version>
+		<blockhound.version>1.0.19.RELEASE</blockhound.version>
 		<jsr305.version>3.0.2</jsr305.version>
 
 		<!-- JUnit tags excluded by default. -->
